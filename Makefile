@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = 
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 SRC = getnext/get_next_line.c getnext/get_next_line_utils.c main.c ft_strtrim.c ft_split.c 
 OBJ = $(SRC:.c=.o)
 NAME = cub3d
@@ -8,7 +8,7 @@ PRINTF = printf/libftprintf.a
 all:  $(NAME) 
 
 $(NAME): $(OBJ)
-	$(CC) -g $(OBJ) $(PRINTF) -o $(NAME) 
+	$(CC)   $(CFLAGS) $(OBJ) $(PRINTF) -lmlx -lXext -lX11 -lm -lbsd -o $(NAME) 
 
 %.o: %.c cub3d.h
 	$(CC)  -g $(CFLAGS) -c $< -o $@ 
@@ -20,3 +20,6 @@ fclean: clean
 re: fclean all
 
 .PHONY: clean
+
+
+# -fsanitize=address -g

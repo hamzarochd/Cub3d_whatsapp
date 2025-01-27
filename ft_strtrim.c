@@ -19,14 +19,12 @@ char	*ft_strtrim(char const *s1, char const *set)
 	int		i;
 	int		j;
 	int		l;
-	int		len;
 	char	*ptr;
 
-	len = 0;
-	while (s1[len] != '\0')
-		len++;
-	l = len;
-	while (0 <= l && check_char(set, s1[l - 1]) == 1)
+	l = 0;
+	while (s1[l] != '\0')
+		l++;
+	while (l > 0 && check_char(set, s1[l - 1]) == 1)
 		l--;
 	ptr = (char *)malloc(l + 1);
 	if (ptr == NULL)

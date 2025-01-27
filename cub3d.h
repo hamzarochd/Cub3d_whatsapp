@@ -11,8 +11,11 @@
 # include <stdio.h>
 # include <string.h>
 # include "printf/ft_printf.h"
+# include <mlx.h>
+# include <math.h>
 
 #include <fcntl.h>
+
 
 typedef struct s_cube
 {
@@ -21,8 +24,8 @@ typedef struct s_cube
     char    *so_tex;
     char    *we_tex;
     char    *ea_tex;
-    char     *floor_color;
-    char     *ceiling_color;
+    char    *floor_color;
+    char    *ceiling_color;
     char    **file_content;
     char    **map;
     char    player_direction;

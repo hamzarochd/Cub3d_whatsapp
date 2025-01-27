@@ -42,8 +42,10 @@ static char	*alloc_word(const char *s, int d, int e)
 	return (word);
 }
 
-static char	**alloc_split(char **split, const char *s, char c)
+static char	**alloc_split(const char *s, char c)
 {
+	char	**split;
+
 	split = (char **)malloc ((check_words(s, c) + 1) * sizeof (char *));
 	if (split == NULL)
 		return (NULL);
@@ -61,7 +63,7 @@ char	**ft_split(const char *s, char c)
 	len = 0;
 	while (s[len] != '\0')
 		len++;
-	split = alloc_split(split, s, c);
+	split = alloc_split(s, c);
 	e = -1;
 	i = 0;
 	j = 0;
