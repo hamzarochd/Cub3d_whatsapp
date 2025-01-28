@@ -332,7 +332,7 @@ enum {
 #define DOWN 115
 #define ESC 65307
 #define PI 3.141592654
-#define SPEED 20.0
+#define SPEED 10.0
 
 
 void	my_mlx_pixel_put(t_data *img, int x, int y, int color)
@@ -350,6 +350,9 @@ int draw_line(t_mlx *mlx, t_point start, t_point end)
     double  delta_y;
     int     pixels;
     t_point pixel_pt;
+
+    if(end.x == -1 || end.y == -1)
+        return (1);
 
     delta_x = end.x - start.x;
     delta_y = end.y - start.y;
@@ -399,7 +402,7 @@ int is_in_wall(char **map, double x, double y, t_mlx *mlx)
     map_x = x / TILE_SIZE;
     map_y = y / TILE_SIZE;
 
-    printf("mapx = %d\nmapy = %d\n", map_x, map_y);
+    // printf("mapx = %d\nmapy = %d\n", map_x, map_y);
     if (map_x < (mlx->map->width / TILE_SIZE) && map_y < (mlx->map->height / TILE_SIZE)
         && map_x >= 0 && map_y >= 0)
     {
@@ -411,48 +414,212 @@ int is_in_wall(char **map, double x, double y, t_mlx *mlx)
     return 0;
 }
 
-t_point get_h_wall(t_mlx *mlx, char **map, t_point player_pt, double rot_angle)
+
+t_point get_h_wall(t_mlx *mlx, char **map, t_point player_pt, double ray_angle, double  *ray_lenght)
 {
     t_point wall_pt;
     double  angle;
     double  cat;
-    // int     found_wall;
+    double  found_wall;
+    double  ht;
 
     wall_pt.x = 0;
     wall_pt.y = 0;
     angle = 0;
     cat = 0;
-    // found_wall = 0;
+    found_wall = 0;
+    ht = 0;
 
-    (void)mlx;
-    (void)map;
-    (void)player_pt;
-
-    if (rot_angle < PI / 2)
-        angle = rot_angle;
-    else if (rot_angle < PI)
-        angle = PI - rot_angle;
-    else if (rot_angle < ((3 * PI) / 2))
-        angle = rot_angle - PI;
+    if (ray_angle < PI / 2)
+        angle = ray_angle;
+    else if (ray_angle < PI)
+        angle = PI - ray_angle;
+    else if (ray_angle < ((3 * PI) / 2))
+        angle = ray_angle - PI;
     else
-        angle = (2 * PI) - rot_angle;
+        angle = (2 * PI) - ray_angle;
+    // angle = ray_angle;
     
-    printf("rot_angle = %f radians --> %f degrees\nangle = %f radians --> %f degrees\n", rot_angle, (rot_angle * 180) / PI, angle, (angle * 180) / PI);
+    // printf("ray_angle = %f radians --> %f degrees\nangle = %f radians --> %f degrees\n", ray_angle, (ray_angle * 180) / PI, angle, (angle * 180) / PI);
 
-    if (rot_angle < PI)
-        cat = player_pt.x - (TILE_SIZE * (int)(player_pt.x / TILE_SIZE));
+    if (ray_angle < PI)
+        cat = player_pt.y - (TILE_SIZE * (int)(player_pt.y / TILE_SIZE));
     else
-        cat = (TILE_SIZE * ((int)(player_pt.x / TILE_SIZE) + 1)) - player_pt.x;
+        cat = (TILE_SIZE * ((int)(player_pt.y / TILE_SIZE) + 1)) - player_pt.y;
 
-    printf("x = %f\ncat = %f\n", player_pt.x, cat);
+    // printf("y = %f\ncat = %f\n", player_pt.y, cat);
 
-    // while (!found_wall)
-    // {
+    while (!found_wall)
+    {
+        if (ray_angle == PI/2 || ray_angle == (3*PI)/2)
+            ht = cat;
+        else if (ray_angle == PI || ray_angle == 0)
+        {
+            wall_pt.x = INT_MAX;
+            wall_pt.y = INT_MAX;
+            *ray_lenght = INT_MAX;
+            return (wall_pt);
+        }
+        else
+            ht = cat / sin(angle);
+
+        *ray_lenght += ht;
+
+        // printf("ht = %f\n", ht);
+        if (ray_angle <= PI/2)
+        {
+            wall_pt.y = player_pt.y - cat;
+            wall_pt.x = player_pt.x + sqrt((ht * ht) - (cat * cat));
+            // printf("Q1\n");
+        }
+        else if (ray_angle < PI && ray_angle > PI/2)
+        {
+            wall_pt.y = player_pt.y - cat;
+            wall_pt.x = player_pt.x - sqrt((ht * ht) - (cat * cat));
+            // printf("Q2\n");
+        }
+        else if (ray_angle > PI && ray_angle <= (3*PI)/2)
+        {
+            wall_pt.y = player_pt.y + cat;
+            wall_pt.x = player_pt.x - sqrt((ht * ht) - (cat * cat));
+            // printf("Q3\n");
+        }
+        else if (ray_angle > (3*PI)/2)
+        {
+            wall_pt.y = player_pt.y + cat;
+            wall_pt.x = player_pt.x + sqrt((ht * ht) - (cat * cat));
+            // printf("Q4\n");
+        }
+
+        if(wall_pt.x > mlx->map->width || wall_pt.x < 0)
+        {
+            wall_pt.x = INT_MAX;
+            wall_pt.y = INT_MAX;
+            *ray_lenght = INT_MAX;
+            return (wall_pt);
+        }
         
-    // }
+        if ((ray_angle < PI && is_in_wall(map, wall_pt.x, wall_pt.y - 1, mlx)) ||
+            (ray_angle > PI && is_in_wall(map, wall_pt.x, wall_pt.y + 1, mlx)))
+        {
+            found_wall = 1;
+        }
+        else
+        {
+            cat = TILE_SIZE;
+            player_pt = wall_pt;
+        }
+        
+        // printf("horizontal_intersection -> (%f, %f)\n", wall_pt.x, wall_pt.y);
+    }
     
 
-    printf("is in wall = %d\n", is_in_wall(map, TILE_SIZE * 2.5, TILE_SIZE - 1, mlx));
+    // printf("is in wall = %d\n", is_in_wall(map, TILE_SIZE * 2.5, TILE_SIZE - 1, mlx));
+    
+
+    return wall_pt;
+}
+
+t_point get_v_wall(t_mlx *mlx, char **map, t_point player_pt, double ray_angle, double  *ray_lenght)
+{
+    t_point wall_pt;
+    double  angle;
+    double  cat;
+    double  found_wall;
+    double  ht;
+
+    wall_pt.x = 0;
+    wall_pt.y = 0;
+    angle = 0;
+    cat = 0;
+    found_wall = 0;
+    ht = 0;
+
+    if (ray_angle < PI / 2)
+        angle = ray_angle;
+    else if (ray_angle < PI)
+        angle = PI - ray_angle;
+    else if (ray_angle < ((3 * PI) / 2))
+        angle = ray_angle - PI;
+    else
+        angle = (2 * PI) - ray_angle;
+    // angle = ray_angle;
+    
+    // printf("ray_angle = %f radians --> %f degrees\nangle = %f radians --> %f degrees\n", ray_angle, (ray_angle * 180) / PI, angle, (angle * 180) / PI);
+
+    if (ray_angle < PI/2 || ray_angle > (3*PI)/2)
+        cat = (TILE_SIZE * ((int)(player_pt.x / TILE_SIZE) + 1)) - player_pt.x;
+    else
+        cat = player_pt.x - (TILE_SIZE * (int)(player_pt.x / TILE_SIZE));
+
+    // printf("x = %f\ncat = %f\n", player_pt.x, cat);
+
+    while (!found_wall)
+    {
+        if (ray_angle == PI || ray_angle == 0)
+            ht = cat;
+        else if (ray_angle == PI/2 || ray_angle == (3*PI)/2)
+        {
+            wall_pt.x = INT_MAX;
+            wall_pt.y = INT_MAX;
+            *ray_lenght = INT_MAX;
+            return (wall_pt);
+        }
+        else
+            ht = cat / cos(angle);
+
+        *ray_lenght += ht;
+
+        // printf("ht = %f\n", ht);
+        if (ray_angle <= PI/2)
+        {
+            wall_pt.y = player_pt.y - sqrt((ht * ht) - (cat * cat));
+            wall_pt.x = player_pt.x + cat;
+            // printf("Q1\n");
+        }
+        else if (ray_angle < PI && ray_angle > PI/2)
+        {
+            wall_pt.y = player_pt.y - sqrt((ht * ht) - (cat * cat));
+            wall_pt.x = player_pt.x - cat;
+            // printf("Q2\n");
+        }
+        else if (ray_angle > PI && ray_angle <= (3*PI)/2)
+        {
+            wall_pt.y = player_pt.y + sqrt((ht * ht) - (cat * cat));
+            wall_pt.x = player_pt.x - cat;
+            // printf("Q3\n");
+        }
+        else if (ray_angle > (3*PI)/2)
+        {
+            wall_pt.y = player_pt.y + sqrt((ht * ht) - (cat * cat));
+            wall_pt.x = player_pt.x + cat;
+            // printf("Q4\n");
+        }
+
+        if(wall_pt.y > mlx->map->height || wall_pt.y < 0)
+        {
+            wall_pt.x = INT_MAX;
+            wall_pt.y = INT_MAX;
+            *ray_lenght = INT_MAX;
+            return (wall_pt);
+        }
+        
+        if (((ray_angle < PI/2 || ray_angle > (3*PI)/2) && is_in_wall(map, wall_pt.x + 1, wall_pt.y, mlx)) ||
+            ((ray_angle < (3*PI)/2 && ray_angle > PI/2) && is_in_wall(map, wall_pt.x - 1, wall_pt.y, mlx)))
+        {
+            found_wall = 1;
+        }
+        else
+        {
+            cat = TILE_SIZE;
+            player_pt = wall_pt;
+        }
+        
+        // printf("horizontal_intersection -> (%f, %f)\n", wall_pt.x, wall_pt.y);
+    }
+    
+
+    // printf("is in wall = %d\n", is_in_wall(map, TILE_SIZE * 2.5, TILE_SIZE - 1, mlx));
     
 
     return wall_pt;
@@ -462,14 +629,22 @@ t_point calculate_rayend(t_mlx *mlx, char **map, t_point player_pt, double angle
 {
     t_point h_wall;
     t_point v_wall;
+    double v_ray;
+    double h_ray;
 
     h_wall.x = 0;
     h_wall.y = 0;
     v_wall.x = 0;
     v_wall.y = 0;
+    v_ray = 0;
+    h_ray = 0;
 
-    h_wall = get_h_wall(mlx, map, player_pt, angle);
-    return h_wall;
+    h_wall = get_h_wall(mlx, map, player_pt, angle, &h_ray);
+    v_wall = get_v_wall(mlx, map, player_pt, angle, &v_ray);
+    if(h_ray < v_ray)
+        return h_wall;
+    else
+        return v_wall;
 }
 
 void map_render(t_mlx *mlx)
@@ -542,18 +717,26 @@ void map_render(t_mlx *mlx)
     // printf("sin = %f\n", sin(mlx->player->rot_angle));
     // printf("from (%f, %f) to (%f, %f)\n", player_pt.x, player_pt.y, line_end_pt.x, line_end_pt.y);
 
-    double angle_start = mlx->player->rot_angle - ((PI/180) * 33);
-    // int i = 0;
-    // while (i < 66)
-    // {
+    double angle_start = mlx->player->rot_angle - ((PI/180) * 30);
+    if(angle_start < 0)
+        angle_start += 2*PI;
+    else if (angle_start > 2*PI)
+        angle_start -= 2*PI;
+    int i = 0;
+    while (i < 1200)
+    {
         
         // line_end_pt.x = player_pt.x + (cos(angle_start) * line_lenght);
         // line_end_pt.y = player_pt.y - (sin(angle_start) * line_lenght);
         line_end_pt = calculate_rayend(mlx, mlx->cube->map, player_pt, angle_start);
         draw_line(mlx, player_pt, line_end_pt);
-    //     angle_start += (PI / 180);
-    //     i++;
-    // }
+        angle_start += (PI / 3) / 1200;
+        if(angle_start < 0)
+            angle_start += 2*PI;
+        else if (angle_start > 2*PI)
+            angle_start -= 2*PI;
+        i++;
+    }
     
     // draw_line(mlx, player_pt, line_end_pt);
 
@@ -646,19 +829,19 @@ int	keydown_handler(int keycode, t_mlx *mlx)
         move_player(mlx, 'D');
     else if (keycode == ARROW_LEFT)
     {
-        mlx->player->rot_angle += PI / 18;
+        mlx->player->rot_angle += PI / 36;
         if (mlx->player->rot_angle >= 2*PI)
             mlx->player->rot_angle -= 2*PI;
-        else if (mlx->player->rot_angle < 0)
-            mlx->player->rot_angle += 2*PI;
+        // else if (mlx->player->rot_angle < 0)
+        //     mlx->player->rot_angle += 2*PI;
     }
     else if (keycode == ARROW_RIGHT)
     {
-        mlx->player->rot_angle -= PI / 18;
-        if (mlx->player->rot_angle >= 2*PI)
-            mlx->player->rot_angle -= 2*PI;
-        else if (mlx->player->rot_angle < 0)
+        mlx->player->rot_angle -= PI / 36;
+        if (mlx->player->rot_angle < 0)
             mlx->player->rot_angle += 2*PI;
+        // if (mlx->player->rot_angle >= 2*PI)
+        //     mlx->player->rot_angle -= 2*PI;
     }
     map_render(mlx);
 	return (0);
