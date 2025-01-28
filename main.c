@@ -700,12 +700,17 @@ void map_render(t_mlx *mlx)
         int j = 0;
         while (j < 1280)
         {
-            if ((j > (640 - (ray_pixels / 2)) && j <= 640) || (j < (640 + (ray_pixels / 2)) && j > 640))
-            {
+            if (ray_pixels >= 1280)
                 my_mlx_pixel_put(&mlx->img, i, j, 0xFFFFFF);
-            }
             else
-                my_mlx_pixel_put(&mlx->img, i, j, 0x000000);
+            {
+                if ((j > (640 - (ray_pixels / 2)) && j <= 640) || (j < (640 + (ray_pixels / 2)) && j > 640))
+                {
+                    my_mlx_pixel_put(&mlx->img, i, j, 0xFFFFFF);
+                }
+                else
+                    my_mlx_pixel_put(&mlx->img, i, j, 0x000000);
+            }
             j++;
         }
         
