@@ -1,5 +1,11 @@
 #include "cub3d.h"
 
+uint32_t    rgb(int r, int g, int b, int a)
+{
+    return (((r & 0xFF) << 24) | ((g & 0xFF) << 16)
+        | ((b & 0xFF) << 8) | (a & 0xFF));
+}
+
 int check_map_name(char *str)
 {
     int i;
@@ -275,68 +281,8 @@ void init_cube(t_cube *cube)
     cube->ceiling_color = NULL;
 }
 
-typedef struct s_player {
-    double     x_player;
-    double     y_player;
-    double     rot_angle;
-} t_player;
 
-typedef struct s_point {
-    double x;
-    double y;
-}               t_point;
-
-typedef struct	s_data {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}				t_data;
-
-typedef struct s_map {
-    int     width;
-    int     height;
-}   t_map;
-
-typedef struct s_mlx {
-    void    *mlx_cnx;
-    void    *mlx_win;
-    t_data  img;
-    t_map   *map;
-    t_cube  *cube;
-    t_player    *player;
-}   t_mlx;
-
-
-
-enum {
-	ON_KEYDOWN = 2,
-	ON_KEYUP = 3,
-	ON_MOUSEDOWN = 4,
-	ON_MOUSEUP = 5,
-	ON_MOUSEMOVE = 6,
-	ON_EXPOSE = 12,
-	ON_DESTROY = 17
-};
-
-
-#define TILE_SIZE 128
-#define ARROW_LEFT 65361
-#define ARROW_UP 65362
-#define ARROW_RIGHT 65363
-#define ARROW_DOWN 65364
-#define LEFT 97
-#define UP 119
-#define RIGHT 100
-#define DOWN 115
-#define ESC 65307
-#define PI 3.141592654
-#define SPEED 10.0
-#define MAX_DISTANCE 10 * TILE_SIZE
-
-
-void	my_mlx_pixel_put(t_data *img, int x, int y, int color)
+void	my_mlx_put_pixel(t_data *img, int x, int y, int color)
 {
 	int	offset;
 
@@ -367,7 +313,7 @@ int draw_line(t_mlx *mlx, t_point start, t_point end)
     // printf("drawn line from (%f, %f) to ", pixel_pt.x, pixel_pt.y);
     while (pixels)
     {
-        my_mlx_pixel_put(&mlx->img, pixel_pt.x, pixel_pt.y, 0xFFFFFF);
+        mlx_put_pixel(mlx->img, pixel_pt.x, pixel_pt.y, rgb(255, 255, 255, 255));
         pixel_pt.x += delta_x;
         pixel_pt.y += delta_y;
         pixels--;
@@ -387,7 +333,7 @@ void draw_filled_circle(t_mlx *mlx, int x_center, int y_center, int radius, int 
             // Check if the point is within the circle using the equation: (x - xc)^2 + (y - yc)^2 <= r^2
             if ((x - x_center) * (x - x_center) + (y - y_center) * (y - y_center) <= radius * radius)
             {
-                my_mlx_pixel_put(&mlx->img, x, y, color);
+                mlx_put_pixel(mlx->img, x, y, color);
             }
         }
     }
@@ -398,12 +344,10 @@ int is_in_wall(char **map, double x, double y, t_mlx *mlx)
     int map_x;
     int map_y;
 
-
-
     map_x = x / TILE_SIZE;
     map_y = y / TILE_SIZE;
 
-    // printf("mapx = %d\nmapy = %d\n", map_x, map_y);
+    // printf("mapx = %d\nmapy = %d\n", );
     if (map_x < (mlx->map->width / TILE_SIZE) && map_y < (mlx->map->height / TILE_SIZE)
         && map_x >= 0 && map_y >= 0)
     {
@@ -415,6 +359,136 @@ int is_in_wall(char **map, double x, double y, t_mlx *mlx)
     return 1;
 }
 
+t_point get_h_wall_v(t_mlx *mlx, char **map, t_point player_pt, double ray_angle, double  *ray_lenght)
+{
+    t_point wall_pt;
+    double  angle;
+    double  next_wall_y;
+    double  found_wall;
+    double  ht;
+    int     quarter;
+    t_point unit_vec;
+
+    wall_pt.x = 0;
+    wall_pt.y = 0;
+    unit_vec.x = 0;
+    unit_vec.y = 0;
+    angle = 0;
+    next_wall_y = 0;
+    found_wall = 0;
+    ht = 0;
+    quarter = 0;
+
+    // if (ray_angle <= PI)
+    //     angle = ray_angle;
+    // else if (ray_angle > PI)
+    //     angle = (2*PI) - ray_angle;
+
+    if (ray_angle == PI || ray_angle == 0)
+    {
+        unit_vec.y = INT_MAX;
+        unit_vec.x = INT_MAX;
+        *ray_lenght = INT_MAX;
+        return unit_vec;
+    }
+    unit_vec.x = cos(ray_angle);
+    unit_vec.y = sin(ray_angle);
+
+
+    if (unit_vec.y > 0)
+        wall_pt.y = TILE_SIZE * (int)(player_pt.y / TILE_SIZE);
+    else
+        wall_pt.y = (TILE_SIZE * ((int)(player_pt.y / TILE_SIZE) + 1));
+
+    double scaling_factor = 0;
+
+    scaling_factor = (player_pt.y - wall_pt.y) / unit_vec.y;
+    
+    wall_pt.x = player_pt.x + (scaling_factor * unit_vec.x);
+
+
+    while (!found_wall)
+    {
+        if ((unit_vec.y > 0 && is_in_wall(map, wall_pt.x, wall_pt.y - 1, mlx)) ||
+            (unit_vec.y < 0 && is_in_wall(map, wall_pt.x, wall_pt.y + 1, mlx)))
+        {
+            found_wall = 1;
+            break;
+        }
+
+        if (unit_vec.y > 0)
+            wall_pt.y -= TILE_SIZE;
+        else
+            wall_pt.y += TILE_SIZE;
+
+        scaling_factor = (player_pt.y - wall_pt.y) / unit_vec.y;
+
+        wall_pt.x = player_pt.x + (scaling_factor * unit_vec.x); 
+        
+    }
+    
+    *ray_lenght = sqrt(((wall_pt.x - player_pt.x) * (wall_pt.x - player_pt.x)) + ((wall_pt.y - player_pt.y) * (wall_pt.y - player_pt.y)));
+    return (wall_pt);
+}
+
+t_point get_v_wall_v(t_mlx *mlx, char **map, t_point player_pt, double ray_angle, double  *ray_lenght)
+{
+    t_point wall_pt;
+    double  found_wall;
+    t_point unit_vec;
+
+    wall_pt.x = 0;
+    wall_pt.y = 0;
+    unit_vec.x = 0;
+    unit_vec.y = 0;
+    found_wall = 0;
+
+    if (ray_angle == PI/ 2 || ray_angle == 3*(PI / 2))
+    {
+        unit_vec.y = INT_MAX;
+        unit_vec.x = INT_MAX;
+        *ray_lenght = INT_MAX;
+        return unit_vec;
+    }
+    unit_vec.x = cos(ray_angle);
+    unit_vec.y = sin(ray_angle);
+
+
+    if (unit_vec.x < 0)
+        wall_pt.x = TILE_SIZE * (int)(player_pt.x / TILE_SIZE);
+    else
+        wall_pt.x = (TILE_SIZE * ((int)(player_pt.x / TILE_SIZE) + 1));
+
+    double scaling_factor = 0;
+
+    scaling_factor = (player_pt.x - wall_pt.x) / unit_vec.x;
+    
+    wall_pt.y = player_pt.y + (scaling_factor * unit_vec.y);
+
+
+    while (!found_wall)
+    {
+        if ((unit_vec.x > 0 && is_in_wall(map, wall_pt.x + 1, wall_pt.y, mlx)) ||
+            (unit_vec.x < 0 && is_in_wall(map, wall_pt.x - 1, wall_pt.y, mlx)))
+        {
+            found_wall = 1;
+            break;
+        }
+
+        if (unit_vec.x > 0)
+            wall_pt.x += TILE_SIZE;
+        else
+            wall_pt.x -= TILE_SIZE;
+
+        scaling_factor = (player_pt.x - wall_pt.x) / unit_vec.x;
+
+        wall_pt.y = player_pt.y + (scaling_factor * unit_vec.y); 
+        
+    }
+    
+    *ray_lenght = sqrt(((wall_pt.x - player_pt.x) * (wall_pt.x - player_pt.x)) + ((wall_pt.y - player_pt.y) * (wall_pt.y - player_pt.y)));
+    return (wall_pt);
+}
 
 t_point get_h_wall(t_mlx *mlx, char **map, t_point player_pt, double ray_angle, double  *ray_lenght)
 {
@@ -449,6 +523,8 @@ t_point get_h_wall(t_mlx *mlx, char **map, t_point player_pt, double ray_angle, 
         cat = (TILE_SIZE * ((int)(player_pt.y / TILE_SIZE) + 1)) - player_pt.y;
 
     // printf("y = %f\ncat = %f\n", player_pt.y, cat);
+
+
 
     while (!found_wall)
     {
@@ -642,39 +718,51 @@ t_point calculate_rayend(t_mlx *mlx, char **map, t_point player_pt, double angle
     v_ray = 0;
     h_ray = 0;
 
-    h_wall = get_h_wall(mlx, map, player_pt, angle, &h_ray);
-    v_wall = get_v_wall(mlx, map, player_pt, angle, &v_ray);
+    h_wall = get_h_wall_v(mlx, map, player_pt, angle, &h_ray);
+    v_wall = get_v_wall_v(mlx, map, player_pt, angle, &v_ray);
     if(h_ray < v_ray)
         return h_wall;
     else
         return v_wall;
 }
 
-double calculate_ray_lenght(t_mlx *mlx, char **map, t_point player_pt, double angle, int *hits_vertical)
+t_ray calculate_ray_lenght(t_mlx *mlx, char **map, t_point player_pt, double angle, int *hits_vertical)
 {
     t_point h_wall;
     t_point v_wall;
-    double v_ray;
-    double h_ray;
+    double  v_ray;
+    double  h_ray;
+    t_ray   ray;
 
-    h_wall.x = 0;
-    h_wall.y = 0;
-    v_wall.x = 0;
-    v_wall.y = 0;
-    v_ray = 0;
-    h_ray = 0;
-
-    h_wall = get_h_wall(mlx, map, player_pt, angle, &h_ray);
-    v_wall = get_v_wall(mlx, map, player_pt, angle, &v_ray);
-    if(h_ray < v_ray)
+    // h_wall.x = 0;
+    // h_wall.y = 0;
+    // v_wall.x = 0;
+    // v_wall.y = 0;
+    // v_ray = 0;
+    // h_ray = 0;
+    h_wall = get_h_wall_v(mlx, map, player_pt, angle, &h_ray);
+    v_wall = get_v_wall_v(mlx, map, player_pt, angle, &v_ray);
+    if (h_ray < v_ray)
     {
         *hits_vertical = 0;
-        return h_ray;
+        ray.ray_length = h_ray;
+        if (angle < PI)
+            ray.wall_orientation = 'N';
+        else
+            ray.wall_orientation = 'S';
+        ray.tile_hit_point = (int)h_wall.x % TILE_SIZE;
+        return ray;
     }
     else
     {
         *hits_vertical = 1;
-        return v_ray;
+        ray.ray_length = v_ray;
+        if (angle < (3*PI)/2 && angle > PI/2)
+            ray.wall_orientation = 'W';
+        else
+            ray.wall_orientation = 'E';
+        ray.tile_hit_point = (int)h_wall.y % TILE_SIZE;
+        return ray;
     }
 }
 
@@ -695,30 +783,45 @@ int apply_distance_effect(int base_color, double distance)
     g = (int)(g * intensity);
     b = (int)(b * intensity);
     
-    return (r << 16) | (g << 8) | b;
+    // return (r << 16) | (g << 8) | b;
+    return rgb(r, g, b, 255);
 }
 
+void    miini(t_mlx *mlx)
+{
+    int i = 0;
+    int j = 0;
+    int rdx = mlx->player->x_player - 100;
+    int rdy = mlx->player->y_player - 100;
+    while (j <= 200)
+    {
+        i = 0;
+        rdx = mlx->player->x_player - 100;
+        while (i <= 200)
+        {
+            if (mlx->cube->map[(int)(rdy / TILE_SIZE)][(int)(rdx / TILE_SIZE)] == '1')
+                mlx_put_pixel(mlx->img, i, j, rgb(255, 0, 0, 255));
+            else
+                mlx_put_pixel(mlx->img, i, j, rgb(255, 0, 0, 100));
+            i++;
+            rdx++;
+        }
+        j++;
+        rdy++;
+    }
+}
 
 void map_render(t_mlx *mlx)
 {
-
-
-
-
-
-    int minimap = 0;
-
+    int     minimap = 0;
     t_point player_pt;
+    t_ray   ray;
 
+    // mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.no_txtr, 0, 0);
+    // return ;
 
     if (!minimap)
     {
-        // double ray_lenght = 0;
-
-        // double c = (TILE_SIZE / 2) * (TILE_SIZE * 20);
-
-        // double ray_pixels = 0;
-
         player_pt.x = mlx->player->x_player;
         player_pt.y = mlx->player->y_player;
 
@@ -727,76 +830,88 @@ void map_render(t_mlx *mlx)
             angle_start += 2*PI;
         else if (angle_start > 2*PI)
             angle_start -= 2*PI;
-        
-        // int i = 0;
-        // printf("ray lenght %f\n", calculate_ray_lenght(mlx, mlx->cube->map, player_pt, mlx->player->rot_angle));
-        // while (i < 2560)
-        // {
-        //     ray_lenght = calculate_ray_lenght(mlx, mlx->cube->map, player_pt, angle_start);
-            
-        //     // ray_pixels = ray_lenght * 10;
-        //     ray_pixels = c / ray_lenght;
-        //     int j = 0;
-        //     while (j < 1280)
-        //     {
-        //         // if (ray_pixels >= 1280)
-        //         //     my_mlx_pixel_put(&mlx->img, i, j, 0xFFFFFF);
-        //         // else
-        //         // {
-        //             // if ((j > (640 - (ray_pixels / 2)) && j <= 640) || (j < (640 + (ray_pixels / 2)) && j > 640))
-        //             if (j < ((1280 - ray_pixels) / 2) || j > (1280 - ((1280 - ray_pixels) / 2)))
-        //             {
-        //                 my_mlx_pixel_put(&mlx->img, i, j, 0x000000);
-        //             }
-        //             else
-        //                 my_mlx_pixel_put(&mlx->img, i, j, 0xFFFFFF);
-        //         // }
-        //         j++;
-        //     }
-            
-        //     angle_start -= (PI/3) / 2560;
-        //     i++;
-        // }
 
-        double c = (TILE_SIZE / 2) * (TILE_SIZE * 20); // Mantieni questa costante
+        double c = (TILE_SIZE / 2) * (TILE_SIZE * 25);
         int i = 0;
         double ray_length = 0;
         double ray_pixels = 0;
 
         while (i < 2560)
         {
+
             int hits_vertical = -1;
-            ray_length = calculate_ray_lenght(mlx, mlx->cube->map, player_pt, angle_start, &hits_vertical);
+            // printf("%p\n", mlx->cube->map);
+            ray = calculate_ray_lenght(mlx, mlx->cube->map, player_pt, angle_start, &hits_vertical);
             
-            // Fish-eye correction
+            
             double delta_angle = angle_start - mlx->player->rot_angle;
-            ray_pixels = c / (ray_length * cos(delta_angle));
+            ray_pixels = c / (ray.ray_length * cos(delta_angle));
+            
+            
             // Clamping
-            if (ray_pixels > 1280) ray_pixels = 1280;
-            if (ray_pixels < 0) ray_pixels = 0;
+            // if (ray_pixels > 1280) ray_pixels = 1280;
+            // if (ray_pixels < 0) ray_pixels = 0;
             
             int wall_start = (1280 - ray_pixels) / 2;
             int wall_end = wall_start + ray_pixels;
 
             int color = 0;
-            if (hits_vertical)
-                color = 0x0D7BFF;
-            else
-                color = 0x33A5FF;
-            int wall_color = apply_distance_effect(color, ray_length);
 
-            // Render colonna
-            for (int j = 0; j < 1280; j++)
+            int ray_colors[1280];
+
+            if (ray.wall_orientation == 'N')
+            {
+                color = 0x273043;
+                // color = 
+
+            }
+            else if (ray.wall_orientation == 'S')
+                color = 0x9197AE;
+            else if (ray.wall_orientation == 'E')
+                color = 0xEFF6EE;
+            else if (ray.wall_orientation == 'W')
+                color = 0xF02D3A;
+            
+
+            int wall_color = apply_distance_effect(color, ray.ray_length);
+            
+            int wall_length = wall_end - wall_start;
+            double wall_prop = W_HEIGHT / wall_length;
+            // printf("%d %d\n", W_HEIGHT, wall_length);
+            // if (wall_prop < 0.1)
+            //     wall_prop = 0.1;
+            double image_j = 0;
+            // printf("%d\n", mlx->graphics.no_txtr->width);
+            int j = 0;
+            while (j < 1280)
             {
                 if (j >= wall_start && j <= wall_end)
-                    my_mlx_pixel_put(&mlx->img, i, j, wall_color);
+                {
+                    int n = wall_prop;
+                    // double image_pixel_y = (j - (double)wall_start) / wall_prop;
+
+                    int pixel_offset = ((int)(image_j / wall_prop) * (mlx->graphics.no_txtr->width)) + ray.tile_hit_point * 10;
+                    // printf("%d\n", pixel_offset);
+                    mlx_put_pixel(mlx->img, i, j, mlx->graphics.no_txtr->pixels[pixel_offset]);
+                    // mlx_put_pixel(mlx->img, i, j, wall_color);
+                    if (wall_prop >= 1)
+                        image_j += wall_prop;
+                    else
+                    {
+                        if (n + wall_prop >= 1)
+                            image_j++;
+                        else
+                            image_j += wall_prop;
+                    }
+                }
                 else
-                    my_mlx_pixel_put(&mlx->img, i, j, 0x000000);
+                    mlx_put_pixel(mlx->img, i, j, rgb(0, 0, 0, 255));
+                j++;
+                // printf("%f\n", wall_prop);
             }
-            
-            // Aggiorna angolo con normalizzazione
             angle_start -= (PI/3) / 2560;
-            if (angle_start < 0) angle_start += 2 * PI;
+            if (angle_start < 0)
+                angle_start += 2 * PI;
             i++;
         }
     }
@@ -809,11 +924,6 @@ void map_render(t_mlx *mlx)
         int map_x;
         int map_y;
         t_point line_end_pt;
-
-
-
-
-        
         double  line_lenght;
 
         map_x = 0;
@@ -827,24 +937,24 @@ void map_render(t_mlx *mlx)
             {
                 map_x = x / TILE_SIZE;
                 if ((x % TILE_SIZE == 0) || (y % TILE_SIZE == 0))
-                    my_mlx_pixel_put(&mlx->img, x, y, 0x000000);
+                    mlx_put_pixel(mlx->img, x, y, 0x000000);
                 else if (mlx->cube->map[map_y][map_x] == '0')
                 {
-                        my_mlx_pixel_put(&mlx->img, x, y, 0x0000FF);
+                        mlx_put_pixel(mlx->img, x, y, 0x0000FF);
                 }
                     
                 else if(mlx->cube->map[map_y][map_x] == 'N' || mlx->cube->map[map_y][map_x] == 'S' || mlx->cube->map[map_y][map_x] == 'E' || mlx->cube->map[map_y][map_x] == 'W')
                 {
-                        my_mlx_pixel_put(&mlx->img, x, y, 0x0000FF);
+                        mlx_put_pixel(mlx->img, x, y, 0x0000FF);
         
                 }
                 else if (mlx->cube->map[map_y][map_x] == ' ')
                 {
-                    my_mlx_pixel_put(&mlx->img, x, y, 0x000000);
+                    mlx_put_pixel(mlx->img, x, y, 0x000000);
                 }
                 else
                 {
-                    my_mlx_pixel_put(&mlx->img, x, y, 0xFF0000);
+                    mlx_put_pixel(mlx->img, x, y, 0xFF0000);
                 }
                 x++;
             }
@@ -867,11 +977,11 @@ void map_render(t_mlx *mlx)
         else if (angle_start > 2*PI)
             angle_start -= 2*PI;
         int i = 0;
-        while (i < 120)
+        while (i < 2560)
         {
             line_end_pt = calculate_rayend(mlx, mlx->cube->map, player_pt, angle_start);
             draw_line(mlx, player_pt, line_end_pt);
-            angle_start += (PI / 3) / 120;
+            angle_start += (PI / 3) / 2560;
             if(angle_start < 0)
                 angle_start += 2*PI;
             else if (angle_start > 2*PI)
@@ -879,19 +989,12 @@ void map_render(t_mlx *mlx)
             i++;
         }
     }
-
-    
-    
-
-
-	
-    
-    mlx_put_image_to_window(mlx->mlx_cnx, mlx->mlx_win, mlx->img.img, 0, 0);
+    // miini(mlx);
 }
 
 
 
-int check_wall(t_mlx *mlx, char direction)
+int check_wall(t_mlx *mlx, char direction, int *speed)
 {
     double x;
     double y;
@@ -899,80 +1002,87 @@ int check_wall(t_mlx *mlx, char direction)
     x = mlx->player->x_player;
     y = mlx->player->y_player;
 
+
     if (direction == 'U') 
     {
-        x += cos(mlx->player->rot_angle) * SPEED;
-        y -= sin(mlx->player->rot_angle) * SPEED;
+        x += cos(mlx->player->rot_angle) * (*speed);
+        y -= sin(mlx->player->rot_angle) * (*speed);
     }
     else if (direction == 'D')
     {
-        x -= cos(mlx->player->rot_angle) * SPEED;
-        y += sin(mlx->player->rot_angle) * SPEED;
+        x -= cos(mlx->player->rot_angle) * (*speed);
+        y += sin(mlx->player->rot_angle) * (*speed);
     }
     else if (direction == 'L') 
     {
-        x += cos(mlx->player->rot_angle + PI / 2) * SPEED;
-        y -= sin(mlx->player->rot_angle + PI / 2) * SPEED;
+        x += cos(mlx->player->rot_angle + PI / 2) * (*speed);
+        y -= sin(mlx->player->rot_angle + PI / 2) * (*speed);
     }
     else if (direction == 'R') 
     {
-        x += cos(mlx->player->rot_angle - PI / 2) * SPEED;
-        y -= sin(mlx->player->rot_angle - PI / 2) * SPEED;
+        x += cos(mlx->player->rot_angle - PI / 2) * (*speed);
+        y -= sin(mlx->player->rot_angle - PI / 2) * (*speed);
     }
     if(is_in_wall(mlx->cube->map, x, y, mlx))
         return 1;
     return 0;
 }
 
-void    move_player(t_mlx *mlx, char direction)
+void    move_player(t_mlx *mlx, char direction, int *speed)
 {
-    if (check_wall(mlx, direction))
+    if (check_wall(mlx, direction, speed))
         return ;
     if (direction == 'U') 
     {
-        mlx->player->x_player += cos(mlx->player->rot_angle) * SPEED;
-        mlx->player->y_player -= sin(mlx->player->rot_angle) * SPEED;
+        mlx->player->x_player += cos(mlx->player->rot_angle) * (*speed);
+        mlx->player->y_player -= sin(mlx->player->rot_angle) * (*speed);
     }
     else if (direction == 'D')
     {
-        mlx->player->x_player -= cos(mlx->player->rot_angle) * SPEED;
-        mlx->player->y_player += sin(mlx->player->rot_angle) * SPEED;
+        mlx->player->x_player -= cos(mlx->player->rot_angle) * (*speed);
+        mlx->player->y_player += sin(mlx->player->rot_angle) * (*speed);
     }
     else if (direction == 'L') 
     {
-        mlx->player->x_player += cos(mlx->player->rot_angle + PI / 2) * SPEED;
-        mlx->player->y_player -= sin(mlx->player->rot_angle + PI / 2) * SPEED;
+        mlx->player->x_player += cos(mlx->player->rot_angle + PI / 2) * (*speed);
+        mlx->player->y_player -= sin(mlx->player->rot_angle + PI / 2) * (*speed);
     }
     else if (direction == 'R') 
     {
-        mlx->player->x_player += cos(mlx->player->rot_angle - PI / 2) * SPEED;
-        mlx->player->y_player -= sin(mlx->player->rot_angle - PI / 2) * SPEED;
+        mlx->player->x_player += cos(mlx->player->rot_angle - PI / 2) * (*speed);
+        mlx->player->y_player -= sin(mlx->player->rot_angle - PI / 2) * (*speed);
     }
 }
 
 int	destroy_handler(t_mlx *mlx)
 {
-	mlx_destroy_image(mlx->mlx_cnx, mlx->img.img);
-	mlx_destroy_window(mlx->mlx_cnx, mlx->mlx_win);
+	// mlx_destroy_image(mlx->mlx_cnx, mlx->img.img);
+	// mlx_destroy_window(mlx->mlx_cnx, mlx->mlx_win);
 	exit(0);
 	return (0);
 }
 
-int	keydown_handler(int keycode, t_mlx *mlx)
+void	keydown_handler(void *param)
 {
-    (void)mlx;
+    t_mlx *mlx;
+    int speed;
+
+    speed = SPEED;
+    mlx = (t_mlx *)param;
     // printf("KEY PRESSED keycode = %d\n", keycode);
-    if (keycode == ESC)
+    if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_LEFT_SHIFT))
+        speed = 28;
+    if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_ESCAPE))
         destroy_handler(mlx);
-    if (keycode == LEFT)
-        move_player(mlx, 'L');
-    if (keycode == UP)
-        move_player(mlx, 'U');
-    if (keycode == RIGHT)
-        move_player(mlx, 'R');
-    if (keycode == DOWN)
-        move_player(mlx, 'D');
-    if (keycode == ARROW_LEFT)
+    if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_A))
+        move_player(mlx, 'L', &speed);
+    if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_W))
+        move_player(mlx, 'U', &speed);
+    if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_D))
+        move_player(mlx, 'R', &speed);
+    if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_S))
+        move_player(mlx, 'D', &speed);
+    if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_LEFT))
     {
         mlx->player->rot_angle += PI / 36;
         if (mlx->player->rot_angle >= 2*PI)
@@ -980,7 +1090,7 @@ int	keydown_handler(int keycode, t_mlx *mlx)
         // else if (mlx->player->rot_angle < 0)
         //     mlx->player->rot_angle += 2*PI;
     }
-    else if (keycode == ARROW_RIGHT)
+    else if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_RIGHT))
     {
         mlx->player->rot_angle -= PI / 36;
         if (mlx->player->rot_angle < 0)
@@ -989,7 +1099,7 @@ int	keydown_handler(int keycode, t_mlx *mlx)
         //     mlx->player->rot_angle -= 2*PI;
     }
     map_render(mlx);
-	return (0);
+	// return (0);
 }
 
 int	close_win(int keycode, t_mlx *mlx)
@@ -998,45 +1108,98 @@ int	close_win(int keycode, t_mlx *mlx)
 
     k = 0;
     // printf("keycode =%d\n", keycode);
-	mlx_destroy_window(mlx->mlx_cnx, mlx->mlx_win);
+	// mlx_destroy_window(mlx->mlx_cnx, mlx->mlx_win);
 	return (0);
 }
 
-
-void player_init(t_mlx *mlx, t_cube cube)
+void    player_infos(t_cube *cube, int *p_x, int *p_y, char *p_or)
 {
     int i;
     int j;
-    int player_x;
-    int player_y;
-
 
     i = 0;
     j = 0;
-    player_x = 0;
-    player_y = 0;
-
-    if (!mlx || !mlx->player || !mlx->map || !cube.map)
-    return;
-
-    while(cube.map[i])
+    while(cube->map[i])
     {
         j = 0;
-        while (cube.map[i][j])
+        while (cube->map[i][j])
         {
-            if(cube.map[i][j] == 'N' || cube.map[i][j] == 'S' || cube.map[i][j] == 'E' || cube.map[i][j] == 'W')
+            if(cube->map[i][j] == 'N' || cube->map[i][j] == 'S' || cube->map[i][j] == 'E' || cube->map[i][j] == 'W')
             {
-                player_x = j;
-                player_y = i;
+                *p_x = j;
+                *p_y = i;
+                *p_or = cube->map[i][j];
             }
             j++;
         }        
         i++;
     }
+}
+
+void player_init(t_mlx *mlx)
+{
+    int     player_x;
+    int     player_y;
+    char    player_orientation;
+    
+    player_x = 0;
+    player_y = 0;
+    player_orientation = '0';
+    if (!mlx || !mlx->player || !mlx->map || !mlx->cube->map)
+    {
+        puts("heeheeehhe");
+        return;
+    }
+    player_infos(mlx->cube, &player_x, &player_y, &player_orientation);
     mlx->player->x_player = (TILE_SIZE * player_x) + (TILE_SIZE / 2);
     mlx->player->y_player = (TILE_SIZE * player_y) + (TILE_SIZE / 2);
-    // mlx->player->x_player = player_x + 0.5;
-    // mlx->player->y_player = player_y + 0.5;
+    // printf("p x : %f p y : %f\n", mlx->player->x_player, mlx->player->y_player);
+    if (player_orientation == 'N')
+        mlx->player->rot_angle = PI/2;
+    else if (player_orientation == 'W')
+        mlx->player->rot_angle = PI;
+    else if (player_orientation == 'S')
+        mlx->player->rot_angle = (3*PI)/2;
+    else if (player_orientation == 'E')
+        mlx->player->rot_angle = 0;
+}
+void *salloc(int size)
+{
+    void *alloc;
+
+    alloc = malloc(size);
+    if (!alloc)
+    {
+        printf("MALLOC ERROR\n");
+        exit(1);
+    }
+    return (alloc);
+}
+void    initializer(t_mlx *mlx, t_cube *cube, int h_tiles, int w_tiles)
+{
+    // mlx->mlx_cnx = mlx_init();
+    mlx->mlx_cnx = mlx_init( 2560, 1280, "CUB3D", false);
+    mlx->img = mlx_new_image(mlx->mlx_cnx, 2560, 1280);
+    // mlx->img.addr = mlx_get_data_addr(mlx->img.img, &mlx->img.bits_per_pixel, &mlx->img.line_length, &mlx->img.endian);
+    mlx->map = salloc(sizeof(t_map));
+    mlx->map->height = h_tiles * TILE_SIZE;
+    mlx->map->width = w_tiles * TILE_SIZE;
+    mlx->cube = cube;
+    mlx->player = salloc(sizeof(t_player));
+    player_init(mlx);
+    mlx_image_to_window(mlx->mlx_cnx, mlx->img, 0, 0);
+}
+
+void    load_graphics(t_mlx *mlx, t_cube *cube)
+{
+    mlx->graphics.no_txtr = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png(cube->no_tex));
+    mlx->graphics.so_txtr = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png(cube->so_tex));
+    mlx->graphics.ea_txtr = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png(cube->ea_tex));
+    mlx->graphics.we_txtr = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png(cube->we_tex));
+    mlx_resize_image(mlx->graphics.no_txtr, W_HEIGHT, W_HEIGHT);
+    mlx_resize_image(mlx->graphics.so_txtr, W_HEIGHT, W_HEIGHT);
+    mlx_resize_image(mlx->graphics.ea_txtr, W_HEIGHT, W_HEIGHT);
+    mlx_resize_image(mlx->graphics.we_txtr, W_HEIGHT, W_HEIGHT);
 }
 
 int main(int ac, char **av)
@@ -1073,64 +1236,14 @@ int main(int ac, char **av)
 
     // EXECUTION
 
-
     t_mlx   *mlx;
-    int     width;
-    int     height;
-
-    mlx = malloc(sizeof(t_mlx));
-    if (!mlx)
-    {
-        fprintf(stderr, "MALLOC ERROR\n");
-        exit(1);
-    }
-    width = width_tiles * TILE_SIZE;
-    height = height_tiles * TILE_SIZE;
-    // printf("width %d\nheight %d\n", width, height);
-
-    mlx->mlx_cnx = mlx_init();
     
-    mlx->mlx_win = mlx_new_window(mlx->mlx_cnx, 2560, 1280, "CUB3D");
-    mlx->img.img = mlx_new_image(mlx->mlx_cnx, 2560, 1280);
-    mlx->img.addr = mlx_get_data_addr(mlx->img.img, &mlx->img.bits_per_pixel, &mlx->img.line_length, &mlx->img.endian);
-
-    mlx->map = malloc(sizeof(t_map));
-    if (!mlx->map)
-    {
-        fprintf(stderr, "MALLOC ERROR\n");
-        exit(1);
-    }
-
-    mlx->cube = malloc(sizeof(t_cube));
-    if (!mlx->cube)
-    {
-        fprintf(stderr, "MALLOC ERROR\n");
-        exit(1);
-    }
-    mlx->cube = &cube;
-    mlx->map->height = height;
-    mlx->map->width = width;
-    mlx->player = malloc(sizeof(t_player));
-    if (!mlx->player)
-    {
-        fprintf(stderr, "MALLOC ERROR\n");
-        exit(1);
-    }
-    mlx->player->x_player = 0;
-    mlx->player->y_player = 0;
-    mlx->player->rot_angle = PI / 2;
-
-
-
-    player_init(mlx, cube);
-
-    // printf("player x = %f\nplayer y = %f\n", mlx->player->x_player, mlx->player->y_player);
-
-    map_render(mlx);
-    // mlx_hook(mlx->mlx_win, 2, 1L<<0, close_win, &mlx);
-    mlx_hook(mlx->mlx_win, 2, (1L<<0), keydown_handler, mlx);
-    mlx_hook(mlx->mlx_win, 17, 1L<<0, destroy_handler, &mlx);
+    mlx = salloc(sizeof(t_mlx));
+    initializer(mlx, &cube, height_tiles, width_tiles);
+    load_graphics(mlx, &cube);
+    // map_render(mlx);
+    mlx_loop_hook(mlx->mlx_cnx, keydown_handler, mlx);
+    // mlx_hook(mlx->mlx_win, 2, (1L<<0), keydown_handler, mlx);
+    // mlx_hook(mlx->mlx_win, 17, 1L<<0, destroy_handler, &mlx);
     mlx_loop(mlx->mlx_cnx);
-
-
 }
