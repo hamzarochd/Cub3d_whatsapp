@@ -16,12 +16,12 @@
 
 #include <fcntl.h>
 #include "./MLX42/include/MLX42/MLX42.h"
-
+#include <sys/time.h>
 
 #define W_HEIGHT 1280
 #define W_WIDTH 2560
 
-#define TILE_SIZE 128
+#define TILE_SIZE 1280
 #define ARROW_LEFT 65361
 #define ARROW_UP 65362
 #define ARROW_RIGHT 65363
@@ -32,8 +32,8 @@
 #define DOWN 115
 #define ESC 65307
 #define PI 3.141592654
-#define SPEED 10
-#define MAX_DISTANCE 10 * TILE_SIZE
+#define SPEED 100
+#define MAX_DISTANCE 15 * TILE_SIZE
 
 typedef struct  s_cube
 {
@@ -89,6 +89,10 @@ typedef struct  s_graphics
     mlx_image_t *so_txtr;
     mlx_image_t *ea_txtr;
     mlx_image_t *we_txtr;
+    mlx_image_t *sky_image;
+    mlx_image_t *player;
+    mlx_image_t *north;
+    mlx_image_t *map_frame;
 }               t_graphics;
 
 typedef struct  s_mlx {
