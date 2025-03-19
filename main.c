@@ -339,6 +339,23 @@ void draw_filled_circle(t_mlx *mlx, int x_center, int y_center, int radius, int 
     }
 }
 
+int check_diagonal(char **map, int xtile, int ytile, t_mlx *mlx)
+{
+    // int target_x;
+    // int target_y;
+    int player_x;
+    int player_y;
+
+    player_x = mlx->player->x_player/TILE_SIZE;
+    player_y = mlx->player->y_player/TILE_SIZE;
+    // target_x = player_x + (xtile - player_x);
+    // target_y = player_y + (ytile - player_y);
+
+    if (map[player_y][xtile] == '1' && map[ytile][player_x] == '1')
+        return 1;
+    return 0;
+}
+
 int is_in_wall(char **map, double x, double y, t_mlx *mlx)
 {
     int map_x;
@@ -354,7 +371,12 @@ int is_in_wall(char **map, double x, double y, t_mlx *mlx)
         if(map[map_y][map_x] == '1')
             return 1;
         else
+        {
+            // printf("old x : %d\t\t\told y : %d\nnew x : %d\t\t\tnew y : %d\n", (int)(mlx->player->x_player/TILE_SIZE), (int)(mlx->player->y_player/TILE_SIZE), map_x, map_y);
+            // if (map_x != (mlx->player->x_player/TILE_SIZE) && map_y != (mlx->player->y_player/TILE_SIZE))
+            //     return (check_diagonal(map, map_x, map_y, mlx));
             return 0;
+        }
     }
     return 1;
 }
@@ -917,7 +939,7 @@ void minimap(t_mlx *mlx)
 {
     int center_x = 192;
     int center_y = 192;
-    float scale = 20;
+    float scale = (float)mlx->minimap_scale;
     static mlx_image_t *pre;
     static mlx_image_t *prev;
     float rot_angle = mlx->player->rot_angle - (PI/2);
@@ -931,7 +953,7 @@ void minimap(t_mlx *mlx)
 
     float cos_angle = cos(-rot_angle);
     float sin_angle = sin(-rot_angle);
- draw_filled_circle(mlx, 192, 192, 135, rgb(0, 0, 0, 255));
+    draw_filled_circle(mlx, 192, 192, 135, rgb(0, 0, 0, 255));
     for (int y = 64; y < 320; y++)
     {
         for (int x = 64; x < 320; x++)
@@ -970,7 +992,6 @@ void minimap(t_mlx *mlx)
             } else {
                 mlx_put_pixel(mlx->img, x, y, rgb(255, 16, 31, 255));
             }
-            
         }
     }
 
@@ -981,15 +1002,13 @@ void minimap(t_mlx *mlx)
         mlx_delete_image(mlx->mlx_cnx, pre);
     pre = mlx_put_string(mlx->mlx_cnx, "N", tip.x - 5, tip.y - 10);
     mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.player, center_x - 10, center_y - 10);
-    // mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.map_frame, 51, 51);
-    // mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.north, tip.x - 10, tip.y - 10);
     
-    if (prev)
-        mlx_delete_image(mlx->mlx_cnx, prev);
-    char *str = ft_itoa(1 / get_delta_time());
-    printf("%s\n", str);
-    prev = mlx_put_string(mlx->mlx_cnx, str, 400, 400);
-    free(str);
+    // if (prev)
+    //     mlx_delete_image(mlx->mlx_cnx, prev);
+    // char *str = ft_itoa(1 / get_delta_time());
+    // printf("%s\n", str);
+    // prev = mlx_put_string(mlx->mlx_cnx, str, 400, 400);
+    // free(str);
     // printf("%p\n", fps);
 }
 
@@ -1002,7 +1021,6 @@ void map_render(void   *param)
     t_ray   *ray;
 
     mlx = (t_mlx *)param;
-    // draw_filled_circle(mlx, 192, 192, 180, rgb(0, 0, 0, 255));
     if (!is_minimap)
     {
         player_pt.x = mlx->player->x_player;
@@ -1080,7 +1098,6 @@ void map_render(void   *param)
                 int floor_color = rgb(136, 152, 178, 255);
                 double distanceFactor = 1.0 - (abs(wall_start - (W_HEIGHT / 2)) / ((W_HEIGHT) / 2));
                 mlx_put_pixel(mlx->img, i, wall_start, re_apply_distance_effect(floor_color, (distanceFactor * MAX_DISTANCE)));
-                // mlx_put_pixel(mlx->img, i, wall_start, apply_distance_effect(floor_color, ));
                 wall_start++;
             }
             angle_start -= (PI/3) / 2560;
@@ -1089,84 +1106,7 @@ void map_render(void   *param)
             i++;
         }
     }
-    else
-    {
-        // DRAW MAP
-
-        int	x;
-        int	y;
-        int map_x;
-        int map_y;
-        t_point line_end_pt;
-        double  line_lenght;
-
-        map_x = 0;
-        map_y = 0;
-        y = 0;
-        while (y < mlx->map->height)
-        {
-            map_y = y / (TILE_SIZE);
-            x = 0;
-            while (x < mlx->map->width)
-            {
-                map_x = x / (TILE_SIZE);
-                if ((x % (TILE_SIZE) == 0) || (y % (TILE_SIZE) == 0))
-                    mlx_put_pixel(mlx->img, x, y, 0x000000);
-                else if (mlx->cube->map[map_y][map_x] == '0')
-                {
-                        mlx_put_pixel(mlx->img, x, y, 0x0000FF);
-                }
-                    
-                else if(mlx->cube->map[map_y][map_x] == 'N' || mlx->cube->map[map_y][map_x] == 'S' || mlx->cube->map[map_y][map_x] == 'E' || mlx->cube->map[map_y][map_x] == 'W')
-                {
-                        mlx_put_pixel(mlx->img, x, y, 0x0000FF);
-        
-                }
-                else if (mlx->cube->map[map_y][map_x] == ' ')
-                {
-                    mlx_put_pixel(mlx->img, x, y, 0x000000);
-                }
-                else
-                {
-                    mlx_put_pixel(mlx->img, x, y, 0xFF0000);
-                }
-                x++;
-            }
-            y++;
-        }
-
-
-        // DRAW PLAYER AND RAYS
-
-        draw_filled_circle(mlx, mlx->player->x_player, mlx->player->y_player, 5, 0x00FF00);
-
-        player_pt.x = mlx->player->x_player;
-        player_pt.y = mlx->player->y_player;
-
-        line_lenght = 200.0;
-
-        double angle_start = mlx->player->rot_angle - ((PI/180) * 30);
-        if(angle_start < 0)
-            angle_start += 2*PI;
-        else if (angle_start > 2*PI)
-            angle_start -= 2*PI;
-        int i = 0;
-        while (i < 2560)
-        {
-            line_end_pt = calculate_rayend(mlx, mlx->cube->map, player_pt, angle_start);
-            draw_line(mlx, player_pt, line_end_pt);
-            angle_start += (PI / 3) / 2560;
-            if(angle_start < 0)
-                angle_start += 2*PI;
-            else if (angle_start > 2*PI)
-                angle_start -= 2*PI;
-            i++;
-        }
-    }
-    // miini(mlx);
     minimap(mlx);
-    
-    // minimap(mlx);
 }
 
 
@@ -1178,30 +1118,52 @@ int check_wall(t_mlx *mlx, char direction, int *speed)
 
     x = mlx->player->x_player;
     y = mlx->player->y_player;
+    double old_x = x;
+    double old_y = y;
     if (direction == 'U') 
     {
-        x += cos(mlx->player->rot_angle) * (*speed);
-        y -= sin(mlx->player->rot_angle) * (*speed);
+        x += cos(mlx->player->rot_angle) * (*speed + 200);
+        y -= sin(mlx->player->rot_angle) * (*speed + 200);
     }
     else if (direction == 'D')
     {
-        x -= cos(mlx->player->rot_angle) * (*speed);
-        y += sin(mlx->player->rot_angle) * (*speed);
+        x -= cos(mlx->player->rot_angle) * (*speed + 200);
+        y += sin(mlx->player->rot_angle) * (*speed + 200);
     }
     else if (direction == 'L') 
     {
-        x += cos(mlx->player->rot_angle + PI / 2) * (*speed);
-        y -= sin(mlx->player->rot_angle + PI / 2) * (*speed);
+        x += cos(mlx->player->rot_angle + PI / 2) * (*speed + 200);
+        y -= sin(mlx->player->rot_angle + PI / 2) * (*speed + 200);
     }
     else if (direction == 'R') 
     {
-        x += cos(mlx->player->rot_angle - PI / 2) * (*speed);
-        y -= sin(mlx->player->rot_angle - PI / 2) * (*speed);
+        x += cos(mlx->player->rot_angle - PI / 2) * (*speed + 200);
+        y -= sin(mlx->player->rot_angle - PI / 2) * (*speed + 200);
     }
+    t_point average1, average2, average3;
+    average1.x = old_x + ((x - old_x) / 4);
+    average1.y = old_y + ((y - old_y) / 4);
+    average1.x = old_x + (2 * ((x - old_x) / 4));
+    average1.y = old_y + (2 * ((y - old_y) / 4));
+    average1.x = old_x + (3 * ((x - old_x) / 4));
+    average1.y = old_y + (3 * ((y - old_y) / 4));
+
     if(is_in_wall(mlx->cube->map, x, y, mlx))
+    if(is_in_wall(mlx->cube->map, x, y, mlx) || is_in_wall(mlx->cube->map, average1.x, average1.y, mlx)
+        || is_in_wall(mlx->cube->map, average2.x, average2.y, mlx) || is_in_wall(mlx->cube->map, average3.x, average3.y, mlx))
+    {
+        if (!is_in_wall(mlx->cube->map, x, mlx->player->y_player, mlx))
+            mlx->player->x_player += (x - mlx->player->x_player) / 2;
+        if (!is_in_wall(mlx->cube->map, mlx->player->x_player, y, mlx))
+            mlx->player->y_player += (y - mlx->player->y_player) / 2; 
         return 1;
+    }
+    if (old_x/TILE_SIZE != x/TILE_SIZE && old_y/TILE_SIZE != y/TILE_SIZE)
+        return (check_diagonal(mlx->cube->map, x/TILE_SIZE, y/TILE_SIZE, mlx));
     return 0;
 }
+
+
 
 void    move_player(t_mlx *mlx, char direction, int *speed)
 {
@@ -1242,8 +1204,12 @@ void	keydown_handler(void *param)
 
     speed = SPEED;
     mlx = (t_mlx *)param;
+    mlx->minimap_scale = MINIMAP_SCALE;
     if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_LEFT_SHIFT))
-        speed = 280;
+    {
+        speed = 400;
+        mlx->minimap_scale = MINIMAP_SCALE * 1.15;
+    }
     if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_ESCAPE))
         destroy_handler(mlx);
     if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_A))
@@ -1350,6 +1316,7 @@ void    initializer(t_mlx *mlx, t_cube *cube, int h_tiles, int w_tiles)
     mlx->map->width = w_tiles * TILE_SIZE;
     mlx->cube = cube;
     mlx->player = salloc(sizeof(t_player));
+    mlx->minimap_scale = MINIMAP_SCALE;
     player_init(mlx);
     
 }
@@ -1363,8 +1330,6 @@ void    load_graphics(t_mlx *mlx, t_cube *cube)
     mlx->graphics.sky_image = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png("textures/sky5.png"));
     mlx->graphics.player = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png("textures/player_arrow1.png"));
     mlx->graphics.north = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png("textures/north.png"));
-    mlx->graphics.map_frame = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png("textures/minimapframe2.png"));
-
 
     mlx_resize_image(mlx->graphics.no_txtr, W_HEIGHT, W_HEIGHT);
     mlx_resize_image(mlx->graphics.so_txtr, W_HEIGHT, W_HEIGHT);
@@ -1372,9 +1337,6 @@ void    load_graphics(t_mlx *mlx, t_cube *cube)
     mlx_resize_image(mlx->graphics.we_txtr, W_HEIGHT, W_HEIGHT);
     mlx_resize_image(mlx->graphics.player, 20, 20);
     mlx_resize_image(mlx->graphics.north, 20, 20);
-    mlx_resize_image(mlx->graphics.map_frame, 280, 280);
-    
-
 }
 
 

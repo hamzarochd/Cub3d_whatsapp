@@ -32,7 +32,8 @@
 #define DOWN 115
 #define ESC 65307
 #define PI 3.141592654
-#define SPEED 100
+#define SPEED 200
+#define MINIMAP_SCALE 20
 #define MAX_DISTANCE 15 * TILE_SIZE
 
 typedef struct  s_cube
@@ -103,6 +104,7 @@ typedef struct  s_mlx {
     t_cube  *cube;
     t_graphics graphics;
     t_player    *player;
+    int         minimap_scale;
 }               t_mlx;
 
 
