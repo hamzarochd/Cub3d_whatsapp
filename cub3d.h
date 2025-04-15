@@ -35,6 +35,12 @@
 #define SPEED 200
 #define MINIMAP_SCALE 20
 #define MAX_DISTANCE 15 * TILE_SIZE
+# define GUN_W 877
+# define GUN_H 580
+# define FIRE_W 898
+# define FIRE_H 570
+# define RELOAD_W 1394
+# define RELOAD_H 736
 
 typedef struct  s_cube
 {
@@ -82,6 +88,7 @@ typedef struct  s_ray
     double  ray_length;
     char    wall_orientation;
     int     tile_hit_point;
+    int     is_door;
 }               t_ray;
 
 typedef struct  s_graphics
@@ -90,9 +97,16 @@ typedef struct  s_graphics
     mlx_image_t *so_txtr;
     mlx_image_t *ea_txtr;
     mlx_image_t *we_txtr;
+    mlx_image_t *door_txtr;
     mlx_image_t *sky_image;
+    mlx_image_t *gun;
+    mlx_image_t *reload;
     mlx_image_t *player;
+    mlx_image_t *fire;
     mlx_image_t *north;
+    mlx_texture_t *fire_tex;
+    mlx_texture_t *reload_tex;
+    mlx_texture_t *gun_tex;
     mlx_image_t *map_frame;
 }               t_graphics;
 
@@ -105,6 +119,10 @@ typedef struct  s_mlx {
     t_graphics graphics;
     t_player    *player;
     int         minimap_scale;
+    int         is_walking;
+    int         is_firing;
+    int         is_reloading;
+    int         is_holding;
 }               t_mlx;
 
 
