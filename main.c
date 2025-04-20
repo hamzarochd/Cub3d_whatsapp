@@ -1592,9 +1592,27 @@ void    animation_hook(void *param)
     }
 }
 
-void    load_graphics(t_mlx *mlx, t_cube *cube)
+void ft_exit(t_mlx * mlx)
 {
-    mlx->graphics.no_txtr = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png(cube->no_tex));
+    // kole image delete image 
+    // kola texture delete texture
+    // if ( alid )
+    // dekete
+    // mlx_terminate
+}
+
+
+
+void    load_graphics(t_mlx *mlx, t_cube *cube)
+{   
+    mlx_texture_t * tmp; 
+    tmp =  mlx_load_png(cube->no_tex);
+
+//check 
+    // if (!tmp)
+        // exit with ft-exit delete images li dja tloadaw 
+    mlx->graphics.no_txtr = mlx_texture_to_image(mlx->mlx_cnx, tmp);
+    mlx_delete_texture(tmp);
     mlx->graphics.so_txtr = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png(cube->so_tex));
     mlx->graphics.ea_txtr = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png(cube->ea_tex));
     mlx->graphics.we_txtr = mlx_texture_to_image(mlx->mlx_cnx, mlx_load_png(cube->we_tex));
