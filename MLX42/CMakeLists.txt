@@ -20,6 +20,7 @@ set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set(CMAKE_OSX_DEPLOYMENT_TARGET "14.0" CACHE STRING "Minimum macOS version")
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # Options
@@ -82,7 +83,6 @@ add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/mlx_frag_shader.c
     COMMAND ${CCSHADER} ${PROJECT_SOURCE_DIR}/shaders/default.frag ${EMSCRIPTEN_VALUE} > ${CMAKE_CURRENT_BINARY_DIR}/mlx_frag_shader.c
     VERBATIM
-    PRE_BUILD
     USES_TERMINAL
 )
 
@@ -93,7 +93,6 @@ add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/mlx_vert_shader.c
     COMMAND ${CCSHADER} ${PROJECT_SOURCE_DIR}/shaders/default.vert ${EMSCRIPTEN_VALUE} > ${CMAKE_CURRENT_BINARY_DIR}/mlx_vert_shader.c
     VERBATIM
-    PRE_BUILD
     USES_TERMINAL
 )
 

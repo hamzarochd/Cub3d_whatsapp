@@ -10,7 +10,6 @@
 # include <limits.h>
 # include <stdio.h>
 # include <string.h>
-# include "printf/ft_printf.h"
 // # include <mlx.h>
 # include <math.h>
 

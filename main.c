@@ -39,12 +39,12 @@ int read_file(t_cube *cube)
     while(get_next_line(cube->fd))
         count++;
     if (count == 0)
-        return (ft_printf("map empty\n"), 1);
+        return (printf("map empty\n"), 1);
     cube->file_content = calloc(count + 1, sizeof(char *));
     close(cube->fd);
     cube->fd = open(cube->file_name, O_RDONLY);
     if (cube->fd == -1)
-        return (ft_printf("fd error\n"), 1);
+        return (printf("fd error\n"), 1);
     tmp = get_next_line(cube->fd);
     while(tmp)
     {
@@ -111,42 +111,42 @@ int check_config(t_cube *cube, char *line)
     if (strcmp(splitted[0], "NO") == 0)
     {
         if (cube->no_tex != NULL)
-            return (ft_printf("NO texture already set\n"), 1);
+            return (printf("NO texture already set\n"), 1);
         cube->no_tex = strdup(splitted[1]);
         counter++;
     }
     else if (strcmp(splitted[0], "SO") == 0)
     {
         if (cube->so_tex != NULL)
-            return (ft_printf("SO texture already set\n"), 1);
+            return (printf("SO texture already set\n"), 1);
         cube->so_tex = strdup(splitted[1]);
         counter++;
     }
     else if (strcmp(splitted[0], "WE") == 0)
     {
         if (cube->we_tex != NULL)
-            return (ft_printf("WE texture already set\n"), 1);
+            return (printf("WE texture already set\n"), 1);
         cube->we_tex = strdup(splitted[1]);
         counter++;
     }
     else if (strcmp(splitted[0], "EA") == 0)
     {
         if (cube->ea_tex != NULL)
-            return (ft_printf("EA texture already set\n"), 1);
+            return (printf("EA texture already set\n"), 1);
         cube->ea_tex = strdup(splitted[1]);
         counter++;
     }
     else if (strcmp(splitted[0], "F") == 0)
     {
         if (cube->floor_color != NULL)
-            return (ft_printf("floor color already set\n"), 1);
+            return (printf("floor color already set\n"), 1);
         cube->floor_color = color_join(splitted);
         counter++;
     }
     else if (strcmp(splitted[0], "C") == 0)
     {
         if (cube->ceiling_color != NULL)
-            return (ft_printf("ceiling color already set\n"), 1);
+            return (printf("ceiling color already set\n"), 1);
         cube->ceiling_color = color_join(splitted);
         counter++;
     }
@@ -247,13 +247,13 @@ int check_map(t_cube *cube)
             if (cube->map[i][j] == '0')
             {
                 if (i == 0 || cube->map[i - 1][j] == ' ')
-                    return (ft_printf("Error: '0' not closed on top at (%d, %d)\n", i, j), 1);
+                    return (printf("Error: '0' not closed on top at (%d, %d)\n", i, j), 1);
                 if (cube->map[i + 1] == NULL || cube->map[i + 1][j] == ' ')
-                    return (ft_printf("Error: '0' not closed on bottom at (%d, %d)\n", i, j), 1);
+                    return (printf("Error: '0' not closed on bottom at (%d, %d)\n", i, j), 1);
                 if (j == 0 || cube->map[i][j - 1] == ' ') 
-                    return (ft_printf("Error: '0' not closed on left at (%d, %d)\n", i, j), 1);
+                    return (printf("Error: '0' not closed on left at (%d, %d)\n", i, j), 1);
                 if (cube->map[i][j + 1] == '\0' || cube->map[i][j + 1] == ' ') 
-                    return (ft_printf("Error: '0' not closed on right at (%d, %d)\n", i, j), 1);
+                    return (printf("Error: '0' not closed on right at (%d, %d)\n", i, j), 1);
             }
 
             if (cube->map[i][j] == 'N' || cube->map[i][j] == 'S' || cube->map[i][j] == 'W' || cube->map[i][j] == 'E')
@@ -264,7 +264,7 @@ int check_map(t_cube *cube)
     }
 
     if (player_count != 1) {
-        return (ft_printf("Error: There must be exactly one player on the map\n"), 1);
+        return (printf("Error: There must be exactly one player on the map\n"), 1);
     }
     return (0);
 }
@@ -1401,7 +1401,8 @@ void *salloc(int size)
 void    initializer(t_mlx *mlx, t_cube *cube, int h_tiles, int w_tiles)
 {
     // mlx->mlx_cnx = mlx_init();
-    mlx->mlx_cnx = mlx_init( 2560, 1280, "CUB3D", false);
+    // mlx->mlx_cnx = mlx_init( 2560, 1280, "CUB3D", false);
+    mlx->mlx_cnx = mlx_init( 1280, 700, "CUB3D", false);
     mlx->img = mlx_new_image(mlx->mlx_cnx, 2560, 1280);
     // mlx->img.addr = mlx_get_data_addr(mlx->img.img, &mlx->img.bits_per_pixel, &mlx->img.line_length, &mlx->img.endian);
     mlx->map = salloc(sizeof(t_map));
@@ -1651,7 +1652,7 @@ int main(int ac, char **av)
     cube.file_name = ft_strdup(av[1]);
     if (check_map_name(cube.file_name) == 1)
     {
-        ft_printf("map name error\n");
+        printf("map name error\n");
         return (1);
     }
     cube.fd = open(cube.file_name, O_RDONLY);
@@ -1667,7 +1668,7 @@ int main(int ac, char **av)
     int width_tiles = 0;
     while(cube.map[i])
     {
-        ft_printf("[%s]\n", cube.map[i]);
+        printf("[%s]\n", cube.map[i]);
         if(ft_strlen(cube.map[i]) > width_tiles)
             width_tiles = ft_strlen(cube.map[i]);
         i++;
