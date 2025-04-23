@@ -462,45 +462,46 @@ t_point calculate_rayend(t_mlx *mlx, char **map, t_point player_pt, double angle
         return v_wall;
 }
 
-t_ray *calculate_ray_lenght(t_mlx *mlx, char **map, t_point player_pt, double angle)
+t_ray calculate_ray_lenght(t_mlx *mlx, char **map, t_point player_pt, double angle)
 {
     t_point h_wall;
     t_point v_wall;
     double  v_ray;
     double  h_ray;
-    t_ray   *ray = malloc(sizeof(t_ray));
+    t_ray   ray;
 
     h_wall = get_h_wall_v(mlx, map, player_pt, angle, &h_ray);
     v_wall = get_v_wall_v(mlx, map, player_pt, angle, &v_ray);
-    ray->is_door = 0;
+    ray.is_door = 0;
+    ray.ray_pixels = 0;
     if (h_ray < v_ray)
     {
-        ray->ray_length = h_ray;
-        ray->tile_hit_point = (int)h_wall.x % TILE_SIZE;
+        ray.ray_length = h_ray;
+        ray.tile_hit_point = (int)h_wall.x % TILE_SIZE;
         if (angle < PI)
-            ray->wall_orientation = 'N';
+            ray.wall_orientation = 'N';
         else
-            ray->wall_orientation = 'S';
-        if (ray->wall_orientation == 'S')
-            ray->tile_hit_point = TILE_SIZE - ray->tile_hit_point;
-        if ((ray->wall_orientation == 'N' && is_in_door(map, h_wall.x, h_wall.y - 1, mlx))
-            || (ray->wall_orientation == 'S' && is_in_door(map, h_wall.x, h_wall.y + 1, mlx)))
-            ray->is_door = 1;
+            ray.wall_orientation = 'S';
+        if (ray.wall_orientation == 'S')
+            ray.tile_hit_point = TILE_SIZE - ray.tile_hit_point;
+        if ((ray.wall_orientation == 'N' && is_in_door(map, h_wall.x, h_wall.y - 1, mlx))
+            || (ray.wall_orientation == 'S' && is_in_door(map, h_wall.x, h_wall.y + 1, mlx)))
+            ray.is_door = 1;
         return ray;
     }
     else
     {
-        ray->ray_length = v_ray;
-        ray->tile_hit_point = (int)v_wall.y % TILE_SIZE;
+        ray.ray_length = v_ray;
+        ray.tile_hit_point = (int)v_wall.y % TILE_SIZE;
         if (angle < (3*PI)/2 && angle > PI/2)
-            ray->wall_orientation = 'W';
+            ray.wall_orientation = 'W';
         else
-            ray->wall_orientation = 'E';
-        if (ray->wall_orientation == 'W')
-            ray->tile_hit_point = TILE_SIZE - ray->tile_hit_point;
-        if ((ray->wall_orientation == 'W' && is_in_door(map, v_wall.x - 1, v_wall.y, mlx))
-            || (ray->wall_orientation == 'E' && is_in_door(map, v_wall.x + 1, v_wall.y, mlx)))
-            ray->is_door = 1;
+            ray.wall_orientation = 'E';
+        if (ray.wall_orientation == 'W')
+            ray.tile_hit_point = TILE_SIZE - ray.tile_hit_point;
+        if ((ray.wall_orientation == 'W' && is_in_door(map, v_wall.x - 1, v_wall.y, mlx))
+            || (ray.wall_orientation == 'E' && is_in_door(map, v_wall.x + 1, v_wall.y, mlx)))
+            ray.is_door = 1;
         return ray;
     }
 }
@@ -686,114 +687,129 @@ mlx_image_t *define_wall_tex(int is_door, char wall_orientation, t_graphics grap
             return (graphics.so_txtr);
         else if (wall_orientation == 'E')
             return (graphics.ea_txtr);
-        else if (wall_orientation == 'W')
+        else 
             return (graphics.we_txtr);
-        else
-            return (NULL);
     }
 }
+
+
+void put_wall(t_mlx *mlx, int i, int *j, t_wall wall)
+{
+    int k;
+    uint32_t index;
+    uint32_t tex_width;
+    uint32_t tex_height;
+    
+    tex_width = wall.wall_texture->width;
+    tex_height = wall.wall_texture->height;
+    wall.tex.texel_x = (wall.ray->tile_hit_point) * (tex_width / TILE_SIZE);
+    wall.tex.texel_x = wall.tex.texel_x % tex_width;
+    index = wall.tex.texel_x;
+    k = *j;
+    while (k < wall.wall_end)
+    {
+        wall.tex.texel_y = ((int)wall.tex.tex_index) * tex_width;
+        wall.tex.texel_y = wall.tex.texel_y % (tex_width * tex_height);
+        index = (index + wall.tex.texel_y) % (tex_width * tex_height); 
+        wall.tex.texel_color = ((uint32_t *)(wall.wall_texture->pixels))[(wall.tex.texel_y + wall.tex.texel_x)];
+        re_put_pixel(mlx->img, i, k, wall.tex.texel_color);
+        k++;
+        wall.tex.tex_index += wall.wall_prop;
+    }
+    *j = k;
+}
+
+
+void put_ceiling(t_mlx *mlx, int i, int *j,int wall_start)
+{
+    // uint32_t sky_pixel_color = 0;
+    // int sky_start = (15360) - ((int)(mlx->player.rot_angle * ((15360)/(2*PI))));
+    int k;
+
+    k = *j;
+    while(k < wall_start)
+    {
+
+        ///// get sky color from parsing
+        // uint32_t pixel_offset = ((*j) * sky_image->width) + i + sky_start + (int)time;
+        // sky_pixel_color = ((uint32_t *)sky_image->pixels)[pixel_offset];
+        mlx_put_pixel(mlx->img, i, k, rgb(136, 152, 178, 255));
+        k++;
+    }
+    *j = k;
+}
+
+void    put_floor(t_mlx *mlx, int i, int *j)
+{
+    int k;
+
+    k = *j;
+    while(k < W_HEIGHT)
+    {
+        ////// get color from parsing
+        int floor_color = rgb(136, 152, 178, 255);
+        mlx_put_pixel(mlx->img, i, k, floor_color);
+        k++;
+    }
+    *j = k;     
+}
+
+t_wall  get_wall(t_mlx *mlx, t_ray *ray, double ray_pixels)
+{
+    t_wall wall;
+    
+    wall.wall_start = (W_HEIGHT - ray_pixels) / 2;
+    wall.wall_end = wall.wall_start + ray_pixels;
+    wall.wall_prop = W_HEIGHT / (double)ray_pixels;
+    wall.wall_texture = define_wall_tex(ray->is_door, ray->wall_orientation, mlx->graphics);  
+    wall.tex.tex_index = 0;
+    return (wall);
+}
+
+void    normmalize_angle(double *angle)
+{
+    if(*angle < 0)
+        *angle += 2*PI;
+    else if (*angle > 2*PI)
+        *angle -= 2*PI;
+}
+
 
 void map_render(void   *param)
 {
     t_mlx   *mlx;
-    t_ray   *ray;
+    t_ray   ray;
     t_point player_pt;
-    double angle_start;
+    t_rendex    r;
+    t_wall wall;
 
     mlx = (t_mlx *)param;
-    
-    
-    
     player_pt.x = mlx->player.x_player;
     player_pt.y = mlx->player.y_player;
     
-    angle_start = mlx->player.rot_angle + PI/6;
-    if(angle_start < 0)
-        angle_start += 2*PI;
-    else if (angle_start > 2*PI)
-        angle_start -= 2*PI;
-    
-
-
-
-
-    double c = (256) * (128 * 80);
-    double ray_length = 0;
-    double ray_pixels = 0;
+    r.angle_start = mlx->player.rot_angle + PI/6;
+    normmalize_angle(&r.angle_start);
     mlx_image_t *sky_image = mlx->graphics.sky_image;
-    double time = mlx_get_time();
-    
-    
-    
-    int i = 0;
-    while (i < 2560)
+    r.i = 0;
+    while (r.i < W_WIDTH)
     {
-        ray = calculate_ray_lenght(mlx, mlx->cube->map, player_pt, angle_start);
-        
-        double delta_angle = angle_start - mlx->player.rot_angle;
-        
-        ray_pixels = c / (ray->ray_length * cos(delta_angle));
-
-        ////       WALL VARIABLES
-
-
-        int wall_start = (1280 - ray_pixels) / 2;
-        int wall_end = wall_start + ray_pixels;
-        
-        int wall_length = wall_end - wall_start;
-
-        double wall_prop = 1280.0 / (double)ray_pixels;
-        
-        
-        /////// DEFINING WALL/DOOR TEXTURE
-
-
-
-        mlx_image_t *wall_texture;
-        wall_texture = define_wall_tex(ray->is_door, ray->wall_orientation, mlx->graphics);
-        if (wall_texture == NULL)
-            ft_exit(mlx);
-        
-        
-
-
-
-        
-        int image_start_x = 0;     
-        int j = 0;
-        double text_index = 0;
-        uint32_t sky_pixel_color = 0;
-        int sky_start = (15360) - ((int)(mlx->player.rot_angle * ((15360)/(2*PI))));
-        while(j < wall_start)
+        ray = calculate_ray_lenght(mlx, mlx->cube->map, player_pt, r.angle_start);
+        double delta_angle = r.angle_start - mlx->player.rot_angle;
+        ray.ray_pixels = mlx->wall_const / (ray.ray_length * cos(delta_angle));
+        wall = get_wall(mlx, &ray, ray.ray_pixels);
+        r.j = 0;
+        put_ceiling(mlx, r.i, &r.j, wall.wall_start);
+        if (ray.ray_pixels > W_HEIGHT)
         {
-            sky_pixel_color = ((uint32_t *)sky_image->pixels)[(j * sky_image->width) + (i) + (sky_start) + ((int)time)];
-            re_put_pixel(mlx->img, i, j, sky_pixel_color);
-            j++;
+            wall.tex.tex_index = (-wall.wall_start) * wall.wall_prop;
+            r.j = 0;
         }
-        if (ray_pixels > W_HEIGHT)
-        {
-            text_index = (-wall_start) * wall_prop;
-            wall_start = 0;
-        }
-        while (wall_start < wall_end && wall_start < W_HEIGHT)
-        {
-            uint32_t texel_color = ((uint32_t *)wall_texture->pixels)[((((int)text_index) * wall_texture->width) + ((ray->tile_hit_point) * (wall_texture->width / TILE_SIZE)))];
-            if (text_index < 1280.0)
-                re_put_pixel(mlx->img, i, wall_start, texel_color);
-            wall_start++;
-            text_index += wall_prop;
-        }
-        while(wall_start < W_HEIGHT)
-        {
-            int floor_color = rgb(136, 152, 178, 255);
-            double distanceFactor = 1.0 - (abs(wall_start - (W_HEIGHT / 2)) / ((W_HEIGHT) / 2));
-            mlx_put_pixel(mlx->img, i, wall_start, re_apply_distance_effect(floor_color, (distanceFactor * MAX_DISTANCE)));
-            wall_start++;
-        }
-        angle_start -= (PI/3) / 2560;
-        if (angle_start < 0)
-            angle_start += 2 * PI;
-        i++;
+        wall.ray = &ray;
+        put_wall(mlx, r.i, &r.j, wall);
+        put_floor(mlx, r.i, &r.j);
+        r.angle_start -= (PI/3) / W_WIDTH;
+        normmalize_angle(&r.angle_start);
+        r.i++;
     }
     minimap(mlx);
 }
@@ -1113,6 +1129,7 @@ void    initializer(t_mlx *mlx, t_cube *cube)
     mlx->is_holding = 0;
     mlx->is_firing = 0;
     mlx->is_reloading = 0;
+    mlx->wall_const = (W_HEIGHT / 5) * ((W_HEIGHT / 10) * 80);
     player_init(mlx);
 }
 

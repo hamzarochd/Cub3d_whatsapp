@@ -87,10 +87,37 @@ typedef struct  s_map {
 typedef struct  s_ray
 {
 	double  ray_length;
+	double	ray_pixels;
 	char    wall_orientation;
 	int     tile_hit_point;
 	int     is_door;
 }               t_ray;
+
+typedef struct	s_tex
+{
+	uint32_t	texel_x;
+	uint32_t	texel_y;
+	uint32_t	texel_color;
+	double		tex_index;
+}				t_tex;
+
+typedef struct 	s_render_indexes
+{
+	int		i;
+	int 	j;
+	double	angle_start;
+}				t_rendex;
+
+
+typedef struct s_wall
+{
+	int			wall_start;
+	int			wall_end;
+	double		wall_prop;
+	mlx_image_t *wall_texture;
+	t_tex		tex;
+	t_ray		*ray;
+}				t_wall;
 
 typedef struct  s_graphics
 {
@@ -123,6 +150,7 @@ typedef struct  s_mlx {
 	int         is_firing;
 	int         is_reloading;
 	int         is_holding;
+	double		wall_const;
 }               t_mlx;
 
 
