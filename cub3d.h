@@ -151,4 +151,14 @@ char	*ft_strjoin(char *s1, char *s2);
 char	**ft_split(const char *s, char c);
 char	*ft_strdup(char *s1);
 char	*ft_strtrim(char const *s1, char const *set);
+char    *color_join(char    **splitted);
+int     check_config(t_cube *cube, char *line);
+char    **refill_map(t_cube *cube);
+void init_cube(t_cube *cube);
+int check_map_name(char *str);
+int read_file(t_cube *cube);
+int parse_file(t_cube *cube);
+int check_map(t_cube *cube);
+
+
 #endif
