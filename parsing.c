@@ -1,64 +1,75 @@
 #include "cub3d.h"
 
-int check_config(t_cube *cube, char *line)
+int check_config(t_cube *cube)
 {
     char    **splitted;
-    static int counter;
+    char    *config;
+    char    *line;
+    int counter;
     
-    if (!line)
-        return 0;
+    counter = 0;
+    while(cube->file_content[counter])
+    {
+        line = ft_strdup(cube->file_content[counter]);
+        splitted = ft_split(line, ' ');
+        if (strcmp(splitted[0], "NO") == 0 && counter == 0)
+        {
+            if (cube->no_tex != NULL)
+                return (ft_printf("NO texture already set\n"), 1);
+            cube->no_tex = strdup(line + ft_strlen(splitted[0]));
+            cube->no_tex = ft_strtrim(cube->no_tex, " \t");
+            counter++;
+        }
+        else if (strcmp(splitted[0], "SO") == 0 && counter == 1)
+        {
+            if (cube->so_tex != NULL)
+                return (ft_printf("SO texture already set\n"), 1);
+            cube->so_tex = strdup(line + ft_strlen(splitted[0]));
+            cube->so_tex = ft_strtrim(cube->so_tex, " \t");
+            counter++;
+        }
+        else if (strcmp(splitted[0], "WE") == 0 && counter == 2)
+        {
+            if (cube->we_tex != NULL)
+                return (ft_printf("WE texture already set\n"), 1);
+            cube->we_tex = strdup(line + ft_strlen(splitted[0]));
+            cube->we_tex = ft_strtrim(cube->we_tex, " \t");
+            counter++;
+        }
+        else if (strcmp(splitted[0], "EA") == 0 && counter == 3)
+        {
+            if (cube->ea_tex != NULL)
+                return (ft_printf("EA texture already set\n"), 1);
+            cube->ea_tex = strdup(line + ft_strlen(splitted[0]));
 
-    splitted = ft_split(line, ' ');
-    if (strcmp(splitted[0], "NO") == 0)
-    {
-        if (cube->no_tex != NULL)
-            return (ft_printf("NO texture already set\n"), 1);
-        cube->no_tex = strdup(splitted[1]);
-        counter++;
-    }
-    else if (strcmp(splitted[0], "SO") == 0)
-    {
-        if (cube->so_tex != NULL)
-            return (ft_printf("SO texture already set\n"), 1);
-        cube->so_tex = strdup(splitted[1]);
-        counter++;
-    }
-    else if (strcmp(splitted[0], "WE") == 0)
-    {
-        if (cube->we_tex != NULL)
-            return (ft_printf("WE texture already set\n"), 1);
-        cube->we_tex = strdup(splitted[1]);
-        counter++;
-    }
-    else if (strcmp(splitted[0], "EA") == 0)
-    {
-        if (cube->ea_tex != NULL)
-            return (ft_printf("EA texture already set\n"), 1);
-        cube->ea_tex = strdup(splitted[1]);
-        counter++;
-    }
-    else if (strcmp(splitted[0], "F") == 0)
-    {
-        if (cube->floor_color != NULL)
-            return (ft_printf("floor color already set\n"), 1);
-        cube->floor_color = color_join(splitted);
-        counter++;
-    }
-    else if (strcmp(splitted[0], "C") == 0)
-    {
-        if (cube->ceiling_color != NULL)
-            return (ft_printf("ceiling color already set\n"), 1);
-        cube->ceiling_color = color_join(splitted);
-        counter++;
-    }
-    else
-    {   
-        if (counter != 6)
-           return (printf("error\n"), 1);
+            cube->ea_tex = ft_strtrim(cube->ea_tex, " \t");
+            counter++;
+        }
+        else if (strcmp(splitted[0], "F") == 0 && counter == 4)
+        {
+            if (cube->floor_color != NULL)
+                return (ft_printf("floor color already set\n"), 1);
+            cube->floor_color = color_join(splitted);
+            counter++;
+        }
+        else if (strcmp(splitted[0], "C") == 0 && counter == 5)
+        {
+            if (cube->ceiling_color != NULL)
+                return (ft_printf("ceiling color already set\n"), 1);
+            cube->ceiling_color = color_join(splitted);
+            counter++;
+        }
         else
-            return (2);
+        {   
+            if (counter != 6)
+                return (printf("error\n"), -1);
+            else
+                return (counter);
+        }
+        free(line);
+        free_double(splitted);
     }
-    return (0);
+    return (counter);
 }
 
 char    **refill_map(t_cube *cube)
@@ -156,7 +167,7 @@ int read_file(t_cube *cube)
     tmp = get_next_line(cube->fd);
     while(tmp)
     {
-        tmp = ft_strtrim(tmp, " \t\n\r");
+        tmp = ft_strtrim_last(tmp, " \t\n\r");
         if (!tmp[0])
         {
             tmp = get_next_line(cube->fd);
@@ -175,17 +186,18 @@ int parse_file(t_cube *cube)
     int i;
     int j;
 
-    i = 0;
-    j = 0;
-    while(cube->file_content[i])
-    {
-        int w = check_config(cube, cube->file_content[i]);
-        if (w == 1)
-            return (1);
-        else if (w == 2)
-            break ;
-        i++;
-    }
+    i = check_config(cube);
+    if (i == -1)
+        return (1);
+    // while(cube->file_content[i])
+    // {
+    //     int w = check_config(cube, cube->file_content[i]);
+    //     if (w == 1)
+    //         return (1);
+    //     else if (w == 2)
+    //         break ;
+    //     i++;
+    // }
     j = i;
     while(cube->file_content[j])
         j++;

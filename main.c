@@ -25,10 +25,18 @@ int check_if_done(t_cube *cube)
     return (0);
 }
 
+int is_digit(char i)
+{
+    if (i < '0' && i > '9')
+        return (0);
+    return (1);
+}
+
 char    *color_join(char    **splitted)
 {
     char    *res;
     int i;
+    int j;
 
     i = 2;
     if (splitted[1])
@@ -40,6 +48,15 @@ char    *color_join(char    **splitted)
         res = ft_strjoin(res, splitted[i]);
         i++; 
     }
+    i = 0;
+    // j = 0;
+    // while(res[i])
+    // {
+        
+    //     if (res[i] == ',')
+    //         j++;
+    // }
+    // if (j)
     return (res);
 }
 
@@ -1306,6 +1323,12 @@ int main(int ac, char **av)
             width_tiles = ft_strlen(cube.map[i]);
         i++;
     }
+    ft_printf("no : '%s'\n", cube.no_tex);
+    ft_printf("so : '%s'\n", cube.so_tex);
+    ft_printf("ea : '%s'\n", cube.ea_tex);
+    ft_printf("we : '%s'\n", cube.we_tex);
+    ft_printf("C : '%s'\n", cube.ceiling_color);
+    ft_printf("F : '%s'\n", cube.floor_color);
     height_tiles = i;
     // EXECUTION
     t_mlx   *mlx;
