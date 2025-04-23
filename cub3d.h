@@ -13,6 +13,7 @@
 # include "printf/ft_printf.h"
 // # include <mlx.h>
 # include <math.h>
+# include <strings.h>
 
 #include <fcntl.h>
 #include "./MLX42/include/MLX42/MLX42.h"
@@ -107,17 +108,16 @@ typedef struct  s_graphics
 	mlx_texture_t *fire_tex;
 	mlx_texture_t *reload_tex;
 	mlx_texture_t *gun_tex;
-	mlx_image_t *map_frame;
 }               t_graphics;
 
 typedef struct  s_mlx {
 	mlx_t    *mlx_cnx;
 	void    *mlx_win;
 	mlx_image_t *img;
-	t_map   *map;
+	t_map   map;
 	t_cube  *cube;
 	t_graphics graphics;
-	t_player    *player;
+	t_player    player;
 	int         minimap_scale;
 	int         is_walking;
 	int         is_firing;
@@ -158,6 +158,7 @@ void	init_cube(t_cube *cube);
 int		check_map_name(char *str);
 int		read_file(t_cube *cube);
 int		parse_file(t_cube *cube);
+void	ft_exit(t_mlx *mlx);
 int		check_map(t_cube *cube);
 int		main_parsing(t_cube *cube, char **av);
 char	*ft_strtrim_last(char const *s1, char const *set);
