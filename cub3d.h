@@ -44,30 +44,30 @@
 
 typedef struct  s_cube
 {
-    char    *file_name;
-    char    *no_tex;
-    char    *so_tex;
-    char    *we_tex;
-    char    *ea_tex;
-    char    *floor_color;
-    char    *ceiling_color;
-    char    **file_content;
-    char    **map;
-    char    player_direction;
-    int     fd;
-    int     player_x;
-    int     player_y;
+	char    *file_name;
+	char    *no_tex;
+	char    *so_tex;
+	char    *we_tex;
+	char    *ea_tex;
+	char    *floor_color;
+	char    *ceiling_color;
+	char    **file_content;
+	char    **map;
+	char    player_direction;
+	int     fd;
+	int     player_x;
+	int     player_y;
 }               t_cube;
 
 typedef struct  s_player {
-    double     x_player;
-    double     y_player;
-    double     rot_angle;
+	double     x_player;
+	double     y_player;
+	double     rot_angle;
 }               t_player;
 
 typedef struct s_point {
-    double x;
-    double y;
+	double x;
+	double y;
 }               t_point;
 
 typedef struct	s_data {
@@ -79,50 +79,50 @@ typedef struct	s_data {
 }				t_data;
 
 typedef struct  s_map {
-    int     width;
-    int     height;
+	int     width;
+	int     height;
 }               t_map;
 
 typedef struct  s_ray
 {
-    double  ray_length;
-    char    wall_orientation;
-    int     tile_hit_point;
-    int     is_door;
+	double  ray_length;
+	char    wall_orientation;
+	int     tile_hit_point;
+	int     is_door;
 }               t_ray;
 
 typedef struct  s_graphics
 {
-    mlx_image_t *no_txtr;
-    mlx_image_t *so_txtr;
-    mlx_image_t *ea_txtr;
-    mlx_image_t *we_txtr;
-    mlx_image_t *door_txtr;
-    mlx_image_t *sky_image;
-    mlx_image_t *gun;
-    mlx_image_t *reload;
-    mlx_image_t *player;
-    mlx_image_t *fire;
-    mlx_image_t *north;
-    mlx_texture_t *fire_tex;
-    mlx_texture_t *reload_tex;
-    mlx_texture_t *gun_tex;
-    mlx_image_t *map_frame;
+	mlx_image_t *no_txtr;
+	mlx_image_t *so_txtr;
+	mlx_image_t *ea_txtr;
+	mlx_image_t *we_txtr;
+	mlx_image_t *door_txtr;
+	mlx_image_t *sky_image;
+	mlx_image_t *gun;
+	mlx_image_t *reload;
+	mlx_image_t *player;
+	mlx_image_t *fire;
+	mlx_image_t *north;
+	mlx_texture_t *fire_tex;
+	mlx_texture_t *reload_tex;
+	mlx_texture_t *gun_tex;
+	mlx_image_t *map_frame;
 }               t_graphics;
 
 typedef struct  s_mlx {
-    mlx_t    *mlx_cnx;
-    void    *mlx_win;
-    mlx_image_t *img;
-    t_map   *map;
-    t_cube  *cube;
-    t_graphics graphics;
-    t_player    *player;
-    int         minimap_scale;
-    int         is_walking;
-    int         is_firing;
-    int         is_reloading;
-    int         is_holding;
+	mlx_t    *mlx_cnx;
+	void    *mlx_win;
+	mlx_image_t *img;
+	t_map   *map;
+	t_cube  *cube;
+	t_graphics graphics;
+	t_player    *player;
+	int         minimap_scale;
+	int         is_walking;
+	int         is_firing;
+	int         is_reloading;
+	int         is_holding;
 }               t_mlx;
 
 
@@ -154,11 +154,11 @@ char	*ft_strtrim(char const *s1, char const *set);
 char    *color_join(char    **splitted);
 int     check_config(t_cube *cube, char *line);
 char    **refill_map(t_cube *cube);
-void init_cube(t_cube *cube);
-int check_map_name(char *str);
-int read_file(t_cube *cube);
-int parse_file(t_cube *cube);
-int check_map(t_cube *cube);
-
+void	init_cube(t_cube *cube);
+int		check_map_name(char *str);
+int		read_file(t_cube *cube);
+int		parse_file(t_cube *cube);
+int		check_map(t_cube *cube);
+int		main_parsing(t_cube *cube, char **av);
 
 #endif
