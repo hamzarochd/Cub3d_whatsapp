@@ -11,7 +11,7 @@ int check_config(t_cube *cube)
     while(cube->file_content[counter])
     {
         line = ft_strdup(cube->file_content[counter]);
-        splitted = ft_split(line, ' ');
+        splitted =  ft_split(line, ' ');
         if (strcmp(splitted[0], "NO") == 0 && counter == 0)
         {
             if (cube->no_tex != NULL)
@@ -62,9 +62,9 @@ int check_config(t_cube *cube)
         else
         {   
             if (counter != 6)
-                return (printf("error\n"), -1);
+                return (free(line), free_double(splitted), printf("error\n"), -1);
             else
-                return (counter);
+                return (free(line), free_double(splitted), counter);
         }
         free(line);
         free_double(splitted);
@@ -109,6 +109,7 @@ char    **refill_map(t_cube *cube)
         j++;
     }
     res[j] = NULL;
+    free_double(cube->map);
     return (res);
 }
 
@@ -155,8 +156,13 @@ int read_file(t_cube *cube)
 
     i = 0;
     count = 0;
-    while(get_next_line(cube->fd))
+    tmp = get_next_line(cube->fd); 
+    while(tmp)
+    {
+        free(tmp);
+        tmp = get_next_line(cube->fd);
         count++;
+    }
     if (count == 0)
         return (ft_printf("map empty\n"), 1);
     cube->file_content = calloc(count + 1, sizeof(char *));
@@ -170,11 +176,13 @@ int read_file(t_cube *cube)
         tmp = ft_strtrim_last(tmp, " \t\n\r");
         if (!tmp[0])
         {
+            free(tmp);
             tmp = get_next_line(cube->fd);
             continue ;
         }
         cube->file_content[i] = ft_strdup(tmp);
         i++;
+        free(tmp);
         tmp = get_next_line(cube->fd);
     }
     cube->file_content[i] = NULL;

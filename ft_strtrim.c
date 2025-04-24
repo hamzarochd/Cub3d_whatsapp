@@ -14,7 +14,7 @@ static int	check_char(char const *set, char c)
 	return (0);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char *s1, char const *set)
 {
 	int		i;
 	int		j;
@@ -38,10 +38,11 @@ char	*ft_strtrim(char const *s1, char const *set)
 	while (i < l)
 		ptr[j++] = s1[i++];
 	ptr[j] = '\0';
+	free(s1);
 	return (ptr);
 }
 
-char	*ft_strtrim_last(char const *s1, char const *set)
+char	*ft_strtrim_last(char *s1, char const *set)
 {
 	int		i;
 	int		j;
@@ -61,6 +62,7 @@ char	*ft_strtrim_last(char const *s1, char const *set)
 	while (i < l)
 		ptr[j++] = s1[i++];
 	ptr[j] = '\0';
+	free(s1);
 	return (ptr);
 }
 
