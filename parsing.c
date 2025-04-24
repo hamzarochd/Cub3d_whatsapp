@@ -14,49 +14,54 @@ int check_config(t_cube *cube)
         splitted =  ft_split(line, ' ');
         if (strcmp(splitted[0], "NO") == 0 && counter == 0)
         {
-            if (cube->no_tex != NULL)
-                return (ft_printf("NO texture already set\n"), 1);
+            if (cube->no_tex[0] != '\0')
+                return (free(line), free_double(splitted),ft_printf("NO texture already set\n"), -1);
+            free(cube->no_tex);
             cube->no_tex = strdup(line + ft_strlen(splitted[0]));
             cube->no_tex = ft_strtrim(cube->no_tex, " \t");
             counter++;
         }
         else if (strcmp(splitted[0], "SO") == 0 && counter == 1)
         {
-            if (cube->so_tex != NULL)
-                return (ft_printf("SO texture already set\n"), 1);
+            if (cube->so_tex[0] != '\0')
+                return (free(line), free_double(splitted),ft_printf("SO texture already set\n"), -1);
+            free(cube->so_tex);
             cube->so_tex = strdup(line + ft_strlen(splitted[0]));
             cube->so_tex = ft_strtrim(cube->so_tex, " \t");
             counter++;
         }
         else if (strcmp(splitted[0], "WE") == 0 && counter == 2)
         {
-            if (cube->we_tex != NULL)
-                return (ft_printf("WE texture already set\n"), 1);
+            if (cube->we_tex[0] != '\0')
+                return (free(line), free_double(splitted),ft_printf("WE texture already set\n"), -1);
+            free(cube->we_tex);
             cube->we_tex = strdup(line + ft_strlen(splitted[0]));
             cube->we_tex = ft_strtrim(cube->we_tex, " \t");
             counter++;
         }
         else if (strcmp(splitted[0], "EA") == 0 && counter == 3)
         {
-            if (cube->ea_tex != NULL)
-                return (ft_printf("EA texture already set\n"), 1);
+            if (cube->ea_tex[0] != '\0')
+                return (free(line), free_double(splitted),ft_printf("EA texture already set\n"), -1);
+            free(cube->ea_tex);
             cube->ea_tex = strdup(line + ft_strlen(splitted[0]));
-
             cube->ea_tex = ft_strtrim(cube->ea_tex, " \t");
             counter++;
         }
         else if (strcmp(splitted[0], "F") == 0 && counter == 4)
         {
-            if (cube->floor_color != NULL)
-                return (ft_printf("floor color already set\n"), 1);
-            cube->floor_color = color_join(splitted);
+            if (cube->floor_color[0] != -1)
+                return (ft_printf("floor color already set\n"), -1);
+            if (is_invalid_rgb(line + ft_strlen(splitted[0]), cube, splitted[0]) == -1)
+                return (free(line), free_double(splitted), printf("error1\n"), -1);
             counter++;
         }
         else if (strcmp(splitted[0], "C") == 0 && counter == 5)
         {
-            if (cube->ceiling_color != NULL)
-                return (ft_printf("ceiling color already set\n"), 1);
-            cube->ceiling_color = color_join(splitted);
+            if (cube->ceiling_color[0] != -1)
+                return (ft_printf("ceiling color already set\n"), -1);
+            if (is_invalid_rgb(line + ft_strlen(splitted[0]), cube, splitted[0]) == -1)
+                return (free(line), free_double(splitted), printf("error1\n"), -1);
             counter++;
         }
         else
@@ -116,12 +121,12 @@ char    **refill_map(t_cube *cube)
 void init_cube(t_cube *cube)
 {
 
-    cube->no_tex = NULL;
-    cube->so_tex = NULL;
-    cube->we_tex = NULL;
-    cube->ea_tex = NULL;
-    cube->floor_color = NULL;
-    cube->ceiling_color = NULL;
+    cube->no_tex = ft_strdup("");
+    cube->so_tex = ft_strdup("");
+    cube->we_tex = ft_strdup("");
+    cube->ea_tex = ft_strdup("");
+    cube->floor_color[0] = -1;
+    cube->ceiling_color[0] = -1;
 }
 
 int check_map_name(char *str)
@@ -196,7 +201,7 @@ int parse_file(t_cube *cube)
 
     i = check_config(cube);
     if (i == -1)
-        return (1);
+        return (free_double(cube->file_content),1);
     // while(cube->file_content[i])
     // {
     //     int w = check_config(cube, cube->file_content[i]);
@@ -218,6 +223,8 @@ int parse_file(t_cube *cube)
        j++;
     }
     cube->map[j] = 0;
+
+    free_double(cube->file_content);
     cube->map = refill_map(cube);
     return (0);
 }
@@ -232,7 +239,7 @@ int check_map(t_cube *cube)
         j = 0;
         while (cube->map[i][j])
         {
-            if (strchr("NSWE01D ", cube->map[i][j]) == NULL)
+            if (!strchr("NSWE01D ", cube->map[i][j]))
                 return (ft_printf("Error: Invalid character '%c' at (%d, %d)\n", cube->map[i][j], i, j), 1);
             if (cube->map[i][j] == '0')
             {
@@ -259,6 +266,14 @@ int check_map(t_cube *cube)
     return (0);
 }
 
+void free_textures(t_cube *cube)
+{
+    free(cube->so_tex);
+    free(cube->no_tex);
+    free(cube->ea_tex);
+    free(cube->we_tex);
+}
+
 
 int main_parsing(t_cube *cube, char **av)
 {
@@ -273,11 +288,13 @@ int main_parsing(t_cube *cube, char **av)
     }
     cube->fd = open(cube->file_name, O_RDONLY);
     if (read_file(cube) == 1)
-        return (1);
+        return (free(cube->file_name) ,1);
     if (parse_file(cube) == 1)
-        return (1);
+        return (free(cube->file_name),free_textures(cube) ,1);
     if (check_map(cube) == 1)
-        return (1);
+        return (free(cube->file_name),1);
+    printf("floor color %d, %d, %d\n", cube->floor_color[0], cube->floor_color[1], cube->floor_color[2]);
+    printf("ceiling color %d, %d, %d\n", cube->ceiling_color[0], cube->ceiling_color[1], cube->ceiling_color[2]);
 
     return (0);
 }

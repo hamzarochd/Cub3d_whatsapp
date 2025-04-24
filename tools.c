@@ -14,42 +14,73 @@ void	free_double(char **ptr)
 	free (ptr);
 
 }
+static int	ft_atoi(const char *str)
+{
+	int	i;
+	int	sign;
+	int	res;
 
-// int is_invalid_rgb(const char *input)
-// {
-//     int count = 0;
-//     char **token;
-//     int i;
+	sign = 1;
+	i = 0;
+	res = 0;
+	if (str[i] == '\0')
+		return (0);
+	while (str [i] == '\n' || str [i] == '\t'
+		|| str[i] == '\f' || str [i] == '\v' || str [i] == ' ')
+		i++;
+	while (str [i] >= '0' && str [i] <= '9')
+	{
+		res = (res * 10) + (str[i++] - '0');
+	}
+	while (str[i] == ' ' || str[i] == '\t')
+		i++;
+	if (str[i] != '\0')
+		return (-1);
+	return (res * sign);
+}
 
-//     token = ft_split(input, ",");
-//     i = 0;
+void decide(int i, t_cube *cube, char **token, char *tag)
+{
+	if (!strcmp(tag, "C"))
+	{
+		cube->ceiling_color[0] = ft_atoi(token[0]);
+		cube->ceiling_color[1] = ft_atoi(token[1]);
+		cube->ceiling_color[2] = ft_atoi(token[2]);
 
-//     while (token[i]) {
-//         token[i] = htr_trim(token[i]);
+	}
+	if (!strcmp(tag, "C"))
+	{
+		cube->floor_color[0] = ft_atoi(token[0]);
+		cube->floor_color[1] = ft_atoi(token[1]);
+		cube->floor_color[2] = ft_atoi(token[2]);
+	}
+}
 
-//         int val = 0;
-//         int is_valid_number = 1;
-//         int k = 0;
+int is_invalid_rgb(char *input, t_cube *cube, char *tag)
+{
+    int count = 0;
+    char **token;
+    int i;
+    token = ft_split(input, ',');
+    i = 0;
+	while (token[i])
+		i++;
+	if (i != 3)
+		return (free_double(token), -1);
+	i = 0;
+    while (token[i])
+	{
+		count = ft_atoi(token[i]);
+        if ( count < 0 || count > 255)
+		{
+            free_double(token);
+            return (-1);
+        }
+		decide(i, cube, token, tag);
+        i++;
+    }
 
-//         do {
-//             if (!isdigit(token[i][k])) {
-//                 is_valid_number = 0;
-//                 break;
-//             }
-//             val = val * 10 + (token[i][k] - '0');
-//             k++;
-//         } while (token[i][k] != '\0');
-
-//         if (!is_valid_number || val < 0 || val > 255) {
-//             free(token);
-//             return 1;
-//         }
-
-//         count++;
-//         i++;
-//     }
-
-//     free(token);
-//     return count != 3;
-// }
+    free_double(token);
+    return (0);
+}
 
