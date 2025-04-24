@@ -213,6 +213,17 @@ int		main_parsing(t_cube *cube, char **av);
 char	*ft_strtrim_last(char *s1, char const *set);
 void	free_double(char **ptr);
 int		is_invalid_rgb(char *input, t_cube *cube, char *tag);
+void	free_textures(t_cube *cube);
+void	init_cube(t_cube *cube);
+int		handle_config(t_cube *cube, char **splitted, char *line, int counter);
+char	**refill_map(t_cube *cube);
+void	free_textures(t_cube *cube);
+int		read_file(t_cube *cube);
+int		check_map_name(char *str);
+void	free_all(t_cube *cube);
+int		check_color(t_cube *cube, char **splitted, char *line);
+int		check_texture(t_cube *cube, char **splitted, char *line);
+
 
 
 #endif

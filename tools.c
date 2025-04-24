@@ -84,3 +84,9 @@ int is_invalid_rgb(char *input, t_cube *cube, char *tag)
     return (0);
 }
 
+void	free_all(t_cube *cube)
+{
+	free(cube->file_name);
+	free_double(cube->map);
+	free_textures(cube);
+}
