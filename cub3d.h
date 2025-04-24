@@ -50,8 +50,8 @@ typedef struct  s_cube
 	char    *so_tex;
 	char    *we_tex;
 	char    *ea_tex;
-	int    *floor_color;
-	int    *ceiling_color;
+	int    	floor_color[3];
+	int    	ceiling_color[3];
 	char    **file_content;
 	char    **map;
 	char    player_direction;
@@ -91,6 +91,7 @@ typedef struct  s_ray
 	char    wall_orientation;
 	int     tile_hit_point;
 	int     is_door;
+	double	delta_angle;
 }               t_ray;
 
 typedef struct	s_tex

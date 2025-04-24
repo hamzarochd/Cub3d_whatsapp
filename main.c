@@ -462,6 +462,24 @@ t_point calculate_rayend(t_mlx *mlx, char **map, t_point player_pt, double angle
         return v_wall;
 }
 
+// void    get_hray(t_mlx *mlx, t_ray *ray, t_point wall_pt, double angle)
+// {
+//     char **map;
+
+//     map = mlx->cube->map;
+//     ray->ray_length = h_ray;
+//     ray->tile_hit_point = (int)h_wall.x % TILE_SIZE;
+//     if (angle < PI)
+//         ray->wall_orientation = 'N';
+//     else
+//         ray->wall_orientation = 'S';
+//     if (ray->wall_orientation == 'S')
+//         ray->tile_hit_point = TILE_SIZE - ray->tile_hit_point;
+//     if ((ray->wall_orientation == 'N' && is_in_door(map, h_wall.x, h_wall.y - 1, mlx))
+//         || (ray->wall_orientation == 'S' && is_in_door(map, h_wall.x, h_wall.y + 1, mlx)))
+//         ray->is_door = 1;
+// }
+
 t_ray calculate_ray_lenght(t_mlx *mlx, char **map, t_point player_pt, double angle)
 {
     t_point h_wall;
@@ -476,12 +494,12 @@ t_ray calculate_ray_lenght(t_mlx *mlx, char **map, t_point player_pt, double ang
     ray.ray_pixels = 0;
     if (h_ray < v_ray)
     {
-        ray.ray_length = h_ray;
-        ray.tile_hit_point = (int)h_wall.x % TILE_SIZE;
         if (angle < PI)
             ray.wall_orientation = 'N';
         else
             ray.wall_orientation = 'S';
+        ray.ray_length = h_ray;
+        ray.tile_hit_point = (int)h_wall.x % TILE_SIZE;
         if (ray.wall_orientation == 'S')
             ray.tile_hit_point = TILE_SIZE - ray.tile_hit_point;
         if ((ray.wall_orientation == 'N' && is_in_door(map, h_wall.x, h_wall.y - 1, mlx))
@@ -491,12 +509,12 @@ t_ray calculate_ray_lenght(t_mlx *mlx, char **map, t_point player_pt, double ang
     }
     else
     {
-        ray.ray_length = v_ray;
-        ray.tile_hit_point = (int)v_wall.y % TILE_SIZE;
         if (angle < (3*PI)/2 && angle > PI/2)
             ray.wall_orientation = 'W';
         else
             ray.wall_orientation = 'E';
+        ray.ray_length = v_ray;
+        ray.tile_hit_point = (int)v_wall.y % TILE_SIZE;
         if (ray.wall_orientation == 'W')
             ray.tile_hit_point = TILE_SIZE - ray.tile_hit_point;
         if ((ray.wall_orientation == 'W' && is_in_door(map, v_wall.x - 1, v_wall.y, mlx))
@@ -774,6 +792,24 @@ void    normmalize_angle(double *angle)
         *angle -= 2*PI;
 }
 
+void    set_render_var(t_mlx **mlx, t_point *player_pt, void *param, t_rendex *r)
+{
+    *mlx = (t_mlx *)param;
+    player_pt->x = (*mlx)->player.x_player;
+    player_pt->y = (*mlx)->player.y_player;
+    r->angle_start = (*mlx)->player.rot_angle + PI/6;
+    normmalize_angle(&(r->angle_start));
+    r->i = 0;
+}
+
+void    set_ray(t_ray *ray, t_mlx *mlx, t_point player_pt, t_rendex *r)
+{
+    *ray = calculate_ray_lenght(mlx, mlx->cube->map, player_pt, r->angle_start);
+    ray->delta_angle = r->angle_start - mlx->player.rot_angle;
+    ray->ray_pixels = mlx->wall_const / (ray->ray_length * cos(ray->delta_angle));
+    r->j = 0;
+}
+
 
 void map_render(void   *param)
 {
@@ -783,21 +819,11 @@ void map_render(void   *param)
     t_rendex    r;
     t_wall wall;
 
-    mlx = (t_mlx *)param;
-    player_pt.x = mlx->player.x_player;
-    player_pt.y = mlx->player.y_player;
-    
-    r.angle_start = mlx->player.rot_angle + PI/6;
-    normmalize_angle(&r.angle_start);
-    mlx_image_t *sky_image = mlx->graphics.sky_image;
-    r.i = 0;
+    set_render_var(&mlx, &player_pt, param, &r);
     while (r.i < W_WIDTH)
     {
-        ray = calculate_ray_lenght(mlx, mlx->cube->map, player_pt, r.angle_start);
-        double delta_angle = r.angle_start - mlx->player.rot_angle;
-        ray.ray_pixels = mlx->wall_const / (ray.ray_length * cos(delta_angle));
+        set_ray(&ray, mlx, player_pt, &r);
         wall = get_wall(mlx, &ray, ray.ray_pixels);
-        r.j = 0;
         put_ceiling(mlx, r.i, &r.j, wall.wall_start);
         if (ray.ray_pixels > W_HEIGHT)
         {
