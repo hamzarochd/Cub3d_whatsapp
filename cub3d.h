@@ -42,6 +42,9 @@
 # define FIRE_H 570
 # define RELOAD_W 1394
 # define RELOAD_H 736
+# define MAP_RADIUS 128
+# define MAP_X 192
+# define MAP_Y 192
 
 typedef struct  s_cube
 {
@@ -93,6 +96,23 @@ typedef struct  s_ray
 	int     is_door;
 	double	delta_angle;
 }               t_ray;
+
+typedef struct	s_minimap
+{
+	double	scale;
+    double	rot_angle;
+    double	cos_angle;
+    double	sin_angle;
+    int		map_pixel_width;
+    int		map_pixel_height;
+	int		tile_x;
+	int		tile_y;
+	t_point	tip;
+	int		x;
+	int		y;
+	int		dx;
+	int		dy;
+}				t_minimap;
 
 typedef struct	s_tex
 {
@@ -192,5 +212,7 @@ int		check_map(t_cube *cube);
 int		main_parsing(t_cube *cube, char **av);
 char	*ft_strtrim_last(char *s1, char const *set);
 void	free_double(char **ptr);
+int		is_invalid_rgb(char *input, t_cube *cube, char *tag);
+
 
 #endif
