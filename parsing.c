@@ -268,6 +268,7 @@ int main_parsing(t_cube *cube, char **av)
     if (check_map_name(cube->file_name) == 1)
     {
         ft_printf("map name error\n");
+        free(cube->file_name);
         return (1);
     }
     cube->fd = open(cube->file_name, O_RDONLY);

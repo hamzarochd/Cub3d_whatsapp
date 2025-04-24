@@ -50,8 +50,8 @@ typedef struct  s_cube
 	char    *so_tex;
 	char    *we_tex;
 	char    *ea_tex;
-	char    *floor_color;
-	char    *ceiling_color;
+	int    *floor_color;
+	int    *ceiling_color;
 	char    **file_content;
 	char    **map;
 	char    player_direction;
