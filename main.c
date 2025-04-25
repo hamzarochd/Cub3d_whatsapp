@@ -7,49 +7,6 @@ uint32_t	rgb(int r, int g, int b, int a)
 }
 
 
-int	check_if_done(t_cube *cube)
-{
-	if (cube->no_tex == NULL)
-			return (1);
-	if (cube->so_tex == NULL)
-			return (1);
-	if (cube->we_tex == NULL)
-			return (1);
-	if (cube->ea_tex == NULL)
-			return (1);
-	if (cube->floor_color == NULL)
-			return (1);
-	if (cube->ceiling_color == NULL)
-			return (1);
-	return (0);
-}
-
-int	is_digit(char i)
-{
-	if (i < '0' && i > '9')
-		return (0);
-	return (1);
-}
-
-// char	*color_join(char *splitted)
-// {
-// 	char	*res;
-// 	int		i;
-
-// 	i = 2;
-// 	if (splitted[1])
-// 		res = ft_strdup(splitted[1]);
-// 	else
-// 		return (NULL);
-// 	while (splitted[i])
-// 	{
-// 		res = ft_strjoin(res, splitted[i]);
-// 		i++; 
-// 	}
-// 	i = 0;
-// 	return (res);
-// }
-
 
 void	my_mlx_put_pixel(t_data *img, int x, int y, int color)
 {
@@ -59,36 +16,15 @@ void	my_mlx_put_pixel(t_data *img, int x, int y, int color)
 	*(unsigned int *)(img->addr + offset) = color;
 }
 
-int	draw_line(t_mlx *mlx, t_point start, t_point end)
-{
-	double	delta_x;
-	double	delta_y;
-	int		pixels;
-	t_point	pixel_pt;
 
-	if (end.x == -1 || end.y == -1)
-		return (1);
-	delta_x = end.x - start.x;
-	delta_y = end.y - start.y;
-	pixels = sqrt((delta_x * delta_x) + (delta_y * delta_y));
-	delta_x /= pixels;
-	delta_y /= pixels;
-	pixel_pt = start;
-	while (pixels)
-	{
-		mlx_put_pixel(mlx->img, pixel_pt.x, pixel_pt.y, rgb(255, 255, 255, 255));
-		pixel_pt.x += delta_x;
-		pixel_pt.y += delta_y;
-		pixels--;
-	}
-	return (0);
-}
 
-void	draw_filled_circle(t_mlx *mlx, int x_center, int y_center, int radius, int color)
+void	draw_filled_circle(t_mlx *mlx, int x_center, int y_center, int radius)
 {
 	int x;
 	int y;
+	int color;
 
+	color = rgb(0, 0, 0, 255);
 	y = y_center - radius;
 	while (y <= y_center + radius)
 	{
@@ -105,37 +41,9 @@ void	draw_filled_circle(t_mlx *mlx, int x_center, int y_center, int radius, int 
 	}
 }
 
-int	check_diagonal(char **map, int xtile, int ytile, t_mlx *mlx)
-{
 
-	int	player_x;
-	int	player_y;
 
-	player_x = mlx->player.x_player/TILE_SIZE;
-	player_y = mlx->player.y_player/TILE_SIZE;
-	if ((map[player_y][xtile] == '1' && map[ytile][player_x] == '1') ||
-		(map[player_y][xtile] == 'D' && map[ytile][player_x] == 'D'))
-		return (1);
-	return (0);
-}
 
-int	is_in_door(char **map, double x, double y, t_mlx *mlx)
-{
-	int	map_x;
-	int	map_y;
-
-	map_x = x / TILE_SIZE;
-	map_y = y / TILE_SIZE;
-	if (map_x < (mlx->map.width / TILE_SIZE) && map_y < (mlx->map.height / TILE_SIZE)
-		&& map_x >= 0 && map_y >= 0)
-	{
-		if (map[map_y][map_x] == 'D')
-			return (1);
-		else
-			return (0);
-	}
-	return (0);
-}
 
 int	is_in_wall(char **map, double x, double y, t_mlx *mlx)
 {
@@ -162,25 +70,9 @@ void	vec_init(t_point *unit_vec, double ray_angle, int *found_wall)
 	*found_wall = 0;
 }
 
-void	hwall_init(t_point *wall_pt, t_point unit_vec, t_point player_pt, double *scaling_factor)
-{
-	if (unit_vec.y > 0)
-		wall_pt->y = TILE_SIZE * (int)(player_pt.y / TILE_SIZE);
-	else
-		wall_pt->y = (TILE_SIZE * ((int)(player_pt.y / TILE_SIZE) + 1));
-	*scaling_factor = (player_pt.y - wall_pt->y) / unit_vec.y;
-	wall_pt->x = player_pt.x + (*scaling_factor * unit_vec.x);
-}
 
-void	vwall_init(t_point *wall_pt, t_point unit_vec, t_point player_pt, double *scaling_factor)
-{
-	if (unit_vec.x < 0)
-		wall_pt->x = TILE_SIZE * (int)(player_pt.x / TILE_SIZE);
-	else
-		wall_pt->x = (TILE_SIZE * ((int)(player_pt.x / TILE_SIZE) + 1));
-	*scaling_factor = (player_pt.x - wall_pt->x) / unit_vec.x;
-	wall_pt->y = player_pt.y + (*scaling_factor * unit_vec.y);
-}
+
+
 
 
 t_point	infinite_ray(double *ray_lenght)
@@ -193,258 +85,40 @@ t_point	infinite_ray(double *ray_lenght)
 	return (inf_ray);
 }
 
-int hwall_hit(t_point unit_vec, t_mlx *mlx, t_point *wall_pt)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int clamp_value(int value, int min_val, int max_val)
 {
-	if (unit_vec.y > 0)
-	{
-		if (is_in_wall(mlx->cube->map, wall_pt->x, wall_pt->y - 1, mlx))
-			return (1);
-		wall_pt->y -= TILE_SIZE;
-	}
-	else
-	{
-		if (is_in_wall(mlx->cube->map, wall_pt->x, wall_pt->y + 1, mlx))
-			return (1);
-		wall_pt->y += TILE_SIZE;
-	}
-	return (0);
+	if (value < min_val)
+		return min_val;
+	if (value > max_val)
+		return max_val;
+	return value;
 }
 
 
-int	vwall_hit(t_point unit_vec, t_mlx *mlx, t_point *wall_pt)
-{
-	if (unit_vec.x > 0)
-	{
-		if (is_in_wall(mlx->cube->map, wall_pt->x + 1, wall_pt->y, mlx))
-			return (1);
-		wall_pt->x += TILE_SIZE;
-	}
-	else
-	{
-		if (is_in_wall(mlx->cube->map, wall_pt->x - 1, wall_pt->y, mlx))
-			return (1);
-		wall_pt->x -= TILE_SIZE;
-	}
-	return (0);
-}
 
 
-t_point get_h_wall_v(t_mlx *mlx, t_point player_pt, double ray_angle, double  *ray_lenght)
-{
-	t_point wall_pt;
-	int  found_wall;
-	double scaling_factor;
-	t_point unit_vec;
-
-	if (ray_angle == PI || ray_angle == 0)
-		return (infinite_ray(ray_lenght));
-	vec_init(&unit_vec, ray_angle, &found_wall);
-	hwall_init(&wall_pt, unit_vec, player_pt, &scaling_factor);
-	while (!found_wall)
-	{
-		if (hwall_hit(unit_vec, mlx, &wall_pt))
-			break;
-		scaling_factor = (player_pt.y - wall_pt.y) / unit_vec.y;
-		wall_pt.x = player_pt.x + (scaling_factor * unit_vec.x); 
-	}
-	*ray_lenght = sqrt(((wall_pt.x - player_pt.x) * (wall_pt.x - player_pt.x)) + ((wall_pt.y - player_pt.y) * (wall_pt.y - player_pt.y)));
-	return (wall_pt);
-}
-
-t_point get_v_wall_v(t_mlx *mlx, t_point player_pt, double ray_angle, double  *ray_lenght)
-{
-	t_point wall_pt;
-	int  found_wall;
-	double scaling_factor;
-	t_point unit_vec;
-
-	if (ray_angle == PI/ 2 || ray_angle == 3*(PI / 2))
-		return (infinite_ray(ray_lenght));
-	vec_init(&unit_vec, ray_angle, &found_wall);
-	vwall_init(&wall_pt, unit_vec, player_pt, &scaling_factor);
-	while (!found_wall)
-	{
-		if (vwall_hit(unit_vec, mlx, &wall_pt))
-			break;
-		scaling_factor = (player_pt.x - wall_pt.x) / unit_vec.x;
-		wall_pt.y = player_pt.y + (scaling_factor * unit_vec.y);    
-	}
-	*ray_lenght = sqrt(((wall_pt.x - player_pt.x) * (wall_pt.x - player_pt.x)) + ((wall_pt.y - player_pt.y) * (wall_pt.y - player_pt.y)));
-	return (wall_pt);
-}
+////////////////////////////////////////
 
 
-void    get_hray(t_mlx *mlx, t_ray *ray, t_point wall_pt)
-{
-	char **map;
 
-	map = mlx->cube->map;
-	ray->tile_hit_point = (int)wall_pt.x % TILE_SIZE;
-	if (ray->wall_orientation == 'S')
-		ray->tile_hit_point = TILE_SIZE - ray->tile_hit_point;
-	if ((ray->wall_orientation == 'N' && is_in_door(map, wall_pt.x, wall_pt.y - 1, mlx))
-		|| (ray->wall_orientation == 'S' && is_in_door(map, wall_pt.x, wall_pt.y + 1, mlx)))
-		ray->is_door = 1;
-}
-
-
-void    get_vray(t_mlx *mlx, t_ray *ray, t_point wall_pt)
-{
-	char **map;
-
-	map = mlx->cube->map;
-	ray->tile_hit_point = (int)wall_pt.y % TILE_SIZE;
-		if (ray->wall_orientation == 'W')
-			ray->tile_hit_point = TILE_SIZE - ray->tile_hit_point;
-		if ((ray->wall_orientation == 'W' && is_in_door(map, wall_pt.x - 1, wall_pt.y, mlx))
-			|| (ray->wall_orientation == 'E' && is_in_door(map, wall_pt.x + 1, wall_pt.y, mlx)))
-			ray->is_door = 1;
-}
-
-char    get_wall_orientation(double angle, int is_wall_horizontal)
-{
-	char wall_orientation;
-
-	if (is_wall_horizontal)
-	{
-		if (angle < PI)
-			wall_orientation = 'N';
-		else
-			wall_orientation = 'S';
-	}
-	else
-	{
-		if (angle < (3*PI)/2 && angle > PI/2)
-			wall_orientation = 'W';
-		else
-			wall_orientation = 'E';
-	}
-	return (wall_orientation);
-}
-
-
-t_ray calculate_ray_lenght(t_mlx *mlx, t_point player_pt, double angle)
-{
-	t_point h_wall;
-	t_point v_wall;
-	double  v_ray;
-	double  h_ray;
-	t_ray   ray;
-
-	h_wall = get_h_wall_v(mlx, player_pt, angle, &h_ray);
-	v_wall = get_v_wall_v(mlx, player_pt, angle, &v_ray);
-	ray.is_door = 0;
-	ray.ray_pixels = 0;
-	if (h_ray < v_ray)
-	{
-		ray.wall_orientation = get_wall_orientation(angle, 1);
-		ray.ray_length = h_ray;
-		get_hray(mlx, &ray, h_wall);
-		return ray;
-	}
-	else
-	{
-		ray.wall_orientation = get_wall_orientation(angle, 0);
-		ray.ray_length = v_ray;
-		get_vray(mlx, &ray, v_wall);
-		return ray;
-	}
-}
-
-
-uint32_t apply_distance_effect(uint32_t base_color, double distance) 
-{
-	double max_dist = MAX_DISTANCE;
-	double intensity = 1.0 - (distance / max_dist);
-	
-	if (intensity < 0.1)
-		intensity = 0.1;
-	uint32_t r = (base_color >> 8) & (uint32_t)0xFF;
-	uint32_t g = (base_color >> 16) & (uint32_t)0xFF;
-	uint32_t b = (base_color >> 24) & (uint32_t)0xFF;
-	r = (uint32_t)(r * intensity);
-	g = (uint32_t)(g * intensity);
-	b = (uint32_t)(b * intensity);
-	return (uint32_t)rgb(r, g, b, 255);
-}
-
-uint32_t re_apply_distance_effect(uint32_t base_color, double distance) 
-{
-	double max_dist = MAX_DISTANCE;
-	double intensity = 1.0 - (distance / max_dist);
-	
-	if (intensity < 0.1)
-		intensity = 0.1;
-	uint32_t a = (base_color >> 24) & 0xFF; 
-	uint32_t r = (base_color >> 16) & 0xFF; 
-	uint32_t g = (base_color >> 8)  & 0xFF;
-	uint32_t b = (base_color) & 0xFF;
-	r = (uint32_t)(r * intensity);
-	g = (uint32_t)(g * intensity);
-	b = (uint32_t)(b * intensity);
-	return (a << 24) | (r << 16) | (g << 8) | b;
-}
-
-int    ft_counter(int n)
-{
-	int    count;
-
-	count = 0;
-	if (n == 0)
-		return (1);
-	if (n < 0)
-	{
-		count++;
-		n *= -1;
-	}
-	while (n)
-	{
-		n /= 10;
-		count++;
-	}
-	return (count);
-}
-
-char    *ft_itoa(int n)
-{
-	int        len;
-	char    *r;
-
-	if (n == -2147483648)
-		return (strdup("-2147483648"));
-	len = ft_counter(n);
-	r = (char *)malloc((len + 1) * sizeof(char));
-	if (r == NULL)
-		return (NULL);
-	r[len] = '\0';
-	len--;
-	if (n == 0)
-		r[0] = '0';
-	if (n < 0)
-	{
-		n *= -1;
-		r[0] = '-';
-	}
-	while (n)
-	{
-		r[len] = (n % 10) + 48;
-		len--;
-		n /= 10;
-	}
-	return (r);
-}
-double get_delta_time()
-{
-	static double last_time = 0;
-	struct timeval time;
-	gettimeofday(&time, NULL);
-	double current_time = (time.tv_sec * 1000.0) + (time.tv_usec / 1000.0);
-	
-	double delta = (current_time - last_time) / 1000.0;
-	last_time = current_time;
-
-	return delta;
-}
 
 void    re_put_pixel(mlx_image_t *img, int x, int y, uint32_t color)
 {
@@ -459,126 +133,6 @@ void    re_put_pixel(mlx_image_t *img, int x, int y, uint32_t color)
 		img->pixels[index + 0] = (color) & 0xFF;
 	}
 }
-
-void    map_put_pixel(t_mlx *mlx, char cell, int x, int y)
-{
-	if (cell == '0' || strchr("NSEW", cell))
-		mlx_put_pixel(mlx->img, x, y, rgb(211, 211, 211, 255));
-	else if (cell == 'O')
-		mlx_put_pixel(mlx->img, x, y, rgb(179, 158, 106, 255));
-	else if (cell == 'D')
-		mlx_put_pixel(mlx->img, x, y, rgb(103, 73, 40, 255));
-	else
-		mlx_put_pixel(mlx->img, x, y, rgb(108, 108, 108, 255));
-}
-
-int clamp_value(int value, int min_val, int max_val)
-{
-	if (value < min_val)
-		return min_val;
-	if (value > max_val)
-		return max_val;
-	return value;
-}
-void    minimap_init(t_mlx *mlx, t_minimap *mp)
-{
-	mp->scale = (double)mlx->minimap_scale;
-	mp->rot_angle = mlx->player.rot_angle - (PI/2);
-	mp->map_pixel_width = mlx->map.width * TILE_SIZE;
-	mp->map_pixel_height = mlx->map.height * TILE_SIZE;
-	mp->north.x = MAP_X - cos(mlx->player.rot_angle) * (MAP_RADIUS);
-	mp->north.y = MAP_Y - sin(mlx->player.rot_angle) * (MAP_RADIUS);
-	mp->cos_angle = cos(mp->rot_angle * -1);
-	mp->sin_angle = sin(mp->rot_angle * -1);
-	mp->tile_x = 0;
-	mp->tile_y = 0;
-	mp->x = 64;
-	mp->y = 64;
-}
-
-int is_in_map(t_mlx *mlx, t_minimap *mp, int dx, int dy)
-{
-	double rot_x;
-	double rot_y;
-	int world_x;
-	int world_y;
-
-	rot_x = dx * mp->cos_angle - dy * mp->sin_angle;
-	rot_y = dx * mp->sin_angle + dy * mp->cos_angle;
-	world_x = mlx->player.x_player + (rot_x * mp->scale);
-	world_y = mlx->player.y_player + (rot_y * mp->scale);
-	world_x = clamp_value(world_x, 0, mp->map_pixel_width - 1);
-	world_y = clamp_value(world_y, 0, mp->map_pixel_height - 1);
-	mp->tile_x = world_x / TILE_SIZE;
-	mp->tile_y = world_y / TILE_SIZE;
-	if (mp->tile_x < 0 || mp->tile_x >= mlx->map.width/TILE_SIZE || 
-		mp->tile_y < 0 || mp->tile_y >= mlx->map.height/TILE_SIZE)
-		return (0);
-	else
-		return (1);
-}
-
-void    put_north(t_mlx *mlx, t_point north)
-{
-    static  mlx_image_t *n;
-
-    draw_filled_circle(mlx, north.x, north.y, 10, rgb(0, 0, 0, 255));
-    if (n)
-        mlx_delete_image(mlx->mlx_cnx, n);
-    n = mlx_put_string(mlx->mlx_cnx, "N", north.x - 5, north.y - 10);
-}
-
-void minimap(t_mlx *mlx)
-{
-	t_minimap mp;
-    
-	
-	minimap_init(mlx, &mp);
-	draw_filled_circle(mlx, 192, 192, 135, rgb(0, 0, 0, 255));
-	while (mp.y < 320)
-	{
-		mp.x = 64;
-		mp.dy = mp.y - MAP_Y;
-		while (mp.x < 320)
-		{
-			mp.dx = mp.x - MAP_X;
-			if ((mp.dx)*(mp.dx) + (mp.dy)*(mp.dy) < 16384)
-			{
-				if (is_in_map(mlx, &mp, mp.dx, mp.dy))
-					map_put_pixel(mlx, mlx->cube->map[mp.tile_y][mp.tile_x], mp.x, mp.y);
-				else
-					mlx_put_pixel(mlx->img, mp.x, mp.y, rgb(255, 0, 0, 255));
-			}
-			mp.x++;
-		}
-		mp.y++;
-	}
-    put_north(mlx, mp.north);
-	// draw_filled_circle(mlx, mp.tip.x, mp.tip.y, 10, rgb(0, 0, 0, 255));
-    // if (n)
-    //     mlx_delete_image(mlx->mlx_cnx, n);
-    // n = mlx_put_string(mlx->mlx_cnx, "N", mp.tip.x - 5, mp.tip.y - 10);
-	mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.player, MAP_X - 10, MAP_Y - 10);
-}
-
-
-mlx_image_t *define_wall_tex(int is_door, char wall_orientation, t_graphics graphics)
-{
-	if (is_door)
-		return (graphics.door_txtr);
-	else
-	{
-		if (wall_orientation == 'N')
-			return (graphics.no_txtr);
-		else if (wall_orientation == 'S')
-			return (graphics.so_txtr);
-		else if (wall_orientation == 'E')
-			return (graphics.ea_txtr);
-		else 
-			return (graphics.we_txtr);
-	}
-}
-
 
 void put_wall(t_mlx *mlx, int i, int *j, t_wall wall)
 {
@@ -610,11 +164,15 @@ void put_wall(t_mlx *mlx, int i, int *j, t_wall wall)
 void put_ceiling(t_mlx *mlx, int i, int *j,int wall_start)
 {
 	int k;
+	int ceiling_color;
 
+	ceiling_color = rgb(mlx->cube->ceiling_color[0],
+						mlx->cube->ceiling_color[1],
+						mlx->cube->ceiling_color[2], 255);
 	k = *j;
 	while(k < wall_start)
 	{
-		mlx_put_pixel(mlx->img, i, k, rgb(136, 152, 178, 255));
+		mlx_put_pixel(mlx->img, i, k, ceiling_color);
 		k++;
 	}
 	*j = k;
@@ -623,29 +181,23 @@ void put_ceiling(t_mlx *mlx, int i, int *j,int wall_start)
 void    put_floor(t_mlx *mlx, int i, int *j)
 {
 	int k;
+	int floor_color;
 
+	floor_color = rgb(mlx->cube->floor_color[0],
+						mlx->cube->floor_color[1],
+						mlx->cube->floor_color[2], 255);
 	k = *j;
 	while(k < W_HEIGHT)
 	{
-		////// get color from parsing
-		int floor_color = rgb(136, 152, 178, 255);
 		mlx_put_pixel(mlx->img, i, k, floor_color);
 		k++;
 	}
 	*j = k;     
 }
 
-t_wall  get_wall(t_mlx *mlx, t_ray *ray, double ray_pixels)
-{
-	t_wall wall;
-	
-	wall.wall_start = (W_HEIGHT - ray_pixels) / 2;
-	wall.wall_end = wall.wall_start + ray_pixels;
-	wall.wall_prop = W_HEIGHT / (double)ray_pixels;
-	wall.wall_texture = define_wall_tex(ray->is_door, ray->wall_orientation, mlx->graphics);  
-	wall.tex.tex_index = 0;
-	return (wall);
-}
+/////////////////////////////
+
+
 
 void    normmalize_angle(double *angle)
 {
@@ -655,153 +207,13 @@ void    normmalize_angle(double *angle)
 		*angle -= 2*PI;
 }
 
-void    set_render_var(t_mlx **mlx, t_point *player_pt, void *param, t_rendex *r)
-{
-	*mlx = (t_mlx *)param;
-	player_pt->x = (*mlx)->player.x_player;
-	player_pt->y = (*mlx)->player.y_player;
-	r->angle_start = (*mlx)->player.rot_angle + PI/6;
-	normmalize_angle(&(r->angle_start));
-	r->i = 0;
-}
-
-void    set_ray(t_ray *ray, t_mlx *mlx, t_point player_pt, t_rendex *r)
-{
-	*ray = calculate_ray_lenght(mlx, player_pt, r->angle_start);
-	ray->delta_angle = r->angle_start - mlx->player.rot_angle;
-	ray->ray_pixels = mlx->wall_const / (ray->ray_length * cos(ray->delta_angle));
-	r->j = 0;
-}
-
-
-void render(void   *param)
-{
-	t_mlx   *mlx;
-	t_ray   ray;
-	t_point player_pt;
-	t_rendex    r;
-	t_wall wall;
-
-	set_render_var(&mlx, &player_pt, param, &r);
-	while (r.i < W_WIDTH)
-	{
-		set_ray(&ray, mlx, player_pt, &r);
-		wall = get_wall(mlx, &ray, ray.ray_pixels);
-		put_ceiling(mlx, r.i, &r.j, wall.wall_start);
-		if (ray.ray_pixels > W_HEIGHT)
-		{
-			wall.tex.tex_index = (-wall.wall_start) * wall.wall_prop;
-			r.j = 0;
-		}
-		wall.ray = &ray;
-		put_wall(mlx, r.i, &r.j, wall);
-		put_floor(mlx, r.i, &r.j);
-		r.angle_start -= (PI/3) / W_WIDTH;
-		normmalize_angle(&r.angle_start);
-		r.i++;
-	}
-	minimap(mlx);
-}
 
 
 
-static void calculate_movement(t_mlx *mlx, char direction, int *speed, double *x, double *y)
-{
-	if (direction == 'U') 
-	{
-		*x += cos(mlx->player.rot_angle) * (*speed + 200);
-		*y -= sin(mlx->player.rot_angle) * (*speed + 200);
-	}
-	else if (direction == 'D')
-	{
-		*x -= cos(mlx->player.rot_angle) * (*speed + 200);
-		*y += sin(mlx->player.rot_angle) * (*speed + 200);
-	}
-	else if (direction == 'L') 
-	{
-		*x += cos(mlx->player.rot_angle + PI / 2) * (*speed + 200);
-		*y -= sin(mlx->player.rot_angle + PI / 2) * (*speed + 200);
-	}
-	else if (direction == 'R') 
-	{
-		*x += cos(mlx->player.rot_angle - PI / 2) * (*speed + 200);
-		*y -= sin(mlx->player.rot_angle - PI / 2) * (*speed + 200);
-	}
-}
 
-static void calculate_averages(double old_x, double old_y, double x, double y, t_point *average1, t_point *average2, t_point *average3)
-{
-	average1->x = old_x + ((x - old_x) / 4);
-	average1->y = old_y + ((y - old_y) / 4);
-	average2->x = old_x + (2 * ((x - old_x) / 4));
-	average2->y = old_y + (2 * ((y - old_y) / 4));
-	average3->x = old_x + (3 * ((x - old_x) / 4));
-	average3->y = old_y + (3 * ((y - old_y) / 4));
-}
 
-static int handle_wall_collision(t_mlx *mlx, double x, double y, t_point average1, t_point average2, t_point average3)
-{
-	if (is_in_wall(mlx->cube->map, x, y, mlx) || 
-		is_in_wall(mlx->cube->map, average1.x, average1.y, mlx) ||
-		is_in_wall(mlx->cube->map, average2.x, average2.y, mlx) || 
-		is_in_wall(mlx->cube->map, average3.x, average3.y, mlx))
-	{
-		if (!is_in_wall(mlx->cube->map, x, mlx->player.y_player, mlx))
-			mlx->player.x_player += (x - mlx->player.x_player) / 2;
-		if (!is_in_wall(mlx->cube->map, mlx->player.x_player, y, mlx))
-			mlx->player.y_player += (y - mlx->player.y_player) / 2; 
-		return 1;
-	}
-	return 0;
-}
 
-int check_wall(t_mlx *mlx, char direction, int *speed)
-{
-	double x;
-	double y;
-	t_point average1, average2, average3;
-	double old_x = mlx->player.x_player;
-	double old_y = mlx->player.y_player;
 
-	x = mlx->player.x_player;
-	y = mlx->player.y_player;
-
-	calculate_movement(mlx, direction, speed, &x, &y);
-	calculate_averages(old_x, old_y, x, y, &average1, &average2, &average3);
-
-	if (handle_wall_collision(mlx, x, y, average1, average2, average3))
-		return 1;
-
-	if (old_x/TILE_SIZE != x/TILE_SIZE && old_y/TILE_SIZE != y/TILE_SIZE)
-		return (check_diagonal(mlx->cube->map, x/TILE_SIZE, y/TILE_SIZE, mlx));
-	return 0;
-}
-
-void    move_player(t_mlx *mlx, char direction, int *speed)
-{
-	if (check_wall(mlx, direction, speed))
-		return ;
-	if (direction == 'U') 
-	{
-		mlx->player.x_player += cos(mlx->player.rot_angle) * (*speed);
-		mlx->player.y_player -= sin(mlx->player.rot_angle) * (*speed);
-	}
-	else if (direction == 'D')
-	{
-		mlx->player.x_player -= cos(mlx->player.rot_angle) * (*speed);
-		mlx->player.y_player += sin(mlx->player.rot_angle) * (*speed);
-	}
-	else if (direction == 'L') 
-	{
-		mlx->player.x_player += cos(mlx->player.rot_angle + PI / 2) * (*speed);
-		mlx->player.y_player -= sin(mlx->player.rot_angle + PI / 2) * (*speed);
-	}
-	else if (direction == 'R') 
-	{
-		mlx->player.x_player += cos(mlx->player.rot_angle - PI / 2) * (*speed);
-		mlx->player.y_player -= sin(mlx->player.rot_angle - PI / 2) * (*speed);
-	}
-}
 
 int	destroy_handler()
 {
@@ -816,6 +228,8 @@ void    mouse_handler(double xpos, double ypos, void *param)
 	const double center_x = W_WIDTH/2;
 	double delta_x = xpos - center_x;
 
+	if (mlx->is_loading)
+		return ;
 	mlx->player.rot_angle -= (PI/2) * (delta_x/center_x);
 	if (mlx->player.rot_angle >= 2*PI)
 		mlx->player.rot_angle -= 2*PI;
@@ -825,178 +239,18 @@ void    mouse_handler(double xpos, double ypos, void *param)
 	mlx_set_mouse_pos(mlx->mlx_cnx, W_WIDTH/2, W_HEIGHT/2);
 }
 
-static void handle_north_door(char **map, int player_x, int player_y)
-{
-	if (map[player_y - 1][player_x] == 'D')
-		map[player_y - 1][player_x] = 'O';
-	else if (map[player_y - 1][player_x] == 'O')
-		map[player_y - 1][player_x] = 'D';
-}
 
-static void handle_west_door(char **map, int player_x, int player_y)
-{
-	if (map[player_y][player_x - 1] == 'D')
-		map[player_y][player_x - 1] = 'O';
-	else if (map[player_y][player_x - 1] == 'O')
-		map[player_y][player_x - 1] = 'D';
-}
 
-static void handle_south_door(char **map, int player_x, int player_y)
-{
-	if (map[player_y + 1][player_x] == 'D')
-		map[player_y + 1][player_x] = 'O';
-	else if (map[player_y + 1][player_x] == 'O')
-		map[player_y + 1][player_x] = 'D';
-}
 
-static void handle_east_door(char **map, int player_x, int player_y)
-{
-	if (map[player_y][player_x + 1] == 'D')
-		map[player_y][player_x + 1] = 'O';
-	else if (map[player_y][player_x + 1] == 'O')
-		map[player_y][player_x + 1] = 'D';
-}
 
-void    open_door(struct mlx_key_data keydata, void *param)
-{
-	t_mlx *mlx = (t_mlx *)param;
-	char **map = mlx->cube->map;
-	int player_x = mlx->player.x_player / TILE_SIZE;
-	int player_y = mlx->player.y_player / TILE_SIZE;
 
-	if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS)
-	{
-		if (mlx->player.rot_angle >= PI/4 && mlx->player.rot_angle < 3*(PI/4))
-			handle_north_door(map, player_x, player_y);
-		else if (mlx->player.rot_angle >= 3*(PI/4) && mlx->player.rot_angle < 5*(PI/4))
-			handle_west_door(map, player_x, player_y);
-		else if (mlx->player.rot_angle >= 5*(PI/4) && mlx->player.rot_angle < 7*(PI/4))
-			handle_south_door(map, player_x, player_y);
-		else
-			handle_east_door(map, player_x, player_y);
-	}
-	if (keydata.key == MLX_KEY_R && keydata.action == MLX_PRESS)
-		mlx->is_reloading = 1;
-}
 
-static void handle_movement_keys(t_mlx *mlx, int *speed, int *moved)
-{
-	if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_A))
-	{
-		move_player(mlx, 'L', speed);
-		*moved = 1;
-	}
-	if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_W))
-	{
-		move_player(mlx, 'U', speed);
-		*moved = 1;
-	}
-	if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_D))
-	{
-		move_player(mlx, 'R', speed);
-		*moved = 1;
-	}
-	if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_S))
-	{
-		move_player(mlx, 'D', speed);
-		*moved = 1;
-	}
-}
 
-static void handle_rotation_keys(t_mlx *mlx)
-{
-	if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_LEFT))
-	{
-		mlx->player.rot_angle += PI / 36;
-		if (mlx->player.rot_angle >= 2*PI)
-			mlx->player.rot_angle -= 2*PI;
-	}
-	if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_RIGHT))
-	{
-		mlx->player.rot_angle -= PI / 36;
-		if (mlx->player.rot_angle < 0)
-			mlx->player.rot_angle += 2*PI;
-	}
-}
 
-void	keydown_handler(void *param)
-{
-	t_mlx *mlx;
-	int speed;
-	int moved;
 
-	moved = 0;
-	speed = SPEED;
-	mlx = (t_mlx *)param;
-	mlx->minimap_scale = MINIMAP_SCALE;
 
-	if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_LEFT_SHIFT))
-	{
-		speed = 400;
-		mlx->minimap_scale = MINIMAP_SCALE * 1.15;
-	}
-	if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_ESCAPE))
-		destroy_handler();
 
-	handle_movement_keys(mlx, &speed, &moved);
-	handle_rotation_keys(mlx);
 
-	if (moved)
-		mlx->is_walking = 1;
-	else 
-		mlx->is_walking = 0;
-}
-
-void    player_infos(t_cube *cube, int *p_x, int *p_y, char *p_or)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-	while(cube->map[i])
-	{
-		j = 0;
-		while (cube->map[i][j])
-		{
-			if(cube->map[i][j] == 'N' || cube->map[i][j] == 'S' || cube->map[i][j] == 'E' || cube->map[i][j] == 'W')
-			{
-				*p_x = j;
-				*p_y = i;
-				*p_or = cube->map[i][j];
-			}
-			j++;
-		}        
-		i++;
-	}
-}
-
-void player_init(t_mlx *mlx)
-{
-	int     player_x;
-	int     player_y;
-	char    player_orientation;
-	
-	player_x = 0;
-	player_y = 0;
-	player_orientation = '0';
-	if (!mlx || !mlx->cube->map)
-	{
-		puts("heeheeehhe"); //change
-		return;
-	}
-	player_infos(mlx->cube, &player_x, &player_y, &player_orientation);
-	mlx->player.x_player = (TILE_SIZE * player_x) + (TILE_SIZE / 2);
-	mlx->player.y_player = (TILE_SIZE * player_y) + (TILE_SIZE / 2);
-	if (player_orientation == 'N')
-		mlx->player.rot_angle = PI/2;
-	else if (player_orientation == 'W')
-		mlx->player.rot_angle = PI;
-	else if (player_orientation == 'S')
-		mlx->player.rot_angle = (3*PI)/2;
-	else if (player_orientation == 'E')
-		mlx->player.rot_angle = 0;
-}
 void *salloc(int size)
 {
 	void *alloc;
@@ -1010,183 +264,18 @@ void *salloc(int size)
 	return (alloc);
 }
 
-void set_dimensions(t_cube *cube, int *height_tiles, int *width_tiles)
-{
-	int i;
-	int h;
-	int w;
 
-	i = 0;
-	h = 0;
-	w = 0;
-	while(cube->map[i])
-	{
-		if(ft_strlen(cube->map[i]) > w)
-			w = ft_strlen(cube->map[i]);
-		i++;
-	}
-	h = i;
-	*height_tiles = h;
-	*width_tiles = w;
-}
 
-void    initializer(t_mlx *mlx, t_cube *cube)
-{
-	int h_tiles;
-	int w_tiles;
 
-	set_dimensions(cube, &h_tiles, &w_tiles);
-	mlx->mlx_cnx = mlx_init( W_WIDTH, W_HEIGHT, "CUB3D", false);
-	if (!mlx->mlx_cnx)
-		ft_exit(mlx);
-	mlx->img = mlx_new_image(mlx->mlx_cnx, W_WIDTH, W_HEIGHT);
-	if (!mlx->img)
-		ft_exit(mlx);
-	mlx->map.height = h_tiles * TILE_SIZE;
-	mlx->map.width = w_tiles * TILE_SIZE;
-	mlx->cube = cube;
-	mlx->minimap_scale = MINIMAP_SCALE;
-	mlx->is_walking = 0;
-	mlx->is_holding = 0;
-	mlx->is_firing = 0;
-	mlx->is_reloading = 0;
-	mlx->wall_const = (W_HEIGHT / 5) * ((W_HEIGHT / 10) * 80);
-	player_init(mlx);
-}
 
-void    gun_animation(t_mlx *mlx, int x, int y)
-{
-	int i;
-	int src;
-	int dest;
 
-	i = 0;
-	src = (x * GUN_W) + ((y * GUN_H) * mlx->graphics.gun_tex->width);
-	dest = 0; 
 
-	while (i < GUN_H)
-	{
-		memcpy((uint32_t *)mlx->graphics.gun->pixels + dest, (uint32_t *)mlx->graphics.gun_tex->pixels + src, GUN_W * 4);
-		src += mlx->graphics.gun_tex->width;
-		dest += GUN_W;
-		i++;
-	} 
-}
-void    fire_animation(t_mlx *mlx, int x, int y)
-{
-	int i;
-	int src;
-	int dest;
 
-	i = 0;
-	src = (x * FIRE_W) + ((y * FIRE_H) * mlx->graphics.fire_tex->width);
-	dest = 0; 
-	while (i < FIRE_H)
-	{
-		memcpy((uint32_t *)mlx->graphics.fire->pixels + dest, (uint32_t *)mlx->graphics.fire_tex->pixels + src, FIRE_W * 4);
-		src += mlx->graphics.fire_tex->width;
-		dest += FIRE_W;
-		i++;
-	} 
-}
 
-void    reload_animation(t_mlx *mlx, int x, int y)
-{
-	int i;
-	int src;
-	int dest;
 
-	i = 0;
-	src = (x * RELOAD_W) + ((y * RELOAD_H) * mlx->graphics.reload_tex->width);
-	dest = 0; 
-	while (i < RELOAD_H)
-	{
-		memcpy(((uint32_t *) mlx->graphics.reload->pixels) + dest, ((uint32_t *) mlx->graphics.reload_tex->pixels) + src, RELOAD_W * 4);
-		src += mlx->graphics.reload_tex->width;
-		dest += RELOAD_W;
-		i++;
-	} 
-}
 
-void    fire_hook(mouse_key_t button, action_t action, modifier_key_t mods, void *param)
-{
-	t_mlx *mlx = (t_mlx *)param;
-	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS)
-	{
-		mlx->is_firing = 1;
-		mlx->is_holding = 1;
-	}
-	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_RELEASE)
-	{
-		mlx->is_firing = 0;
-		mlx->is_holding = 0;
-	}
-}
 
-static void	handle_walking_animation(t_mlx *mlx, int *gun_i)
-{
-	if (mlx->is_walking)
-	{
-		if (*gun_i == 0)
-		{
-			mlx->graphics.gun->instances[0].enabled = true;
-			mlx->graphics.reload->instances[0].enabled = false;
-			mlx->graphics.fire->instances[0].enabled = false;
-		}
-		gun_animation(mlx, *gun_i % 8, *gun_i / 8);
-		(*gun_i)++;
-		if (*gun_i == 44)
-			*gun_i = 0;
-	}
-}
 
-static void handle_firing_animation(t_mlx *mlx, int *fire_i)
-{
-	if (mlx->is_firing || *fire_i != 0 || mlx->is_holding)
-	{
-		if (mlx->is_firing && *fire_i)
-			*fire_i = 0;
-		if (*fire_i == 0)
-		{
-			mlx->graphics.gun->instances[0].enabled = false;
-			mlx->graphics.reload->instances[0].enabled = false;
-			mlx->graphics.fire->instances[0].enabled = true;
-			mlx->is_firing = 0;
-		}
-		fire_animation(mlx, *fire_i % 6, *fire_i / 6);
-		*fire_i += 2;
-		if (*fire_i == 16)
-		{
-			*fire_i = 0;
-			mlx->is_firing = 0;
-			mlx->graphics.fire->instances[0].enabled = false;
-			mlx->graphics.gun->instances[0].enabled = true;
-		}
-	}
-}
-
-static void handle_reloading_animation(t_mlx *mlx, int *reload_i, int *gun_i)
-{
-	if (mlx->is_reloading)
-	{
-		if (*reload_i == 0)
-		{
-			mlx->graphics.gun->instances[0].enabled = false;
-			mlx->graphics.reload->instances[0].enabled = true;
-			mlx->graphics.fire->instances[0].enabled = false;
-		}
-		reload_animation(mlx, *reload_i % 8, *reload_i / 8);
-		(*reload_i)++;
-		if (*reload_i == 44)
-		{
-			*reload_i = 0;
-			mlx->is_reloading = 0;
-			mlx->graphics.reload->instances[0].enabled = false;
-			mlx->graphics.gun->instances[0].enabled = true;
-			*gun_i = 0;
-		}
-	}
-}
 
 void    animation_hook(void *param)
 {
@@ -1201,117 +290,6 @@ void    animation_hook(void *param)
 }
 
 
-
-mlx_image_t *textures_loader(t_mlx *mlx, const char *path)
-{
-	mlx_texture_t * tmp;
-	mlx_image_t *img; 
-
-	tmp =  mlx_load_png(path);
-	if (!tmp)
-		ft_exit(mlx);
-	img = mlx_texture_to_image(mlx->mlx_cnx, tmp);
-	if (!img)
-		ft_exit(mlx);
-	mlx_delete_texture(tmp);
-	return (img);
-}
-
-void delete_images(t_mlx *mlx)
-{
-	if (mlx->graphics.no_txtr)
-		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.no_txtr);
-	if (mlx->graphics.so_txtr)
-		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.so_txtr);
-	if (mlx->graphics.ea_txtr)
-		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.ea_txtr);
-	if (mlx->graphics.we_txtr)
-		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.we_txtr);
-	if (mlx->graphics.door_txtr)
-		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.door_txtr);
-	if (mlx->graphics.sky_image)
-		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.sky_image);
-	if (mlx->graphics.player)
-		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.player);
-	if (mlx->graphics.gun)
-		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.gun);
-	if (mlx->graphics.fire)
-		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.fire);
-	if (mlx->graphics.reload)
-		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.reload);
-}
-
-void free_parsing(t_mlx *mlx)
-{
-	int i;
-
-	free(mlx->cube->file_name);
-	free(mlx->cube->no_tex);
-	free(mlx->cube->so_tex);
-	free(mlx->cube->we_tex);
-	free(mlx->cube->ea_tex);
-	i = 0;
-	while (mlx->cube->map[i])
-		free(mlx->cube->map[i++]);
-	free(mlx->cube->map);
-}
-
-
-void ft_exit(t_mlx *mlx)
-{
-	delete_images(mlx);
-	if (mlx->graphics.gun_tex)
-		mlx_delete_texture(mlx->graphics.gun_tex);
-	if (mlx->graphics.fire_tex)
-		mlx_delete_texture(mlx->graphics.fire_tex);
-	if (mlx->graphics.reload_tex)
-		mlx_delete_texture(mlx->graphics.reload_tex);
-	if (mlx->mlx_cnx)
-	{
-		mlx_close_window(mlx->mlx_cnx);
-		mlx_terminate(mlx->mlx_cnx);
-	}
-	free_parsing(mlx);
-	exit(0);
-}
-
-void    load_graphics(t_mlx *mlx, t_cube *cube)
-{
-	mlx->graphics.no_txtr = textures_loader(mlx, cube->no_tex);
-	mlx->graphics.so_txtr = textures_loader(mlx, cube->so_tex);
-	mlx->graphics.ea_txtr = textures_loader(mlx, cube->ea_tex);
-	mlx->graphics.we_txtr = textures_loader(mlx, cube->we_tex);
-	mlx->graphics.door_txtr = textures_loader(mlx, "textures/no1.png");
-	mlx->graphics.sky_image = textures_loader(mlx, "textures/sky5.png");
-	mlx->graphics.player = textures_loader(mlx, "textures/player_arrow1.png");
-	mlx->graphics.fire_tex = mlx_load_png("textures/fire_tex.png");
-	mlx->graphics.reload_tex = mlx_load_png("textures/reload_tex.png");
-	mlx->graphics.gun_tex = mlx_load_png("textures/gun_tex.png");
-	mlx->graphics.gun = mlx_new_image(mlx->mlx_cnx, GUN_W, GUN_H);
-	mlx->graphics.fire = mlx_new_image(mlx->mlx_cnx, FIRE_W, FIRE_H);
-	mlx->graphics.reload = mlx_new_image(mlx->mlx_cnx, RELOAD_W, RELOAD_H);
-	if (!mlx->graphics.fire_tex || !mlx->graphics.gun_tex || !mlx->graphics.reload_tex ||
-		!mlx->graphics.fire || !mlx->graphics.gun || !mlx->graphics.reload )
-		ft_exit(mlx);
-	mlx_resize_image(mlx->graphics.no_txtr, W_HEIGHT, W_HEIGHT);
-	mlx_resize_image(mlx->graphics.so_txtr, W_HEIGHT, W_HEIGHT);
-	mlx_resize_image(mlx->graphics.ea_txtr, W_HEIGHT, W_HEIGHT);
-	mlx_resize_image(mlx->graphics.we_txtr, W_HEIGHT, W_HEIGHT);
-	mlx_resize_image(mlx->graphics.door_txtr, W_HEIGHT, W_HEIGHT);
-	mlx_resize_image(mlx->graphics.player, 20, 20);
-}
-
-void put_images(t_mlx *mlx)
-{
-	mlx_image_to_window(mlx->mlx_cnx, mlx->img, 0, 0);
-	mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.gun, W_WIDTH / 2 - GUN_W / 2, W_HEIGHT - GUN_H);
-	mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.fire, W_WIDTH / 2 - FIRE_W / 2, W_HEIGHT - FIRE_H);
-	mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.reload, W_WIDTH / 2 - RELOAD_W / 2, W_HEIGHT - RELOAD_H);
-	mlx->graphics.gun->instances[0].enabled = true;
-	gun_animation(mlx, 0, 0);
-	mlx->graphics.reload->instances[0].enabled = false;
-	mlx->graphics.fire->instances[0].enabled = false;
-}
 
 void set_hooks(t_mlx *mlx)
 {
@@ -1329,6 +307,8 @@ int main(int ac, char **av)
 {
 	t_mlx   mlx;
 	t_cube  cube;
+
+	mlx.time = mlx_get_time();
 	if (ac < 2)
 	{
 		printf("need file name !\n");
@@ -1338,6 +318,9 @@ int main(int ac, char **av)
 		return (1);
 	bzero(&mlx, sizeof(t_mlx));
 	initializer(&mlx, &cube);
+	// adjust floor color
+	// printf("floor color : %d %d %d\n", mlx.cube->floor_color[0], mlx.cube->floor_color[1], mlx.cube->floor_color[2]);
+	// printf("ceiling color : %d %d %d\n", mlx.cube->ceiling_color[0], mlx.cube->ceiling_color[1], mlx.cube->ceiling_color[2]);
 	load_graphics(&mlx, &cube);
 	put_images(&mlx);
 	set_hooks(&mlx);
