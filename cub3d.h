@@ -200,7 +200,7 @@ char	*ft_strjoin(char *s1, char *s2);
 char	**ft_split(const char *s, char c);
 char	*ft_strdup(char *s1);
 char	*ft_strtrim(char *s1, char const *set);
-char    *color_join(char    **splitted);
+// char    *color_join(char    **splitted);
 int 	check_config(t_cube *cube);
 char    **refill_map(t_cube *cube);
 void	init_cube(t_cube *cube);

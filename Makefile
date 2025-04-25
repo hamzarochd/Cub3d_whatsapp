@@ -2,7 +2,7 @@ CC = cc
 # CFLAGS = -O3 -mavx2 -flto 
 CFLAGS = -funroll-loops -O3 -ffast-math -mavx2 -flto
 # CFLAGS += -Wall -Wextra -Werror
-CFLAGS += -fsanitize=address -g
+# CFLAGS += -fsanitize=address -g
 
 SRC = getnext/get_next_line.c getnext/get_next_line_utils.c main.c ft_strtrim.c ft_split.c parsing.c tools.c parsing_1.c parsing_2.c parsing_3.c
 OBJ = $(SRC:.c=.o)
