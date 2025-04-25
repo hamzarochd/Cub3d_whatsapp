@@ -486,8 +486,8 @@ void    minimap_init(t_mlx *mlx, t_minimap *mp)
 	mp->rot_angle = mlx->player.rot_angle - (PI/2);
 	mp->map_pixel_width = mlx->map.width * TILE_SIZE;
 	mp->map_pixel_height = mlx->map.height * TILE_SIZE;
-	mp->tip.x = MAP_X - cos(mlx->player.rot_angle) * (MAP_RADIUS);
-	mp->tip.y = MAP_Y - sin(mlx->player.rot_angle) * (MAP_RADIUS);
+	mp->north.x = MAP_X - cos(mlx->player.rot_angle) * (MAP_RADIUS);
+	mp->north.y = MAP_Y - sin(mlx->player.rot_angle) * (MAP_RADIUS);
 	mp->cos_angle = cos(mp->rot_angle * -1);
 	mp->sin_angle = sin(mp->rot_angle * -1);
 	mp->tile_x = 0;
@@ -518,9 +518,20 @@ int is_in_map(t_mlx *mlx, t_minimap *mp, int dx, int dy)
 		return (1);
 }
 
+void    put_north(t_mlx *mlx, t_point north)
+{
+    static  mlx_image_t *n;
+
+    draw_filled_circle(mlx, north.x, north.y, 10, rgb(0, 0, 0, 255));
+    if (n)
+        mlx_delete_image(mlx->mlx_cnx, n);
+    n = mlx_put_string(mlx->mlx_cnx, "N", north.x - 5, north.y - 10);
+}
+
 void minimap(t_mlx *mlx)
 {
 	t_minimap mp;
+    
 	
 	minimap_init(mlx, &mp);
 	draw_filled_circle(mlx, 192, 192, 135, rgb(0, 0, 0, 255));
@@ -542,7 +553,11 @@ void minimap(t_mlx *mlx)
 		}
 		mp.y++;
 	}
-	draw_filled_circle(mlx, mp.tip.x, mp.tip.y, 10, rgb(0, 0, 0, 255));
+    put_north(mlx, mp.north);
+	// draw_filled_circle(mlx, mp.tip.x, mp.tip.y, 10, rgb(0, 0, 0, 255));
+    // if (n)
+    //     mlx_delete_image(mlx->mlx_cnx, n);
+    // n = mlx_put_string(mlx->mlx_cnx, "N", mp.tip.x - 5, mp.tip.y - 10);
 	mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.player, MAP_X - 10, MAP_Y - 10);
 }
 
@@ -659,7 +674,7 @@ void    set_ray(t_ray *ray, t_mlx *mlx, t_point player_pt, t_rendex *r)
 }
 
 
-void map_render(void   *param)
+void render(void   *param)
 {
 	t_mlx   *mlx;
 	t_ray   ray;
@@ -801,7 +816,7 @@ void    mouse_handler(double xpos, double ypos, void *param)
 	const double center_x = W_WIDTH/2;
 	double delta_x = xpos - center_x;
 
-	mlx->player.rot_angle -= (PI/4) * (delta_x/center_x);
+	mlx->player.rot_angle -= (PI/2) * (delta_x/center_x);
 	if (mlx->player.rot_angle >= 2*PI)
 		mlx->player.rot_angle -= 2*PI;
 	if (mlx->player.rot_angle < 0)
@@ -1306,7 +1321,7 @@ void set_hooks(t_mlx *mlx)
 	mlx_mouse_hook(mlx->mlx_cnx, fire_hook, mlx);
 	mlx_set_cursor_mode(mlx->mlx_cnx, 0x00034003);
 	mlx_key_hook(mlx->mlx_cnx, open_door, mlx);
-	mlx_loop_hook(mlx->mlx_cnx, map_render, mlx);
+	mlx_loop_hook(mlx->mlx_cnx, render, mlx);
 	mlx_loop_hook(mlx->mlx_cnx, animation_hook, mlx);
 }
 

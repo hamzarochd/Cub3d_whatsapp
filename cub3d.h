@@ -107,7 +107,7 @@ typedef struct	s_minimap
     int		map_pixel_height;
 	int		tile_x;
 	int		tile_y;
-	t_point	tip;
+	t_point	north;
 	int		x;
 	int		y;
 	int		dx;
