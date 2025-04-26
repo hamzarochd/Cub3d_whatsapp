@@ -6,7 +6,7 @@ CFLAGS = -funroll-loops -O3 -ffast-math -mavx2 -flto
 
 SRC = getnext/get_next_line.c getnext/get_next_line_utils.c main.c ft_strtrim.c ft_split.c parsing.c tools.c parsing_1.c parsing_2.c parsing_3.c initializer.c \
 		graphics_loader.c ft_exit.c walking.c reloading.c firing.c keys_hook.c door_handler.c collisions.c render.c minimap.c ray_calculator.c vertical_raycasting.c \
-		horizontal_raycasting.c
+		horizontal_raycasting.c hooks_setter.c raycasting_tools.c general_tools.c pixel_putters.c graphic_tools.c
 OBJ = $(SRC:.c=.o)
 NAME = cub3d
 PRINTF = printf/libftprintf.a

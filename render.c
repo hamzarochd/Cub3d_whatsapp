@@ -38,7 +38,7 @@ void    set_render_var(t_mlx **mlx, t_point *player_pt, void *param, t_rendex *r
 	player_pt->x = (*mlx)->player.x_player;
 	player_pt->y = (*mlx)->player.y_player;
 	r->angle_start = (*mlx)->player.rot_angle + PI/6;
-	normmalize_angle(&(r->angle_start));
+	normalize_angle(&(r->angle_start));
 	r->i = 0;
 	current_time = mlx_get_time();
 	if (current_time > (*mlx)->time + 7 &&
@@ -85,7 +85,7 @@ void render(void   *param)
 		put_wall(mlx, r.i, &r.j, wall);
 		put_floor(mlx, r.i, &r.j);
 		r.angle_start -= (PI/3) / W_WIDTH;
-		normmalize_angle(&r.angle_start);
+		normalize_angle(&r.angle_start);
 		r.i++;
 	}
 	minimap(mlx);

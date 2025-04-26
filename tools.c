@@ -48,7 +48,7 @@ void decide(int i, t_cube *cube, char **token, char *tag)
 		cube->ceiling_color[2] = ft_atoi(token[2]);
 
 	}
-	if (!strcmp(tag, "C"))
+	if (!strcmp(tag, "F"))
 	{
 		cube->floor_color[0] = ft_atoi(token[0]);
 		cube->floor_color[1] = ft_atoi(token[1]);
