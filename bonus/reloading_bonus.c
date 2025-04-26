@@ -1,27 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   reloading_bonus.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 19:22:31 by hrochd            #+#    #+#             */
+/*   Updated: 2025/04/26 19:24:57 by hrochd           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d_bonus.h"
 
-
-
-void    reload_animation(t_mlx *mlx, int x, int y)
+void	reload_animation(t_mlx *mlx, int x, int y)
 {
-	int i;
-	int src;
-	int dest;
+	int	i;
+	int	src;
+	int	dest;
 
 	i = 0;
-	src = (x * RELOAD_W) + ((y * RELOAD_H) * mlx->graphics.reload_tex->width);
-	dest = 0; 
+	src = (x * RLD_W) + ((y * RELOAD_H) * mlx->graphics.reload_tex->width);
+	dest = 0;
 	while (i < RELOAD_H)
 	{
-		memcpy(((uint32_t *) mlx->graphics.reload->pixels) + dest, ((uint32_t *) mlx->graphics.reload_tex->pixels) + src, RELOAD_W * 4);
+		memcpy(((uint32_t *) mlx->graphics.reload->pixels) + dest,
+			((uint32_t *) mlx->graphics.reload_tex->pixels) + src, RLD_W * 4);
 		src += mlx->graphics.reload_tex->width;
-		dest += RELOAD_W;
+		dest += RLD_W;
 		i++;
-	} 
+	}
 }
 
-
-void handle_reloading_animation(t_mlx *mlx, int *reload_i, int *gun_i)
+void	handle_reloading_animation(t_mlx *mlx, int *reload_i, int *gun_i)
 {
 	if (mlx->is_reloading && !mlx->is_loading)
 	{

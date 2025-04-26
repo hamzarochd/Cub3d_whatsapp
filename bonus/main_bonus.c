@@ -1,11 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 18:58:28 by hrochd            #+#    #+#             */
+/*   Updated: 2025/04/26 18:58:44 by hrochd           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d_bonus.h"
 
-
-
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_mlx   mlx;
-	t_cube  cube;
+	t_mlx	mlx;
+	t_cube	cube;
 
 	mlx.time = mlx_get_time();
 	if (ac < 2)

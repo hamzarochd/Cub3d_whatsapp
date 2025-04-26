@@ -1,5 +1,17 @@
-#ifndef CUB3D_H
-# define CUB3D_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d_bonus.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 19:40:24 by hrochd            #+#    #+#             */
+/*   Updated: 2025/04/26 19:40:24 by hrochd           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef CUB3D_BONUS_H
+# define CUB3D_BONUS_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
@@ -10,67 +22,63 @@
 # include <limits.h>
 # include <stdio.h>
 # include <string.h>
-// # include <mlx.h>
 # include <math.h>
 # include <strings.h>
-
-#include <fcntl.h>
-#include "../MLX42/include/MLX42/MLX42.h"
-#include <sys/time.h>
-
-#define W_HEIGHT 1280
-#define W_WIDTH 2560
-
-#define TILE_SIZE 1280
-#define ARROW_LEFT 65361
-#define ARROW_UP 65362
-#define ARROW_RIGHT 65363
-#define ARROW_DOWN 65364
-#define LEFT 97
-#define UP 119
-#define RIGHT 100
-#define DOWN 115
-#define ESC 65307
-#define PI 3.141592654
-#define SPEED 200
-#define MINIMAP_SCALE 20
-#define MAX_DISTANCE 15 * TILE_SIZE
+# include <fcntl.h>
+# include "../MLX42/include/MLX42/MLX42.h"
+# include <sys/time.h>
+# define W_HEIGHT 1280
+# define W_WIDTH 2560
+# define TILE_SIZE 1280
+# define ARROW_LEFT 65361
+# define ARROW_UP 65362
+# define ARROW_RIGHT 65363
+# define ARROW_DOWN 65364
+# define LEFT 97
+# define UP 119
+# define RIGHT 100
+# define DOWN 115
+# define ESC 65307
+# define PI 3.141592654
+# define SPEED 200
+# define MINIMAP_SCALE 20
+# define MAX_DISTANCE 19200
 # define GUN_W 877
 # define GUN_H 580
 # define FIRE_W 898
 # define FIRE_H 570
-# define RELOAD_W 1394
+# define RLD_W 1394
 # define RELOAD_H 736
 # define MAP_RADIUS 128
 # define MAP_X 192
 # define MAP_Y 192
 
-typedef struct  s_cube
+typedef struct	s_cube
 {
-	char    *file_name;
-	char    *no_tex;
-	char    *so_tex;
-	char    *we_tex;
-	char    *ea_tex;
-	int    	floor_color[3];
-	int    	ceiling_color[3];
-	char    **file_content;
-	char    **map;
-	char    player_direction;
-	int     fd;
-	int     player_x;
-	int     player_y;
+	char	*file_name;
+	char	*no_tex;
+	char	*so_tex;
+	char	*we_tex;
+	char	*ea_tex;
+	int		floor_color[3];
+	int		ceiling_color[3];
+	char	**file_content;
+	char	**map;
+	char	player_direction;
+	int		fd;
+	int		player_x;
+	int		player_y;
 }               t_cube;
 
 typedef struct  s_player {
-	double     x_player;
-	double     y_player;
-	double     rot_angle;
+	double	x_player;
+	double	y_player;
+	double	rot_angle;
 }               t_player;
 
 typedef struct s_point {
-	double x;
-	double y;
+	double	x;
+	double	y;
 }               t_point;
 
 typedef struct	s_data {
@@ -88,11 +96,11 @@ typedef struct  s_map {
 
 typedef struct  s_ray
 {
-	double  ray_length;
+	double 	ray_length;
 	double	ray_pixels;
-	char    wall_orientation;
-	int     tile_hit_point;
-	int     is_door;
+	char	wall_orientation;
+	int		tile_hit_point;
+	int		is_door;
 	double	delta_angle;
 }               t_ray;
 
@@ -128,7 +136,6 @@ typedef struct 	s_render_indexes
 	double	angle_start;
 }				t_rendex;
 
-
 typedef struct s_wall
 {
 	int			wall_start;
@@ -141,21 +148,21 @@ typedef struct s_wall
 
 typedef struct  s_graphics
 {
-	mlx_image_t *no_txtr;
-	mlx_image_t *so_txtr;
-	mlx_image_t *ea_txtr;
-	mlx_image_t *we_txtr;
-	mlx_image_t *door_txtr;
-	mlx_image_t *sky_image;
-	mlx_image_t *gun;
-	mlx_image_t *reload;
-	mlx_image_t *loading_img;
-	mlx_image_t *player;
-	mlx_image_t *fire;
-	mlx_image_t *north;
-	mlx_texture_t *fire_tex;
-	mlx_texture_t *reload_tex;
-	mlx_texture_t *gun_tex;
+	mlx_image_t		*no_txtr;
+	mlx_image_t		*so_txtr;
+	mlx_image_t		*ea_txtr;
+	mlx_image_t		*we_txtr;
+	mlx_image_t		*door_txtr;
+	mlx_image_t		*sky_image;
+	mlx_image_t		*gun;
+	mlx_image_t		*reload;
+	mlx_image_t		*loading_img;
+	mlx_image_t		*player;
+	mlx_image_t		*fire;
+	mlx_image_t		*north;
+	mlx_texture_t	*fire_tex;
+	mlx_texture_t	*reload_tex;
+	mlx_texture_t	*gun_tex;
 }               t_graphics;
 
 typedef struct  s_mlx {
@@ -176,8 +183,6 @@ typedef struct  s_mlx {
 	double		time;
 }               t_mlx;
 
-
-
 enum {
 	ON_KEYDOWN = 2,
 	ON_KEYUP = 3,
@@ -187,10 +192,6 @@ enum {
 	ON_EXPOSE = 12,
 	ON_DESTROY = 17
 };
-
-
-
-
 
 void 		*salloc(int s);
 int			destroy_handler();
@@ -235,7 +236,7 @@ int 		clamp_value(int value, int min_val, int max_val);
 void		handle_walking_animation(t_mlx *mlx, int *gun_i);
 void 		handle_firing_animation(t_mlx *mlx, int *fire_i);
 void		put_wall(t_mlx *mlx, int i, int *j, t_wall wall);
-int			check_wall(t_mlx *mlx, char direction, int *speed);
+int			check_wall(t_mlx *mlx, char direction);
 void    	open_door(struct mlx_key_data keydata, void *param);
 int			is_invalid_rgb(char *input, t_cube *cube, char *tag);
 void		put_ceiling(t_mlx *mlx, int i, int *j,int wall_start);

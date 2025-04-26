@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   initializer_bonus.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 17:56:13 by hrochd            #+#    #+#             */
+/*   Updated: 2025/04/26 18:56:15 by hrochd           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d_bonus.h"
 
-void player_infos(t_cube *cube, int *p_x, int *p_y, char *p_or)
+void	player_infos(t_cube *cube, int *p_x, int *p_y, char *p_or)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -12,7 +24,8 @@ void player_infos(t_cube *cube, int *p_x, int *p_y, char *p_or)
 		j = 0;
 		while (cube->map[i][j])
 		{
-			if (cube->map[i][j] == 'N' || cube->map[i][j] == 'S' || cube->map[i][j] == 'E' || cube->map[i][j] == 'W')
+			if (cube->map[i][j] == 'N' || cube->map[i][j] == 'S'
+				|| cube->map[i][j] == 'E' || cube->map[i][j] == 'W')
 			{
 				*p_x = j;
 				*p_y = i;
@@ -24,11 +37,11 @@ void player_infos(t_cube *cube, int *p_x, int *p_y, char *p_or)
 	}
 }
 
-void player_init(t_mlx *mlx)
+void	player_init(t_mlx *mlx)
 {
-	int player_x;
-	int player_y;
-	char player_orientation;
+	int		player_x;
+	int		player_y;
+	char	player_orientation;
 
 	player_x = 0;
 	player_y = 0;
@@ -36,7 +49,7 @@ void player_init(t_mlx *mlx)
 	if (!mlx || !mlx->cube->map)
 	{
 		printf("Error\nINIT ERROR\n");
-		return;
+		return ;
 	}
 	player_infos(mlx->cube, &player_x, &player_y, &player_orientation);
 	mlx->player.x_player = (TILE_SIZE * player_x) + (TILE_SIZE / 2);
@@ -51,11 +64,11 @@ void player_init(t_mlx *mlx)
 		mlx->player.rot_angle = 0;
 }
 
-void set_dimensions(t_cube *cube, int *height_tiles, int *width_tiles)
+void	set_dimensions(t_cube *cube, int *height_tiles, int *width_tiles)
 {
-	int i;
-	int h;
-	int w;
+	int	i;
+	int	h;
+	int	w;
 
 	i = 0;
 	h = 0;
@@ -71,16 +84,15 @@ void set_dimensions(t_cube *cube, int *height_tiles, int *width_tiles)
 	*width_tiles = w;
 }
 
-void initializer(t_mlx *mlx, t_cube *cube)
+void	initializer(t_mlx *mlx, t_cube *cube)
 {
-	int h_tiles;
-	int w_tiles;
+	int	h_tiles;
+	int	w_tiles;
 
 	set_dimensions(cube, &h_tiles, &w_tiles);
 	mlx->mlx_cnx = mlx_init(W_WIDTH, W_HEIGHT, "CUB3D", false);
 	if (!mlx->mlx_cnx)
 		ft_exit(mlx);
-
 	mlx->is_loading = 1;
 	mlx->img = mlx_new_image(mlx->mlx_cnx, W_WIDTH, W_HEIGHT);
 	if (!mlx->img)

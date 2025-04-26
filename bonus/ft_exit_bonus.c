@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exit_bonus.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 18:23:44 by hrochd            #+#    #+#             */
+/*   Updated: 2025/04/26 18:24:26 by hrochd           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d_bonus.h"
 
-
-void delete_images(t_mlx *mlx)
+void	delete_images(t_mlx *mlx)
 {
 	if (mlx->graphics.no_txtr)
 		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.no_txtr);
@@ -25,9 +36,9 @@ void delete_images(t_mlx *mlx)
 		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.reload);
 }
 
-void free_parsing(t_mlx *mlx)
+void	free_parsing(t_mlx *mlx)
 {
-	int i;
+	int	i;
 
 	free(mlx->cube->file_name);
 	free(mlx->cube->no_tex);
@@ -40,7 +51,7 @@ void free_parsing(t_mlx *mlx)
 	free(mlx->cube->map);
 }
 
-void ft_exit(t_mlx *mlx)
+void	ft_exit(t_mlx *mlx)
 {
 	delete_images(mlx);
 	if (mlx->graphics.gun_tex)

@@ -1,18 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   horizontal_raycasting_bonus.c                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 18:41:43 by hrochd            #+#    #+#             */
+/*   Updated: 2025/04/26 18:47:13 by hrochd           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d_bonus.h"
 
-
-void	hwall_init(t_point *wall_pt, t_point unit_vec, t_point player_pt, double *scaling_factor)
+void	hwall_init(t_point *wl, t_point u_vec, t_point plr, double *scl_fac)
 {
-	if (unit_vec.y > 0)
-		wall_pt->y = TILE_SIZE * (int)(player_pt.y / TILE_SIZE);
+	if (u_vec.y > 0)
+		wl->y = TILE_SIZE * (int)(plr.y / TILE_SIZE);
 	else
-		wall_pt->y = (TILE_SIZE * ((int)(player_pt.y / TILE_SIZE) + 1));
-	*scaling_factor = (player_pt.y - wall_pt->y) / unit_vec.y;
-	wall_pt->x = player_pt.x + (*scaling_factor * unit_vec.x);
+		wl->y = (TILE_SIZE * ((int)(plr.y / TILE_SIZE) + 1));
+	*scl_fac = (plr.y - wl->y) / u_vec.y;
+	wl->x = plr.x + (*scl_fac * u_vec.x);
 }
 
-
-int hwall_hit(t_point unit_vec, t_mlx *mlx, t_point *wall_pt)
+int	hwall_hit(t_point unit_vec, t_mlx *mlx, t_point *wall_pt)
 {
 	if (unit_vec.y > 0)
 	{
@@ -29,25 +39,26 @@ int hwall_hit(t_point unit_vec, t_mlx *mlx, t_point *wall_pt)
 	return (0);
 }
 
-
-t_point get_h_wall(t_mlx *mlx, t_point player_pt, double ray_angle, double  *ray_lenght)
+t_point	get_h_wall(t_mlx *mlx, t_point plr, double ray_angle, double *ray_l)
 {
-	t_point wall_pt;
-	int  found_wall;
-	double scaling_factor;
-	t_point unit_vec;
+	t_point	wall_pt;
+	int		found_wall;
+	double	scaling_factor;
+	t_point	unit_vec;
+	int		delta_x_pw;
 
 	if (ray_angle == PI || ray_angle == 0)
-		return (infinite_ray(ray_lenght));
+		return (infinite_ray(ray_l));
 	vec_init(&unit_vec, ray_angle, &found_wall);
-	hwall_init(&wall_pt, unit_vec, player_pt, &scaling_factor);
+	hwall_init(&wall_pt, unit_vec, plr, &scaling_factor);
 	while (!found_wall)
 	{
 		if (hwall_hit(unit_vec, mlx, &wall_pt))
-			break;
-		scaling_factor = (player_pt.y - wall_pt.y) / unit_vec.y;
-		wall_pt.x = player_pt.x + (scaling_factor * unit_vec.x); 
+			break ;
+		scaling_factor = (plr.y - wall_pt.y) / unit_vec.y;
+		wall_pt.x = plr.x + (scaling_factor * unit_vec.x);
 	}
-	*ray_lenght = sqrt(((wall_pt.x - player_pt.x) * (wall_pt.x - player_pt.x)) + ((wall_pt.y - player_pt.y) * (wall_pt.y - player_pt.y)));
+	delta_x_pw = ((wall_pt.x - plr.x) * (wall_pt.x - plr.x));
+	*ray_l = sqrt(delta_x_pw + ((wall_pt.y - plr.y) * (wall_pt.y - plr.y)));
 	return (wall_pt);
 }

@@ -1,21 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   graphics_loader_bonus.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 18:34:56 by hrochd            #+#    #+#             */
+/*   Updated: 2025/04/26 19:24:57 by hrochd           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d_bonus.h"
 
-
-void put_images(t_mlx *mlx)
+void	put_images(t_mlx *mlx)
 {
 	int32_t	anmtn_x;
 
-	anmtn_x = 3 * (W_WIDTH/5);
+	anmtn_x = 3 * (W_WIDTH / 5);
 	mlx_image_to_window(mlx->mlx_cnx, mlx->img, 0, 0);
 	mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.loading_img, 0, 0);
 	mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.gun,
-						anmtn_x - GUN_W / 2, W_HEIGHT - GUN_H);
+		anmtn_x - GUN_W / 2, W_HEIGHT - GUN_H);
 	mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.fire,
-						anmtn_x - FIRE_W / 2, W_HEIGHT - FIRE_H);
+		anmtn_x - FIRE_W / 2, W_HEIGHT - FIRE_H);
 	mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.reload,
-						anmtn_x - RELOAD_W / 2, W_HEIGHT - RELOAD_H);
-						mlx_image_to_window(mlx->mlx_cnx,
-						mlx->graphics.player, MAP_X - 10, MAP_Y - 10);
+		anmtn_x - RLD_W / 2, W_HEIGHT - RELOAD_H);
+	mlx_image_to_window(mlx->mlx_cnx,
+		mlx->graphics.player, MAP_X - 10, MAP_Y - 10);
 	mlx->img->instances[0].enabled = false;
 	mlx->graphics.gun->instances[0].enabled = false;
 	gun_animation(mlx, 0, 0);
@@ -25,12 +36,12 @@ void put_images(t_mlx *mlx)
 	mlx->graphics.player->instances[0].enabled = false;
 }
 
-mlx_image_t *textures_loader(t_mlx *mlx, const char *path)
+mlx_image_t	*textures_loader(t_mlx *mlx, const char *path)
 {
-	mlx_texture_t * tmp;
-	mlx_image_t *img; 
+	mlx_texture_t	*tmp;
+	mlx_image_t		*img;
 
-	tmp =  mlx_load_png(path);
+	tmp = mlx_load_png(path);
 	if (!tmp)
 		ft_exit(mlx);
 	img = mlx_texture_to_image(mlx->mlx_cnx, tmp);
@@ -40,8 +51,7 @@ mlx_image_t *textures_loader(t_mlx *mlx, const char *path)
 	return (img);
 }
 
-
-void    load_graphics(t_mlx *mlx, t_cube *cube)
+void	load_graphics(t_mlx *mlx, t_cube *cube)
 {
 	mlx->graphics.no_txtr = textures_loader(mlx, cube->no_tex);
 	mlx->graphics.so_txtr = textures_loader(mlx, cube->so_tex);
@@ -56,10 +66,11 @@ void    load_graphics(t_mlx *mlx, t_cube *cube)
 	mlx->graphics.gun_tex = mlx_load_png("textures/gun_tex.png");
 	mlx->graphics.gun = mlx_new_image(mlx->mlx_cnx, GUN_W, GUN_H);
 	mlx->graphics.fire = mlx_new_image(mlx->mlx_cnx, FIRE_W, FIRE_H);
-	mlx->graphics.reload = mlx_new_image(mlx->mlx_cnx, RELOAD_W, RELOAD_H);
-	if (!mlx->graphics.fire_tex || !mlx->graphics.gun_tex ||
-		!mlx->graphics.reload_tex || !mlx->graphics.fire ||
-		!mlx->graphics.gun || !mlx->graphics.reload)
+	mlx->graphics.reload = mlx_new_image(mlx->mlx_cnx, RLD_W, RELOAD_H);
+	if (!mlx->graphics.fire_tex || !mlx->graphics.gun_tex
+		|| !mlx->graphics.reload_tex || !mlx->graphics.fire
+		|| !mlx->graphics.gun || !mlx->graphics.reload
+		|| !mlx->graphics.loading_img)
 		ft_exit(mlx);
 	mlx_resize_image(mlx->graphics.no_txtr, W_HEIGHT, W_HEIGHT);
 	mlx_resize_image(mlx->graphics.so_txtr, W_HEIGHT, W_HEIGHT);

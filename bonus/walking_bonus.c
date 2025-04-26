@@ -1,23 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   walking_bonus.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 19:37:54 by hrochd            #+#    #+#             */
+/*   Updated: 2025/04/26 19:38:38 by hrochd           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d_bonus.h"
 
-
-void    gun_animation(t_mlx *mlx, int x, int y)
+void	gun_animation(t_mlx *mlx, int x, int y)
 {
-	int i;
-	int src;
-	int dest;
+	int	i;
+	int	src;
+	int	dest;
 
 	i = 0;
 	src = (x * GUN_W) + ((y * GUN_H) * mlx->graphics.gun_tex->width);
-	dest = 0; 
-
+	dest = 0;
 	while (i < GUN_H)
 	{
-		memcpy((uint32_t *)mlx->graphics.gun->pixels + dest, (uint32_t *)mlx->graphics.gun_tex->pixels + src, GUN_W * 4);
+		memcpy((uint32_t *)mlx->graphics.gun->pixels + dest,
+			(uint32_t *)mlx->graphics.gun_tex->pixels + src, GUN_W * 4);
 		src += mlx->graphics.gun_tex->width;
 		dest += GUN_W;
 		i++;
-	} 
+	}
 }
 
 void	handle_walking_animation(t_mlx *mlx, int *gun_i)
