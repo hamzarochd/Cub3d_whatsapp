@@ -8,12 +8,12 @@ void    player_infos(t_cube *cube, int *p_x, int *p_y, char *p_or)
 
 	i = 0;
 	j = 0;
-	while(cube->map[i])
+	while (cube->map[i])
 	{
 		j = 0;
 		while (cube->map[i][j])
 		{
-			if(cube->map[i][j] == 'N' || cube->map[i][j] == 'S' || cube->map[i][j] == 'E' || cube->map[i][j] == 'W')
+			if (cube->map[i][j] == 'N' || cube->map[i][j] == 'S' || cube->map[i][j] == 'E' || cube->map[i][j] == 'W')
 			{
 				*p_x = j;
 				*p_y = i;
@@ -62,9 +62,9 @@ void set_dimensions(t_cube *cube, int *height_tiles, int *width_tiles)
 	i = 0;
 	h = 0;
 	w = 0;
-	while(cube->map[i])
+	while (cube->map[i])
 	{
-		if(ft_strlen(cube->map[i]) > w)
+		if (ft_strlen(cube->map[i]) > w)
 			w = ft_strlen(cube->map[i]);
 		i++;
 	}

@@ -51,7 +51,7 @@ void put_ceiling(t_mlx *mlx, int i, int *j,int wall_start)
 						mlx->cube->ceiling_color[1],
 						mlx->cube->ceiling_color[2], 255);
 	k = *j;
-	while(k < wall_start)
+	while (k < wall_start)
 	{
 		mlx_put_pixel(mlx->img, i, k, ceiling_color);
 		k++;
@@ -68,7 +68,7 @@ void    put_floor(t_mlx *mlx, int i, int *j)
 						mlx->cube->floor_color[1],
 						mlx->cube->floor_color[2], 255);
 	k = *j;
-	while(k < W_HEIGHT)
+	while (k < W_HEIGHT)
 	{
 		mlx_put_pixel(mlx->img, i, k, floor_color);
 		k++;

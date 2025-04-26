@@ -33,7 +33,7 @@ int clamp_value(int value, int min_val, int max_val)
 
 void    normalize_angle(double *angle)
 {
-	if(*angle < 0)
+	if (*angle < 0)
 		*angle += 2*PI;
 	else if (*angle > 2*PI)
 		*angle -= 2*PI;
