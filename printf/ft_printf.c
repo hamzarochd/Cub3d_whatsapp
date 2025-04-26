@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 10:44:30 by ymouigui          #+#    #+#             */
-/*   Updated: 2023/11/19 04:12:12 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:03:23 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ft_printf.h"
+#include "ft_printf.h"
 
-int	ft_ft_printf(const char *string, ...)
+int	ft_printf(const char *string, ...)
 {
 	va_list	args;
 	int		i;

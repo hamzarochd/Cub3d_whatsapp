@@ -1,6 +1,6 @@
-NAME = libftft_printf.a
+NAME = libftprintf.a
 
-SRCS = ft_put_c.c ft_ft_printf.c ft_put_s.c ft_exec.c ft_put_x.c ft_put_p.c \
+SRCS = ft_put_c.c ft_printf.c ft_put_s.c ft_exec.c ft_put_x.c ft_put_p.c \
 		 ft_put_u.c ft_put_d.c 
 	   
 
@@ -8,7 +8,7 @@ OBJS = $(SRCS:.c=.o)
 
 CC = cc
 
-HEADER = ft_ft_printf.h
+HEADER = ft_printf.h
 
 CFLAGS = -Wall -Wextra -Werror
 

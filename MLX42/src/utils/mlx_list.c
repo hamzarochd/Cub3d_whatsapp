@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   mlx_list.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: W2Wizard <main@w2wizard.dev>                 +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2021/12/28 01:53:51 by W2Wizard      #+#    #+#                 */
-/*   Updated: 2023/02/27 11:31:01 by W2Wizard      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   mlx_list.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/28 01:53:51 by W2Wizard          #+#    #+#             */
+/*   Updated: 2025/04/26 16:29:48 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ mlx_list_t* mlx_lstnew(void* content)
 {
 	mlx_list_t* out = NULL;
 
-	if ((out = malloc(sizeof(mlx_list_t))))
+	if ((out = salloc(sizeof(mlx_list_t))))
 	{
 		out->content = content;
 		out->next = NULL;

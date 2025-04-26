@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_put_c.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:55:39 by ymouigui          #+#    #+#             */
-/*   Updated: 2023/11/19 04:25:54 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:03:23 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ft_printf.h"
+#include "ft_printf.h"
 
 int	ft_put_c(char c)
 {

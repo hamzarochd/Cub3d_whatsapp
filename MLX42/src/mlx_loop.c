@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   mlx_loop.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: W2Wizard <main@w2wizard.dev>                 +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2021/12/28 01:24:36 by W2Wizard      #+#    #+#                 */
-/*   Updated: 2023/03/28 16:34:17 by W2Wizard      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   mlx_loop.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/28 01:24:36 by W2Wizard          #+#    #+#             */
+/*   Updated: 2025/04/26 16:29:48 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ bool mlx_loop_hook(mlx_t* mlx, void (*f)(void*), void* param)
 	MLX_NONNULL(f);
 
 	mlx_hook_t* hook;
-	if (!(hook = malloc(sizeof(mlx_hook_t))))
+	if (!(hook = salloc(sizeof(mlx_hook_t))))
 		return (mlx_error(MLX_MEMFAIL));
 
 	mlx_list_t* lst;

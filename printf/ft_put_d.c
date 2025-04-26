@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_put_d.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 14:13:39 by ymouigui          #+#    #+#             */
-/*   Updated: 2023/11/19 04:30:03 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:03:23 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ft_printf.h"
+#include "ft_printf.h"
 
 static int	ft_count(int n)
 {

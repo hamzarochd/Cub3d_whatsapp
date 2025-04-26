@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:56:11 by ymouigui          #+#    #+#             */
-/*   Updated: 2023/11/19 04:29:55 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:03:23 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_printf_H
-# define FT_printf_H
+#ifndef printf_H
+# define printf_H
 
 # include <unistd.h>
 # include <stdio.h>
 # include <stdarg.h>
 # include <stdlib.h>
 
-int		ft_printf(const char *string, ...);
+int		printf(const char *string, ...);
 int		ft_exec(va_list args, char c);
 int		ft_put_c(char c);
 int		ft_put_s(char *str);
