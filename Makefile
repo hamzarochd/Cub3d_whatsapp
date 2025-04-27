@@ -1,5 +1,5 @@
 CC = cc
-NAME = cub3d
+NAME = cub3D
 
 BNAME = cub3d_bonus
 

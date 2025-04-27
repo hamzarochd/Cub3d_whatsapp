@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:27 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 14:36:26 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 16:24:39 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	main_parsing(t_cube *cube, char **av)
 		return (printf("Error\nfd error\n"), free(cube->file_name),
 			free_textures(cube), 1);
 	if (read_file(cube) == 1)
-		return (free(cube->file_name), 1);
+		return (free(cube->file_name), free_textures(cube), 1);
 	if (parse_file(cube) == 1)
 		return (free(cube->file_name), free_textures(cube), 1);
 	if (check_map(cube) == 1)
