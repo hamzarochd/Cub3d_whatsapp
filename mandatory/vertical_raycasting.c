@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vertical_raycasting.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/27 11:59:43 by ymouigui          #+#    #+#             */
+/*   Updated: 2025/04/27 11:59:44 by ymouigui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	vwall_init(t_point *wall_pt, t_point unit_vec
@@ -50,4 +62,29 @@ t_point	get_v_wall(t_mlx *mlx, t_point player_pt, double ray_angle
 	*ray_lenght = sqrt(((wall_pt.x - player_pt.x) * (wall_pt.x - player_pt.x))
 			+ ((wall_pt.y - player_pt.y) * (wall_pt.y - player_pt.y)));
 	return (wall_pt);
+}
+
+void	*ft_calloc(size_t number, size_t size)
+{
+	void	*ptr;	
+	size_t	i;
+
+	i = 0;
+	ptr = salloc(number * size);
+	while (i < number)
+	{
+		*(char *)(ptr + 1) = '\0';
+		i++;
+	}
+	return (ptr);
+}
+
+int	ft_strcmp(char	*s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while ((s1[i] != '\0' || s2[i] != '\0') && (s1[i] == s2[i]))
+		i++;
+	return (s1[i] - s2[i]);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/27 11:58:37 by ymouigui          #+#    #+#             */
+/*   Updated: 2025/04/27 11:58:37 by ymouigui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -10,14 +22,11 @@
 # include <limits.h>
 # include <stdio.h>
 # include <string.h>
-// # include <mlx.h>
 # include <math.h>
 # include <strings.h>
-
 # include <fcntl.h>
 # include "../MLX42/include/MLX42/MLX42.h"
 # include <sys/time.h>
-
 # define W_HEIGHT 1280
 # define W_WIDTH 2560
 # define TILE_SIZE 1280
@@ -161,7 +170,9 @@ char		**refill_map(t_cube *cube);
 int			check_config(t_cube *cube);
 void		free_textures(t_cube *cube);
 void		keydown_handler(void *param);
+void		ft_bzero(void	*s, size_t n);
 char		*my_free(char *s1, char **s2);
+int			ft_strcmp(char	*s1, char *s2);
 void		normalize_angle(double *angle);
 uint32_t	rgb(int r, int g, int b, int a);
 char		*ft_strjoin(char *s1, char *s2);
@@ -172,6 +183,7 @@ void		put_floor(t_mlx *mlx, int i, int *j);
 int			main_parsing(t_cube *cube, char **av);
 void		initializer(t_mlx *mlx, t_cube *cube);
 int			check_wall(t_mlx *mlx, char direction);
+void		*ft_calloc(size_t number, size_t size);
 char		*ft_strtrim(char *s1, char const *set);
 void		load_graphics(t_mlx *mlx, t_cube *cube);
 char		*ft_strtrim_last(char *s1, char const *set);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:58:28 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/26 18:58:44 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 10:21:44 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int ac, char **av)
 	}
 	if (main_parsing(&cube, av))
 		return (1);
-	bzero(&mlx, sizeof(t_mlx));
+	ft_bzero(&mlx, sizeof(t_mlx));
 	initializer(&mlx, &cube);
 	load_graphics(&mlx, &cube);
 	put_images(&mlx);

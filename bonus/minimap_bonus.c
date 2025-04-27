@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:58:58 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/26 19:02:41 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 10:16:48 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	put_north(t_mlx *mlx, t_point north)
 
 void	map_put_pixel(t_mlx *mlx, char cell, int x, int y)
 {
-	if (cell == '0' || strchr("NSEW", cell))
+	if (cell == '0' || ft_strchr("NSEW", cell))
 		mlx_put_pixel(mlx->img, x, y, rgb(211, 211, 211, 255));
 	else if (cell == 'O')
 		mlx_put_pixel(mlx->img, x, y, rgb(179, 158, 106, 255));

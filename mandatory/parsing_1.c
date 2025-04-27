@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_1.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/27 11:59:19 by ymouigui          #+#    #+#             */
+/*   Updated: 2025/04/27 11:59:20 by ymouigui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 int	handle_config(t_cube *cube, char **splitted, char *line,
@@ -43,7 +55,7 @@ static char	*fill_line(char *map_line, int bigest_line)
 	int		z;
 
 	z = 0;
-	res = calloc(bigest_line + 1, sizeof(char));
+	res = ft_calloc(bigest_line + 1, sizeof(char));
 	while (map_line[z])
 	{
 		res[z] = map_line[z];
@@ -70,7 +82,7 @@ char	**refill_map(t_cube *cube)
 	while (cube->map[i])
 		i++;
 	j = 0;
-	res = calloc(i + 1, sizeof(char *));
+	res = ft_calloc(i + 1, sizeof(char *));
 	while (j < i)
 	{
 		res[j] = fill_line(cube->map[j], bigest_line);

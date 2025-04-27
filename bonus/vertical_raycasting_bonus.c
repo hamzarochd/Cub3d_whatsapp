@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vertical_raycasting_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:34:12 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/26 19:37:46 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 10:20:16 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,29 @@ t_point	get_v_wall(t_mlx *mlx, t_point plr,
 	delta_x_pw = (wall_pt.x - plr.x) * (wall_pt.x - plr.x);
 	*ray_l = sqrt(delta_x_pw + ((wall_pt.y - plr.y) * (wall_pt.y - plr.y)));
 	return (wall_pt);
+}
+
+void	*ft_calloc(size_t number, size_t size)
+{
+	void	*ptr;	
+	size_t	i;
+
+	i = 0;
+	ptr = salloc(number * size);
+	while (i < number)
+	{
+		*(char *)(ptr + 1) = '\0';
+		i++;
+	}
+	return (ptr);
+}
+
+int	ft_strcmp(char	*s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while ((s1[i] != '\0' || s2[i] != '\0') && (s1[i] == s2[i]))
+		i++;
+	return (s1[i] - s2[i]);
 }

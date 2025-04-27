@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_1_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:02:50 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/26 19:02:55 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 10:08:18 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static char	*fill_line(char *map_line, int bigest_line)
 	int		z;
 
 	z = 0;
-	res = calloc(bigest_line + 1, sizeof(char));
+	res = ft_calloc(bigest_line + 1, sizeof(char));
 	while (map_line[z])
 	{
 		res[z] = map_line[z];
@@ -82,7 +82,7 @@ char	**refill_map(t_cube *cube)
 	while (cube->map[i])
 		i++;
 	j = 0;
-	res = calloc(i + 1, sizeof(char *));
+	res = ft_calloc(i + 1, sizeof(char *));
 	while (j < i)
 	{
 		res[j] = fill_line(cube->map[j], bigest_line);

@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_3.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/27 11:59:24 by ymouigui          #+#    #+#             */
+/*   Updated: 2025/04/27 11:59:25 by ymouigui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 static int	check_texture_type(char *dir)
 {
-	if (strcmp(dir, "NO") == 0)
+	if (ft_strcmp(dir, "NO") == 0)
 		return (0);
-	else if (strcmp(dir, "SO") == 0)
+	else if (ft_strcmp(dir, "SO") == 0)
 		return (1);
-	else if (strcmp(dir, "WE") == 0)
+	else if (ft_strcmp(dir, "WE") == 0)
 		return (2);
-	else if (strcmp(dir, "EA") == 0)
+	else if (ft_strcmp(dir, "EA") == 0)
 		return (3);
 	return (-1);
 }
@@ -45,7 +57,7 @@ int	check_texture(t_cube *cube, char **splitted, char *line)
 
 int	check_color(t_cube *cube, char **splitted, char *line)
 {
-	if (strcmp(splitted[0], "F") == 0)
+	if (ft_strcmp(splitted[0], "F") == 0)
 	{
 		if (cube->floor_color[0] != -1)
 			return (printf("floor color already set\n"), -1);
@@ -56,7 +68,7 @@ int	check_color(t_cube *cube, char **splitted, char *line)
 		}
 		return (1);
 	}
-	else if (strcmp(splitted[0], "C") == 0)
+	else if (ft_strcmp(splitted[0], "C") == 0)
 	{
 		if (cube->ceiling_color[0] != -1)
 			return (printf("ceiling color already set\n"), -1);

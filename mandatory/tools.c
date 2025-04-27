@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tools.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/27 11:59:41 by ymouigui          #+#    #+#             */
+/*   Updated: 2025/04/27 11:59:42 by ymouigui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	free_double(char **ptr)
@@ -40,13 +52,13 @@ static int	ft_atoi(const char *str)
 
 void	decide(t_cube *cube, char **token, char *tag)
 {
-	if (!strcmp(tag, "C"))
+	if (!ft_strcmp(tag, "C"))
 	{
 		cube->ceiling_color[0] = ft_atoi(token[0]);
 		cube->ceiling_color[1] = ft_atoi(token[1]);
 		cube->ceiling_color[2] = ft_atoi(token[2]);
 	}
-	if (!strcmp(tag, "F"))
+	if (!ft_strcmp(tag, "F"))
 	{
 		cube->floor_color[0] = ft_atoi(token[0]);
 		cube->floor_color[1] = ft_atoi(token[1]);

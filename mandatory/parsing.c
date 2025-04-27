@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/27 11:59:27 by ymouigui          #+#    #+#             */
+/*   Updated: 2025/04/27 11:59:28 by ymouigui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 int	parse_file(t_cube *cube)
@@ -13,11 +25,11 @@ int	parse_file(t_cube *cube)
 	j = i;
 	while (cube->file_content[j])
 		j++;
-	cube->map = calloc(j - i + 1, sizeof(char *));
+	cube->map = ft_calloc(j - i + 1, sizeof(char *));
 	j = 0;
 	while (cube->file_content[i])
 	{
-		cube->map[j] = strdup(cube->file_content[i]);
+		cube->map[j] = ft_strdup(cube->file_content[i]);
 		i++;
 		j++;
 	}
@@ -29,7 +41,7 @@ int	parse_file(t_cube *cube)
 
 static int	check_map_char(char c, int i, int j, t_cube *cube)
 {
-	if (!strchr("NSWE01 ", c))
+	if (!ft_strchr("NSWE01 ", c))
 		return (printf("Error: Invalid character '%c' at (%d, %d)\n",
 				c, i, j), 1);
 	if (c == '0' || c == 'N' || c == 'S' || c == 'W' || c == 'E' || c == 'D')
@@ -101,9 +113,5 @@ int	main_parsing(t_cube *cube, char **av)
 		return (free(cube->file_name), free_textures(cube), 1);
 	if (check_map(cube) == 1)
 		return (free_all(cube), 1);
-	printf("cube->no_tex %s\n", cube->no_tex);
-	printf("cube->so_tex %s\n", cube->so_tex);
-	printf("cube->we_tex %s\n", cube->we_tex);
-	printf("cube->ea_tex %s\n", cube->ea_tex);
 	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/27 11:59:15 by ymouigui          #+#    #+#             */
+/*   Updated: 2025/04/27 11:59:16 by ymouigui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 int	main(int ac, char **av)
@@ -13,7 +25,7 @@ int	main(int ac, char **av)
 	}
 	if (main_parsing(&cube, av))
 		return (1);
-	bzero(&mlx, sizeof(t_mlx));
+	ft_bzero(&mlx, sizeof(t_mlx));
 	initializer(&mlx, &cube);
 	load_graphics(&mlx, &cube);
 	put_images(&mlx);

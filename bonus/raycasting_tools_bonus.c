@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting_tools_bonus.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:22:04 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/26 19:22:27 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 10:20:22 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,16 @@ t_point	infinite_ray(double *ray_lenght)
 	inf_ray.y = INT_MAX;
 	*ray_lenght = INT_MAX;
 	return (inf_ray);
+}
+
+void	ft_bzero(void	*s, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		*(unsigned char *)(s + i) = '\0';
+		i++;
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:30:09 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/26 19:34:00 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 10:12:35 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ static int	ft_atoi(const char *str)
 
 void	decide(t_cube *cube, char **token, char *tag)
 {
-	if (!strcmp(tag, "C"))
+	if (!ft_strcmp(tag, "C"))
 	{
 		cube->ceiling_color[0] = ft_atoi(token[0]);
 		cube->ceiling_color[1] = ft_atoi(token[1]);
 		cube->ceiling_color[2] = ft_atoi(token[2]);
 	}
-	if (!strcmp(tag, "F"))
+	if (!ft_strcmp(tag, "F"))
 	{
 		cube->floor_color[0] = ft_atoi(token[0]);
 		cube->floor_color[1] = ft_atoi(token[1]);

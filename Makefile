@@ -5,7 +5,7 @@ BNAME = cub3d_bonus
 
 CFLAGS = -funroll-loops -O3 -ffast-math -mavx2 -flto
 CFLAGS += -Wall -Wextra -Werror
-# CFLAGS += -fsanitize=address -g
+CFLAGS += -fsanitize=address -g
 
 SRC = mandatory/get_next_line.c mandatory/get_next_line_utils.c mandatory/collisions.c \
 		mandatory/ft_split.c mandatory/graphics_loader.c mandatory/hooks_setter.c mandatory/initializer.c  mandatory/main.c mandatory/parsing_2.c \
@@ -38,10 +38,10 @@ $(NAME): $(OBJ)
 $(BNAME): $(BOBJ)
 	$(CC) $(CFLAGS) $(BOBJ) $(INCLUDES) $(MLX) -o $(BNAME) 
 
-%.o: %.c cub3d.h
+%.o: %.c mandatory/cub3d.h
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
-%bonus.o: %bonus.c cub3d_bonus.h
+%bonus.o: %bonus.c bonus/cub3d_bonus.h
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
 clean:

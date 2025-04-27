@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_2_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:03:37 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/26 19:03:38 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 10:12:35 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_map_name(char *str)
 		if (i == 0)
 			return (1);
 		i++;
-		if (strcmp(str + i, "cub") == 0)
+		if (ft_strcmp(str + i, "cub") == 0)
 			return (0);
 		else
 			return (1);
@@ -68,7 +68,7 @@ int	read_file(t_cube *cube)
 	count = count_lines(cube);
 	if (count == -1)
 		return (free_textures(cube), 1);
-	cube->file_content = calloc(count + 1, sizeof(char *));
+	cube->file_content = ft_calloc(count + 1, sizeof(char *));
 	handle_fd(cube);
 	i = 0;
 	tmp = get_next_line(cube->fd);
