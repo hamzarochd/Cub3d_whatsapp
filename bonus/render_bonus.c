@@ -73,8 +73,8 @@ void	set_ray(t_ray *ray, t_mlx *mlx, t_point player_pt, t_rendex *r)
 
 	*ray = calculate_ray_lenght(mlx, player_pt, r->angle_start);
 	ray->delta_angle = r->angle_start - mlx->player.rot_angle;
-	ray_const = ray->ray_length * cos(ray->delta_angle;
-	ray->ray_pixels = mlx->wall_const / ray_const);
+	ray_const = ray->ray_length * cos(ray->delta_angle);
+	ray->ray_pixels = mlx->wall_const / ray_const;
 	r->j = 0;
 }
 

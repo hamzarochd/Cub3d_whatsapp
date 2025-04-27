@@ -1,7 +1,6 @@
 #include "cub3d.h"
 
-
-void delete_images(t_mlx *mlx)
+void	delete_images(t_mlx *mlx)
 {
 	if (mlx->graphics.no_txtr)
 		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.no_txtr);
@@ -13,9 +12,9 @@ void delete_images(t_mlx *mlx)
 		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.we_txtr);
 }
 
-void free_parsing(t_mlx *mlx)
+void	free_parsing(t_mlx *mlx)
 {
-	int i;
+	int	i;
 
 	free(mlx->cube->file_name);
 	free(mlx->cube->no_tex);
@@ -28,7 +27,7 @@ void free_parsing(t_mlx *mlx)
 	free(mlx->cube->map);
 }
 
-void ft_exit(t_mlx *mlx)
+void	ft_exit(t_mlx *mlx)
 {
 	delete_images(mlx);
 	if (mlx->mlx_cnx)

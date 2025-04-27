@@ -1,11 +1,9 @@
 #include "cub3d.h"
 
-
-
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_mlx   mlx;
-	t_cube  cube;
+	t_mlx	mlx;
+	t_cube	cube;
 
 	mlx.time = mlx_get_time();
 	if (ac < 2)

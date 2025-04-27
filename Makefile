@@ -53,6 +53,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: clean
-
-
-# -fsanitize=address -g

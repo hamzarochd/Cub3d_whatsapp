@@ -1,8 +1,8 @@
 #include "cub3d.h"
 
-void re_put_pixel(mlx_image_t *img, int x, int y, uint32_t color)
+void	re_put_pixel(mlx_image_t *img, int x, int y, uint32_t color)
 {
-	int index;
+	int	index;
 
 	if (x >= 0 && x < (int)img->width && y >= 0 && y < (int)img->height)
 	{
@@ -14,12 +14,12 @@ void re_put_pixel(mlx_image_t *img, int x, int y, uint32_t color)
 	}
 }
 
-void put_wall(t_mlx *mlx, int i, int *j, t_wall wall)
+void	put_wall(t_mlx *mlx, int i, int *j, t_wall wall)
 {
-	int k;
-	uint32_t index;
-	uint32_t tex_width;
-	uint32_t tex_height;
+	int			k;
+	uint32_t	index;
+	uint32_t	tex_width;
+	uint32_t	tex_height;
 
 	tex_width = wall.wall_texture->width;
 	tex_height = wall.wall_texture->height;
@@ -32,7 +32,8 @@ void put_wall(t_mlx *mlx, int i, int *j, t_wall wall)
 		wall.tex.texel_y = ((int)wall.tex.tex_index) * tex_width;
 		wall.tex.texel_y = wall.tex.texel_y % (tex_width * tex_height);
 		index = (index + wall.tex.texel_y) % (tex_width * tex_height);
-		wall.tex.texel_color = ((uint32_t *)(wall.wall_texture->pixels))[(wall.tex.texel_y + wall.tex.texel_x)];
+		wall.tex.texel_color = ((uint32_t *)(wall.wall_texture->pixels))
+		[(wall.tex.texel_y + wall.tex.texel_x)];
 		re_put_pixel(mlx->img, i, k, wall.tex.texel_color);
 		k++;
 		wall.tex.tex_index += wall.wall_prop;
@@ -40,14 +41,13 @@ void put_wall(t_mlx *mlx, int i, int *j, t_wall wall)
 	*j = k;
 }
 
-void put_ceiling(t_mlx *mlx, int i, int *j, int wall_start)
+void	put_ceiling(t_mlx *mlx, int i, int *j, int wall_start)
 {
-	int k;
-	int ceiling_color;
+	int	k;
+	int	ceiling_color;
 
 	ceiling_color = rgb(mlx->cube->ceiling_color[0],
-						mlx->cube->ceiling_color[1],
-						mlx->cube->ceiling_color[2], 255);
+			mlx->cube->ceiling_color[1], mlx->cube->ceiling_color[2], 255);
 	k = *j;
 	while (k < wall_start)
 	{
@@ -57,14 +57,13 @@ void put_ceiling(t_mlx *mlx, int i, int *j, int wall_start)
 	*j = k;
 }
 
-void put_floor(t_mlx *mlx, int i, int *j)
+void	put_floor(t_mlx *mlx, int i, int *j)
 {
-	int k;
-	int floor_color;
+	int	k;
+	int	floor_color;
 
 	floor_color = rgb(mlx->cube->floor_color[0],
-					  mlx->cube->floor_color[1],
-					  mlx->cube->floor_color[2], 255);
+			mlx->cube->floor_color[1], mlx->cube->floor_color[2], 255);
 	k = *j;
 	while (k < W_HEIGHT)
 	{

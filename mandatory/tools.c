@@ -1,9 +1,8 @@
 #include "cub3d.h"
 
-
 void	free_double(char **ptr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (ptr[i])
@@ -12,8 +11,8 @@ void	free_double(char **ptr)
 		i++;
 	}
 	free (ptr);
-
 }
+
 static int	ft_atoi(const char *str)
 {
 	int	i;
@@ -39,14 +38,13 @@ static int	ft_atoi(const char *str)
 	return (res * sign);
 }
 
-void decide(t_cube *cube, char **token, char *tag)
+void	decide(t_cube *cube, char **token, char *tag)
 {
 	if (!strcmp(tag, "C"))
 	{
 		cube->ceiling_color[0] = ft_atoi(token[0]);
 		cube->ceiling_color[1] = ft_atoi(token[1]);
 		cube->ceiling_color[2] = ft_atoi(token[2]);
-
 	}
 	if (!strcmp(tag, "F"))
 	{
@@ -56,32 +54,33 @@ void decide(t_cube *cube, char **token, char *tag)
 	}
 }
 
-int is_invalid_rgb(char *input, t_cube *cube, char *tag)
+int	is_invalid_rgb(char *input, t_cube *cube, char *tag)
 {
-    int count = 0;
-    char **token;
-    int i;
-    token = ft_split(input, ',');
-    i = 0;
+	int		count;
+	char	**token;
+	int		i;
+
+	token = ft_split(input, ',');
+	i = 0;
+	count = 0;
 	while (token[i])
 		i++;
 	if (i != 3)
 		return (free_double(token), -1);
 	i = 0;
-    while (token[i])
+	while (token[i])
 	{
 		count = ft_atoi(token[i]);
-        if ( count < 0 || count > 255)
+		if (count < 0 || count > 255)
 		{
-            free_double(token);
-            return (-1);
-        }
+			free_double(token);
+			return (-1);
+		}
 		decide(cube, token, tag);
-        i++;
-    }
-
-    free_double(token);
-    return (0);
+		i++;
+	}
+	free_double(token);
+	return (0);
 }
 
 void	free_all(t_cube *cube)

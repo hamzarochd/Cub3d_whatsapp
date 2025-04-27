@@ -1,7 +1,6 @@
 #include "cub3d.h"
 
-
-void put_images(t_mlx *mlx)
+void	put_images(t_mlx *mlx)
 {
 	mlx_image_to_window(mlx->mlx_cnx, mlx->img, 0, 0);
 	mlx_image_to_window(mlx->mlx_cnx, mlx->graphics.loading_img, 0, 0);
@@ -9,12 +8,12 @@ void put_images(t_mlx *mlx)
 	mlx->graphics.loading_img->instances[0].enabled = true;
 }
 
-mlx_image_t *textures_loader(t_mlx *mlx, const char *path)
+mlx_image_t	*textures_loader(t_mlx *mlx, const char *path)
 {
-	mlx_texture_t * tmp;
-	mlx_image_t *img; 
+	mlx_texture_t	*tmp;
+	mlx_image_t		*img;
 
-	tmp =  mlx_load_png(path);
+	tmp = mlx_load_png(path);
 	if (!tmp)
 		ft_exit(mlx);
 	img = mlx_texture_to_image(mlx->mlx_cnx, tmp);
@@ -24,8 +23,7 @@ mlx_image_t *textures_loader(t_mlx *mlx, const char *path)
 	return (img);
 }
 
-
-void    load_graphics(t_mlx *mlx, t_cube *cube)
+void	load_graphics(t_mlx *mlx, t_cube *cube)
 {
 	mlx->graphics.no_txtr = textures_loader(mlx, cube->no_tex);
 	mlx->graphics.so_txtr = textures_loader(mlx, cube->so_tex);

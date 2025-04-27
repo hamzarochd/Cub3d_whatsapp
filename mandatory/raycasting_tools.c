@@ -1,7 +1,5 @@
 #include "cub3d.h"
 
-
-
 void	vec_init(t_point *unit_vec, double ray_angle, int *found_wall)
 {
 	unit_vec->x = cos(ray_angle);
