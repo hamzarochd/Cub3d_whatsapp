@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:19 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 11:59:20 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:34:23 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ int	handle_config(t_cube *cube, char **splitted, char *line,
 	if (ret == 1)
 		counter++;
 	else if (ret == -1)
-		return (printf("error in config\n"), -1);
+		return (printf("Error\nerror in config\n"), -1);
 	else
 	{
 		ret = check_color(cube, splitted, line);
 		if (ret == 1)
 			counter++;
 		else if (ret == -1)
-			return (printf("error in config\n"), -1);
+			return (printf("Error\nerror in config\n"), -1);
 	}
 	return (counter);
 }

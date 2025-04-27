@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keys_hook.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:12 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 11:59:13 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:39:42 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	keydown_handler(void *param)
 
 	mlx = (t_mlx *)param;
 	if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_ESCAPE))
-		destroy_handler();
+		ft_exit(param);
 	if (mlx->is_loading)
 		return ;
 	handle_movement_keys(mlx);

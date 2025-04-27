@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:58:28 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/27 10:21:44 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:37:19 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int	main(int ac, char **av)
 	t_cube	cube;
 
 	mlx.time = mlx_get_time();
-	if (ac < 2)
+	if (ac != 2)
 	{
-		printf("need file name !\n");
+		printf("Error\nneed file name !\n");
 		return (1);
 	}
 	if (main_parsing(&cube, av))

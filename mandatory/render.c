@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:38 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 11:59:39 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:20:22 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	set_render_var(t_mlx **mlx, t_point *player_pt, void *param,
 	normalize_angle(&(r->angle_start));
 	r->i = 0;
 	current_time = mlx_get_time();
-	if (current_time > (*mlx)->time + 7
-		&& current_time < (*mlx)->time + 8)
+	if (current_time > (*mlx)->time + 3
+		&& current_time < (*mlx)->time + 4)
 	{
 		(*mlx)->graphics.loading_img->instances[0].enabled = false;
 		(*mlx)->is_loading = 0;

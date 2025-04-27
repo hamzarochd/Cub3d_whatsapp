@@ -6,7 +6,7 @@
 /*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:37:50 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/26 18:41:35 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 13:40:47 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	set_hooks(t_mlx *mlx)
 	mlx_loop_hook(mlx->mlx_cnx, keydown_handler, mlx);
 	mlx_cursor_hook(mlx->mlx_cnx, mouse_handler, mlx);
 	mlx_mouse_hook(mlx->mlx_cnx, fire_hook, mlx);
+	mlx_close_hook(mlx->mlx_cnx, ft_exit, mlx);
 	mlx_set_cursor_mode(mlx->mlx_cnx, 0x00034003);
 	mlx_key_hook(mlx->mlx_cnx, open_door, mlx);
 	mlx_loop_hook(mlx->mlx_cnx, render, mlx);

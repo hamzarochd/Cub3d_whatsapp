@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   general_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 08:58:28 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 11:17:28 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:34:23 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	*salloc(int size)
 	alloc = malloc(size);
 	if (!alloc)
 	{
-		printf("salloc ERROR\n");
+		printf("Error\nsalloc ERROR\n");
 		exit(1);
 	}
 	return (alloc);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:58:39 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 11:58:40 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:35:41 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,11 @@ void	free_parsing(t_mlx *mlx)
 	free(mlx->cube->map);
 }
 
-void	ft_exit(t_mlx *mlx)
+void	ft_exit(void *param)
 {
+	t_mlx	*mlx;
+
+	mlx = (t_mlx *)param;
 	delete_images(mlx);
 	if (mlx->mlx_cnx)
 	{

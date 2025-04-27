@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:22 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 11:59:23 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:34:23 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	count_lines(t_cube *cube)
 		count++;
 	}
 	if (count == 0)
-		return (printf("map empty\n"), -1);
+		return (printf("Error\nmap empty\n"), -1);
 	return (count);
 }
 

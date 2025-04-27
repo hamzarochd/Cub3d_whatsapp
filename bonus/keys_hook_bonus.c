@@ -6,7 +6,7 @@
 /*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:56:24 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/26 18:58:23 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 13:41:41 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	keydown_handler(void *param)
 		mlx->minimap_scale = MINIMAP_SCALE * 1.75;
 	}
 	if (mlx_is_key_down(mlx->mlx_cnx, MLX_KEY_ESCAPE))
-		destroy_handler();
+		ft_exit(param);
 	if (mlx->is_loading)
 		return ;
 	handle_movement_keys(mlx, &speed, &moved);

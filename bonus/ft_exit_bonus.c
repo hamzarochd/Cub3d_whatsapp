@@ -6,7 +6,7 @@
 /*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:23:44 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/26 18:24:26 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 13:34:22 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ void	delete_images(t_mlx *mlx)
 		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.we_txtr);
 	if (mlx->graphics.door_txtr)
 		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.door_txtr);
-	if (mlx->graphics.sky_image)
-		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.sky_image);
 	if (mlx->graphics.player)
 		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.player);
 	if (mlx->graphics.gun)
@@ -34,6 +32,8 @@ void	delete_images(t_mlx *mlx)
 		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.fire);
 	if (mlx->graphics.reload)
 		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.reload);
+	if (mlx->graphics.loading_img)
+		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.loading_img);
 }
 
 void	free_parsing(t_mlx *mlx)
@@ -51,8 +51,11 @@ void	free_parsing(t_mlx *mlx)
 	free(mlx->cube->map);
 }
 
-void	ft_exit(t_mlx *mlx)
+void	ft_exit(void *param)
 {
+	t_mlx *mlx;
+	
+	mlx = (t_mlx *)param;
 	delete_images(mlx);
 	if (mlx->graphics.gun_tex)
 		mlx_delete_texture(mlx->graphics.gun_tex);

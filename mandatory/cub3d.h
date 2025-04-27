@@ -32,7 +32,6 @@
 # define TILE_SIZE 1280
 # define PI 3.141592654
 # define SPEED 200
-# define MAX_DISTANCE 15 * TILE_SIZE
 
 typedef struct s_cube
 {
@@ -148,13 +147,13 @@ enum
 };
 
 void		*salloc(int s);
-int			destroy_handler(void);
 char		*ft_read(char *str);
-void		ft_exit(t_mlx *mlx);
+void		render(void *param);
+void		ft_exit(void *param);
 char		*ft_line(char **str);
 char		*ft_strdup(char *s1);
 int			ft_strlen( char *str);
-void		render(void *param);
+int			destroy_handler(void);
 void		set_hooks(t_mlx *mlx);
 char		*get_next_line(int fd);
 void		free_all(t_cube *cube);
@@ -196,13 +195,10 @@ int			is_in_wall(char **map, double x, double y, t_mlx *mlx);
 int			check_color(t_cube *cube, char **splitted, char *line);
 int			check_texture(t_cube *cube, char **splitted, char *line);
 char		get_wall_orientation(double angle, int is_wall_horizontal);
+t_point		get_h_wall(t_mlx *mlx, t_point p_pt, double r_a, double *r_l);
 void		vec_init(t_point *unit_vec, double ray_angle, int *found_wall);
+int			handle_config(t_cube *cube, char **split, char *line, int count);
 t_ray		calculate_ray_lenght(t_mlx *mlx, t_point player_pt, double angle);
-int			handle_config(t_cube *cube, char **splitted, char *line,
-				int counter);
-t_point		get_h_wall(t_mlx *mlx, t_point player_pt, double ray_angle,
-				double *ray_lenght);
-t_point		get_v_wall(t_mlx *mlx, t_point player_pt, double ray_angle,
-				double *ray_lenght);
+t_point		get_v_wall(t_mlx *mlx, t_point player_pt, double r_a, double *r_l);
 
 #endif

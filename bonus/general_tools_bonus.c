@@ -6,7 +6,7 @@
 /*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:26:22 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/26 18:27:38 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:34:40 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	*salloc(int size)
 	alloc = malloc(size);
 	if (!alloc)
 	{
-		printf("salloc ERROR\n");
+		printf("Error\nmalloc\n");
 		exit(1);
 	}
 	return (alloc);

@@ -200,14 +200,14 @@ enum
 };
 
 void		*salloc(int s);
-int			destroy_handler(void);
 char		*ft_read(char *str);
-void		ft_exit(t_mlx *mlx);
 void		minimap(t_mlx *mlx);
+void		render(void *param);
+void		ft_exit(void *param);
 char		*ft_line(char **str);
 char		*ft_strdup(char *s1);
 int			ft_strlen(char *str);
-void		render(void *param);
+int			destroy_handler(void);
 void		set_hooks(t_mlx *mlx);
 char		*get_next_line(int fd);
 void		free_all(t_cube *cube);

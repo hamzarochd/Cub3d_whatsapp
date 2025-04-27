@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initializer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:09 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 11:59:10 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:34:23 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	player_init(t_mlx *mlx)
 	player_orientation = '0';
 	if (!mlx || !mlx->cube->map)
 	{
-		printf("Init Error\n");
+		printf("Error\nInit Error\n");
 		return ;
 	}
 	player_infos(mlx->cube, &player_x, &player_y, &player_orientation);

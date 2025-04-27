@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:24 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 11:59:25 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:34:23 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	check_texture_type(char *dir)
 static int	process_texture(char **tex, char *line, char *dir)
 {
 	if ((*tex)[0] != '\0')
-		return (printf("%s texture already set\n", dir), -1);
+		return (printf("Error\n%s texture already set\n", dir), -1);
 	free(*tex);
 	*tex = ft_strdup(line + ft_strlen(dir));
 	*tex = ft_strtrim(*tex, " \t");
@@ -60,22 +60,22 @@ int	check_color(t_cube *cube, char **splitted, char *line)
 	if (ft_strcmp(splitted[0], "F") == 0)
 	{
 		if (cube->floor_color[0] != -1)
-			return (printf("floor color already set\n"), -1);
+			return (printf("Error\nfloor color already set\n"), -1);
 		if (is_invalid_rgb(line + ft_strlen(splitted[0]), cube, splitted[0])
 			== -1)
 		{
-			return (free(line), free_double(splitted), printf("error1\n"), -1);
+			return (free(line), free_double(splitted), printf("Error\nerror1\n"), -1);
 		}
 		return (1);
 	}
 	else if (ft_strcmp(splitted[0], "C") == 0)
 	{
 		if (cube->ceiling_color[0] != -1)
-			return (printf("ceiling color already set\n"), -1);
+			return (printf("Error\nceiling color already set\n"), -1);
 		if (is_invalid_rgb(line + ft_strlen(splitted[0]), cube, splitted[0])
 			== -1)
 		{
-			return (free(line), free_double(splitted), printf("error1\n"), -1);
+			return (free(line), free_double(splitted), printf("Error\nerror1\n"), -1);
 		}
 		return (1);
 	}

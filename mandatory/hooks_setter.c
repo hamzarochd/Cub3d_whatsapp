@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks_setter.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:01 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 11:59:02 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:31:20 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,6 @@
 void	set_hooks(t_mlx *mlx)
 {
 	mlx_loop_hook(mlx->mlx_cnx, keydown_handler, mlx);
+	mlx_close_hook(mlx->mlx_cnx, ft_exit, mlx);
 	mlx_loop_hook(mlx->mlx_cnx, render, mlx);
 }
