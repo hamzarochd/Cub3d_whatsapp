@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:27 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/28 12:29:56 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:55:41 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	parse_file(t_cube *cube)
 	if (i == -1)
 		return (free_double(cube->file_content), 1);
 	if (i != 6)
-		return (free_double(cube->file_content), printf("Error\nerror %d\n", i)
+		return (free_double(cube->file_content), printf("Error\ncongif err\n")
 			, 1);
 	j = i;
 	while (cube->file_content[j])
