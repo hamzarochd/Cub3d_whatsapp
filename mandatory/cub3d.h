@@ -158,6 +158,7 @@ void		set_hooks(t_mlx *mlx);
 char		*get_next_line(int fd);
 void		free_all(t_cube *cube);
 void		put_images(t_mlx *mlx);
+void		handle_fd(t_cube *cube);
 void		init_cube(t_cube *cube);
 int			check_map(t_cube *cube);
 int			read_file(t_cube *cube);

@@ -6,34 +6,11 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:22 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 17:01:11 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:26:00 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-int	check_map_name(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (1);
-	while (str[i] && str[i] != '.')
-		i++;
-	if (str[i] == '.')
-	{
-		if (i == 0)
-			return (1);
-		i++;
-		if (ft_strcmp(str + i, "cub") == 0)
-			return (0);
-		else
-			return (1);
-	}
-	else
-		return (1);
-}
 
 static int	count_lines(t_cube *cube)
 {
@@ -53,50 +30,44 @@ static int	count_lines(t_cube *cube)
 	return (count);
 }
 
-static void	handle_fd(t_cube *cube)
+int	first_char(char *str)
 {
-	close(cube->fd);
-	cube->fd = open(cube->file_name, O_RDONLY);
-}
-
-int first_char(char *str)
-{
-	int i;
+	int	i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
 		if (str[i] == ' ' || str[i] == '\t')
 			i++;
-		else if(str[i] =='1' || str[i] == '0' || str[i] =='D')
-			return 1;
-		else 
-			return 0;
+		else if (str[i] == '1' || str[i] == '0' || str[i] == 'D')
+			return (1);
+		else
+			return (0);
 	}
-	return 0;
+	return (0);
 }
 
-int check_tmp(char **file)
+int	check_tmp(char **file)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(file[i])
+	while (file[i])
 	{
 		if (first_char(file[i++]))
-			break;
+			break ;
 	}
-	while(file[i])
+	while (file[i])
 	{
 		file[i] = ft_strtrim(file[i], " \t");
 		if (file[i] && (file[i][0] == '\n' || !file[i][0] || file[i][0] == 13))
 		{
 			printf("Error\nnew line inside map\n");
-			return 1;
+			return (1);
 		}
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
 // int	read_file(t_cube *cube)
@@ -106,7 +77,6 @@ int check_tmp(char **file)
 // 	int		count;
 // 	char	**tmp_d;
 // 	int		d;
-	
 // 	d = 0;
 // 	count = count_lines(cube);
 // 	if (count == -1)
@@ -180,13 +150,4 @@ int	read_file(t_cube *cube)
 	if (check_tmp(tmp_d) == 1)
 		return (free_double(cube->file_content), free_double(tmp_d), 1);
 	return (free_double(tmp_d), 0);
-}
-
-
-void	free_textures(t_cube *cube)
-{
-	free(cube->so_tex);
-	free(cube->no_tex);
-	free(cube->ea_tex);
-	free(cube->we_tex);
 }

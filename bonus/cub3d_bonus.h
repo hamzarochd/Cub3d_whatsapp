@@ -216,6 +216,7 @@ void		init_cube(t_cube *cube);
 int			check_map(t_cube *cube);
 int			read_file(t_cube *cube);
 void		free_double(char **ptr);
+void		handle_fd(t_cube *cube);
 void		init_cube(t_cube *cube);
 int			parse_file(t_cube *cube);
 int			check_map_name(char *str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/26 19:03:50 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/27 14:37:28 by hrochd           ###   ########.fr       */
+/*   Created: 2025/04/27 11:59:27 by ymouigui          #+#    #+#             */
+/*   Updated: 2025/04/28 12:35:28 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	parse_file(t_cube *cube)
 	if (i == -1)
 		return (free_double(cube->file_content), 1);
 	if (i != 6)
-		return (free_double(cube->file_content), printf("Error\nerror %d\n", i), 1);
+		return (free_double(cube->file_content), printf("Error\nerror %d\n", i)
+			, 1);
 	j = i;
 	while (cube->file_content[j])
 		j++;
@@ -41,22 +42,22 @@ int	parse_file(t_cube *cube)
 
 static int	check_map_char(char c, int i, int j, t_cube *cube)
 {
-	if (!ft_strchr("NSWE01D ", c))
-		return (printf("Error\nError: Invalid character '%c' at (%d, %d)\n",
+	if (!ft_strchr("NSWE01 ", c))
+		return (printf("Error\nInvalid character '%c' at (%d, %d)\n",
 				c, i, j), 1);
 	if (c == '0' || c == 'N' || c == 'S' || c == 'W' || c == 'E' || c == 'D')
 	{
 		if (i == 0 || cube->map[i - 1][j] == ' ')
-			return (printf("Error\nError: '0' not closed on top at (%d, %d)\n",
+			return (printf("Error\n'0' not closed on top at (%d, %d)\n",
 					i, j), 1);
 		if (cube->map[i + 1] == NULL || cube->map[i + 1][j] == ' ')
-			return (printf("Error\nError: '0' not closed on bottom at (%d, %d)\n",
+			return (printf("Error\n'0' not closed on bottom at (%d, %d)\n",
 					i, j), 1);
 		if (j == 0 || cube->map[i][j - 1] == ' ')
-			return (printf("Error\nError: '0' not closed on left at (%d, %d)\n",
+			return (printf("Error\n'0' not closed on left at (%d, %d)\n",
 					i, j), 1);
 		if (cube->map[i][j + 1] == '\0' || cube->map[i][j + 1] == ' ')
-			return (printf("Error\nError: '0' not closed on right at (%d, %d)\n",
+			return (printf("Error\n'0' not closed on right at (%d, %d)\n",
 					i, j), 1);
 	}
 	return (0);
@@ -109,7 +110,7 @@ int	main_parsing(t_cube *cube, char **av)
 		return (printf("Error\nfd error\n"), free(cube->file_name),
 			free_textures(cube), 1);
 	if (read_file(cube) == 1)
-		return (free(cube->file_name), 1);
+		return (free(cube->file_name), free_textures(cube), 1);
 	if (parse_file(cube) == 1)
 		return (free(cube->file_name), free_textures(cube), 1);
 	if (check_map(cube) == 1)

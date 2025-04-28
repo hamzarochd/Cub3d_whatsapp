@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:23:44 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/27 13:34:22 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/28 12:42:26 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	free_parsing(t_mlx *mlx)
 
 void	ft_exit(void *param)
 {
-	t_mlx *mlx;
-	
+	t_mlx	*mlx;
+
 	mlx = (t_mlx *)param;
 	delete_images(mlx);
 	if (mlx->graphics.gun_tex)
