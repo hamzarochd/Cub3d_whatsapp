@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:41 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/29 09:25:52 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:06:01 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,32 @@ void	decide(t_cube *cube, char **token, char *tag)
 	}
 }
 
+int	check_virgol(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == ',')
+			count++;
+		i++;
+	}
+	if (count != 2)
+		return (-1);
+	return (0);
+}
+
 int	is_invalid_rgb(char *input, t_cube *cube, char *tag)
 {
 	int		count;
 	char	**token;
 	int		i;
 
+	if (check_virgol(input) == -1)
+		return (-1);
 	token = ft_split(input, ',');
 	i = 0;
 	count = 0;

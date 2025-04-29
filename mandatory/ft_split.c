@@ -40,7 +40,7 @@ static char	*alloc_word(const char *s, int d, int e)
 	int		i;
 	char	*word;
 
-	word = (char *)salloc ((e - d) + 1);
+	word = (char *)safe_malloc ((e - d) + 1);
 	if (word == NULL)
 		return (NULL);
 	i = 0;
@@ -58,7 +58,7 @@ static char	**alloc_split(const char *s, char c)
 {
 	char	**split;
 
-	split = (char **)salloc ((check_words(s, c) + 1) * sizeof (char *));
+	split = (char **)safe_malloc ((check_words(s, c) + 1) * sizeof (char *));
 	if (split == NULL)
 		return (NULL);
 	return (split);

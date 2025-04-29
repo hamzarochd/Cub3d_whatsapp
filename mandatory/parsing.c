@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:27 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/29 09:21:07 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:30:55 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,18 +99,17 @@ int	main_parsing(t_cube *cube, char **av)
 	if (check_map_name(cube->file_name) == 1)
 	{
 		printf("Error\nmap name error\n");
-		free_all(cube);
 		return (1);
 	}
 	cube->fd = open(cube->file_name, O_RDONLY);
 	if (cube->fd == -1)
-		return (printf("Error\nfd error\n"), free_all(cube), 1);
+		return (printf("Error\nfd error\n"), 1);
 	if (read_file(cube) == 1)
-		return (free_all(cube), 1);
+		return ( 1);
 	if (parse_file(cube) == 1)
-		return (free_all(cube), 1);
+		return ( 1);
 	if (check_map(cube) == 1)
-		return (free_all(cube), 1);
+		return ( 1);
 	close (cube->fd);
 	return (0);
 }

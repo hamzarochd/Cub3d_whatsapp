@@ -199,6 +199,12 @@ enum
 	ON_DESTROY = 17
 };
 
+typedef struct s_garbage
+{
+	void				*adr;
+	struct s_garbage	*next;
+}	t_garbage;
+
 void		*salloc(int s);
 char		*ft_read(char *str);
 void		minimap(t_mlx *mlx);
@@ -209,6 +215,7 @@ char		*ft_strdup(char *s1);
 int			ft_strlen(char *str);
 int			destroy_handler(void);
 void		set_hooks(t_mlx *mlx);
+void		*safe_malloc(int size);
 char		*get_next_line(int fd);
 void		free_all(t_cube *cube);
 void		put_images(t_mlx *mlx);

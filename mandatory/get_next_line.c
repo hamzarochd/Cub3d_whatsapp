@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 15:34:26 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/26 16:29:48 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/29 10:27:54 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*ft_line(char **str)
 	if (*(str)[i] == '\0')
 		return (free(*str), *str = NULL, NULL);
 	i = end_line(*str);
-	s1 = (char *)salloc((ft_strlen(*str) - i + 1));
+	s1 = (char *)safe_malloc((ft_strlen(*str) - i + 1));
 	if (!s1)
 		return (my_free(s1, str), NULL);
 	while ((*str)[i])
@@ -59,7 +59,7 @@ char	*ft_read(char *str)
 	if (!str || str[i] == '\0')
 		return (NULL);
 	i = end_line(str);
-	line = (char *)salloc(sizeof(char) * i + 1);
+	line = (char *)safe_malloc(sizeof(char) * i + 1);
 	if (!line)
 		return (NULL);
 	i = 0;
@@ -94,7 +94,7 @@ char	*get_next_line(int fd)
 	n = 1;
 	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return (NULL);
-	s = salloc((size_t)BUFFER_SIZE + 1);
+	s = safe_malloc((size_t)BUFFER_SIZE + 1);
 	if (!s)
 		return (free(buffer), buffer = NULL, NULL);
 	while (!(ft_strchr(buffer, '\n')) && n != 0)

@@ -146,7 +146,12 @@ enum
 	ON_DESTROY = 17
 };
 
-void		*salloc(int s);
+typedef struct s_garbage
+{
+	void				*adr;
+	struct s_garbage	*next;
+}	t_garbage;
+
 char		*ft_read(char *str);
 void		render(void *param);
 void		ft_exit(void *param);
@@ -164,6 +169,7 @@ int			read_file(t_cube *cube);
 void		free_double(char **ptr);
 void		init_cube(t_cube *cube);
 int			parse_file(t_cube *cube);
+void		*safe_malloc(int size);
 int			check_map_name(char *str);
 char		**refill_map(t_cube *cube);
 int			check_config(t_cube *cube);

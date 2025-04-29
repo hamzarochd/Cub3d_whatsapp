@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   general_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 08:58:28 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 14:34:23 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/29 10:28:37 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,4 @@ int	destroy_handler(void)
 {
 	exit(0);
 	return (0);
-}
-
-void	*salloc(int size)
-{
-	void	*alloc;
-
-	alloc = malloc(size);
-	if (!alloc)
-	{
-		printf("Error\nsalloc ERROR\n");
-		exit(1);
-	}
-	return (alloc);
 }

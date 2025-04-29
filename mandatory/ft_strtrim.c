@@ -43,7 +43,7 @@ char	*ft_strtrim(char *s1, char const *set)
 	l = len;
 	while (i < l && check_char(set, s1[l - 1]) == 1)
 		l--;
-	ptr = (char *)salloc(l - i + 1);
+	ptr = (char *)safe_malloc(l - i + 1);
 	if (ptr == NULL)
 		return (NULL);
 	j = 0;
@@ -66,7 +66,7 @@ char	*ft_strtrim_last(char *s1, char const *set)
 		l++;
 	while (l > 0 && check_char(set, s1[l - 1]) == 1)
 		l--;
-	ptr = (char *)salloc(l + 1);
+	ptr = (char *)safe_malloc(l + 1);
 	if (ptr == NULL)
 		return (NULL);
 	j = 0;
@@ -88,7 +88,7 @@ char	*ft_strdup(char *s1)
 	lenofs = ft_strlen(s1)+1;
 	if (!s1)
 		return (NULL);
-	s2 = salloc(lenofs * sizeof(char));
+	s2 = safe_malloc(lenofs * sizeof(char));
 	if (!s2)
 		return (NULL);
 	while (s1[i])

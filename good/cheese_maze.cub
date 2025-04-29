@@ -1,9 +1,10 @@
 NO   textures/no2.png
 WE   textures/no2.png
+
 SO   01 .png
 
 EA   textures/wall2.png
-F   123, 54, 12
+F   255, 255, 255
 C	1, 1, 1
 111
 11111111111111111
