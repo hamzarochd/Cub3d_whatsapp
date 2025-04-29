@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 02:43:22 by W2Wizard          #+#    #+#             */
-/*   Updated: 2025/04/25 22:05:45 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/29 08:47:39 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void mlx_close_window(mlx_t* mlx)
  * All of glfw & glads resources are cleaned up by the terminate function.
  * Now it's time to clean up our own mess.
  */
-void smlx_terminate(mlx_t* mlx)
+void mlx_terminate(mlx_t* mlx)
 {
 	MLX_NONNULL(mlx);
 

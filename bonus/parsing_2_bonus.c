@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:22 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/28 12:35:22 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:00:52 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,43 +70,6 @@ int	check_tmp(char **file)
 	return (0);
 }
 
-// int	read_file(t_cube *cube)
-// {
-// 	int		i;
-// 	char	*tmp;
-// 	int		count;
-// 	char	**tmp_d;
-// 	int		d;
-// 	d = 0;
-// 	count = count_lines(cube);
-// 	if (count == -1)
-// 		return (free_textures(cube), 1);
-// 	cube->file_content = ft_calloc(count + 1, sizeof(char *));
-// 	tmp_d = ft_calloc( count + 1, sizeof(char *));
-// 	handle_fd(cube);
-// 	i = 0;
-// 	tmp = get_next_line(cube->fd);
-// 	while (tmp)
-// 	{
-// 		tmp_d[d++] = ft_strdup(tmp);
-// 		tmp = ft_strtrim_last(tmp, " \t\n\r");
-// 		if (!tmp[0])
-// 		{
-// 			free(tmp);
-// 			tmp = get_next_line(cube->fd);
-// 			continue ;
-// 		}
-// 		cube->file_content[i++] = ft_strdup(tmp);
-// 		free(tmp);
-// 		tmp = get_next_line(cube->fd);
-// 	}
-// 	cube->file_content[i] = NULL;
-// 	tmp_d[d] = NULL;
-// 	if (check_tmp(tmp_d) == 1)
-// 		return (free_double(cube->file_content), free_double(tmp_d), 1);
-// 	return (free_double(tmp_d), 0);
-// }
-
 static int	read_lines(t_cube *cube, char **tmp_d)
 {
 	int		i;
@@ -142,7 +105,7 @@ int	read_file(t_cube *cube)
 
 	count = count_lines(cube);
 	if (count == -1)
-		return (free_textures(cube), 1);
+		return (1);
 	cube->file_content = ft_calloc(count + 1, sizeof(char *));
 	tmp_d = ft_calloc(count + 1, sizeof(char *));
 	handle_fd(cube);

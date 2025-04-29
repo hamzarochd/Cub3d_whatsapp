@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_png.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/16 23:11:29 by W2Wizard          #+#    #+#             */
-/*   Updated: 2025/04/26 16:29:48 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/29 08:35:16 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ mlx_texture_t* mlx_load_png(const char* path)
 	MLX_NONNULL(path);
 
 	mlx_texture_t* image;
-	if (!(image = salloc(sizeof(mlx_texture_t))))
+	if (!(image = malloc(sizeof(mlx_texture_t))))
 		return ((void*)mlx_error(MLX_MEMFAIL));
 
 	uint32_t error;
@@ -28,7 +28,7 @@ mlx_texture_t* mlx_load_png(const char* path)
 	{
 		free(image);
 		// Explicitly print error on purpose
-		fprintf(stderr, "MLX42: LodePNG: %s\n", lodepng_error_text(error));
+		fprintf(stderr, "Error\nMLX42: LodePNG: %s\n", lodepng_error_text(error));
 		return ((void*)mlx_error(MLX_INVPNG));
 	}
 	return (image);

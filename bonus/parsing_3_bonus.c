@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:24 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/28 12:40:45 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:00:56 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,7 @@ int	check_color(t_cube *cube, char **splitted, char *line)
 		if (is_invalid_rgb(line + ft_strlen(splitted[0]), cube, splitted[0])
 			== -1)
 		{
-			return (free(line), free_double(splitted), printf("Error\ncolor\n")
-				, -1);
+			return (printf("Error\ncolor\n"), -1);
 		}
 		return (1);
 	}
@@ -76,8 +75,7 @@ int	check_color(t_cube *cube, char **splitted, char *line)
 		if (is_invalid_rgb(line + ft_strlen(splitted[0]), cube, splitted[0])
 			== -1)
 		{
-			return (free(line), free_double(splitted), printf("Error\ncolor\n")
-				, -1);
+			return (printf("Error\ncolor\n"), -1);
 		}
 		return (1);
 	}
@@ -94,7 +92,7 @@ int	check_config(t_cube *cube)
 
 	i = 0;
 	counter = 0;
-	while (cube->file_content[i])
+	while (cube->file_content[i] && counter != 6)
 	{
 		cube->file_content[i] = ft_strtrim(cube->file_content[i], " \t");
 		x = -1;
@@ -105,7 +103,7 @@ int	check_config(t_cube *cube)
 		splitted = ft_split(line, ' ');
 		counter = handle_config(cube, splitted, line, counter);
 		if (counter == -1)
-			return (-1);
+			return (free_double(splitted), free_textures(cube), free(line), -1);
 		free(line);
 		free_double(splitted);
 		i++;

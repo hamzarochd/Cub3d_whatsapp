@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:41 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/27 11:59:42 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 09:25:52 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ void	free_double(char **ptr)
 	while (ptr[i])
 	{
 		free(ptr[i]);
+		ptr[i] = NULL;
 		i++;
 	}
 	free (ptr);
+	ptr = NULL;
 }
 
 static int	ft_atoi(const char *str)
@@ -39,6 +41,8 @@ static int	ft_atoi(const char *str)
 	while (str [i] == '\n' || str [i] == '\t'
 		|| str[i] == '\f' || str [i] == '\v' || str [i] == ' ')
 		i++;
+	if (str[i] == '\0')
+		return (-1);
 	while (str [i] >= '0' && str [i] <= '9')
 	{
 		res = (res * 10) + (str[i++] - '0');
@@ -97,7 +101,27 @@ int	is_invalid_rgb(char *input, t_cube *cube, char *tag)
 
 void	free_all(t_cube *cube)
 {
+	int	i;
+
 	free(cube->file_name);
-	free_double(cube->map);
-	free_textures(cube);
+	free(cube->no_tex);
+	free(cube->so_tex);
+	free(cube->we_tex);
+	free(cube->ea_tex);
+	i = 0;
+	if (cube->map)
+	{
+		while (cube->map[i])
+			free(cube->map[i++]);
+	}
+	free(cube->map);
+	i = 0;
+	if (cube->file_content)
+	{
+		while (cube->file_content[i])
+			free(cube->file_content[i++]);
+	}
+	free(cube->file_content);
+	if (cube->fd != 0)
+		close(cube->fd);
 }

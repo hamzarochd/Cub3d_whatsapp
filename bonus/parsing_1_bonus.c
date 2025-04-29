@@ -6,17 +6,36 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:19 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/28 12:35:18 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:00:46 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_bonus.h"
+
+static int	check_config_type(char *dir)
+{
+	if (ft_strcmp(dir, "NO") == 0)
+		return (0);
+	else if (ft_strcmp(dir, "SO") == 0)
+		return (1);
+	else if (ft_strcmp(dir, "WE") == 0)
+		return (2);
+	else if (ft_strcmp(dir, "EA") == 0)
+		return (3);
+	else if (ft_strcmp(dir, "C") == 0)
+		return (9);
+	else if (ft_strcmp(dir, "F") == 0)
+		return (8);
+	return (printf("Error\ninvalid config"), -1);
+}
 
 int	handle_config(t_cube *cube, char **splitted, char *line,
 	int counter)
 {
 	int	ret;
 
+	if (check_config_type(splitted[0]) == -1)
+		return (-1);
 	ret = check_texture(cube, splitted, line);
 	if (ret == 1)
 		counter++;
@@ -91,14 +110,4 @@ char	**refill_map(t_cube *cube)
 	res[j] = NULL;
 	free_double(cube->map);
 	return (res);
-}
-
-void	init_cube(t_cube *cube)
-{
-	cube->no_tex = ft_strdup("");
-	cube->so_tex = ft_strdup("");
-	cube->we_tex = ft_strdup("");
-	cube->ea_tex = ft_strdup("");
-	cube->floor_color[0] = -1;
-	cube->ceiling_color[0] = -1;
 }

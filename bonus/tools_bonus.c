@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:30:09 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/27 10:12:35 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 09:31:14 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,27 @@ int	is_invalid_rgb(char *input, t_cube *cube, char *tag)
 
 void	free_all(t_cube *cube)
 {
+	int	i;
+
 	free(cube->file_name);
-	free_double(cube->map);
-	free_textures(cube);
+	free(cube->no_tex);
+	free(cube->so_tex);
+	free(cube->we_tex);
+	free(cube->ea_tex);
+	i = 0;
+	if (cube->map)
+	{
+		while (cube->map[i])
+			free(cube->map[i++]);
+	}
+	free(cube->map);
+	i = 0;
+	if (cube->file_content)
+	{
+		while (cube->file_content[i])
+			free(cube->file_content[i++]);
+	}
+	free(cube->file_content);
+	if (cube->fd != 0)
+		close(cube->fd);
 }

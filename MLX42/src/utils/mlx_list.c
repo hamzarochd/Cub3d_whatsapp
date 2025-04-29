@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 01:53:51 by W2Wizard          #+#    #+#             */
-/*   Updated: 2025/04/26 16:29:48 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/29 08:34:58 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ mlx_list_t* mlx_lstnew(void* content)
 {
 	mlx_list_t* out = NULL;
 
-	if ((out = salloc(sizeof(mlx_list_t))))
+	if ((out = malloc(sizeof(mlx_list_t))))
 	{
 		out->content = content;
 		out->next = NULL;

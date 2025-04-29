@@ -82,8 +82,8 @@ or comment out LODEPNG_COMPILE_ERROR_TEXT below*/
 #define LODEPNG_COMPILE_ERROR_TEXT
 #endif
 
-/*Compile the default allocators (C's free, salloc and realloc). If you disable this,
-you can define the functions lodepng_free, lodepng_salloc and lodepng_realloc in your
+/*Compile the default allocators (C's free, malloc and realloc). If you disable this,
+you can define the functions lodepng_free, lodepng_malloc and lodepng_realloc in your
 source files with custom allocators.*/
 #ifndef LODEPNG_NO_COMPILE_ALLOCATORS
 /*pass -DLODEPNG_NO_COMPILE_ALLOCATORS to the compiler to disable the built-in ones,
@@ -908,7 +908,7 @@ unsigned lodepng_inspect_chunk(LodePNGState* state, size_t pos,
                                const unsigned char* in, size_t insize);
 
 #ifdef LODEPNG_COMPILE_ENCODER
-/*This function allocates the out buffer with standard salloc and stores the size in *outsize.*/
+/*This function allocates the out buffer with standard malloc and stores the size in *outsize.*/
 unsigned lodepng_encode(unsigned char** out, size_t* outsize,
                         const unsigned char* image, unsigned w, unsigned h,
                         LodePNGState* state);
