@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:23:44 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/28 12:42:26 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:29:13 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,6 @@ void	delete_images(t_mlx *mlx)
 		mlx_delete_image(mlx->mlx_cnx, mlx->graphics.loading_img);
 }
 
-void	free_parsing(t_mlx *mlx)
-{
-	int	i;
-
-	free(mlx->cube->file_name);
-	free(mlx->cube->no_tex);
-	free(mlx->cube->so_tex);
-	free(mlx->cube->we_tex);
-	free(mlx->cube->ea_tex);
-	i = 0;
-	while (mlx->cube->map[i])
-		free(mlx->cube->map[i++]);
-	free(mlx->cube->map);
-}
-
 void	ft_exit(void *param)
 {
 	t_mlx	*mlx;
@@ -68,6 +53,6 @@ void	ft_exit(void *param)
 		mlx_close_window(mlx->mlx_cnx);
 		mlx_terminate(mlx->mlx_cnx);
 	}
-	free_parsing(mlx);
+	safe_malloc(-1);
 	exit(0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   general_tools_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:26:22 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/27 14:34:40 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/29 13:06:21 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,4 @@ void	normalize_angle(double *angle)
 		*angle += 2 * PI;
 	else if (*angle > 2 * PI)
 		*angle -= 2 * PI;
-}
-
-int	destroy_handler(void)
-{
-	exit(0);
-	return (0);
-}
-
-void	*salloc(int size)
-{
-	void	*alloc;
-
-	alloc = malloc(size);
-	if (!alloc)
-	{
-		printf("Error\nmalloc\n");
-		exit(1);
-	}
-	return (alloc);
 }

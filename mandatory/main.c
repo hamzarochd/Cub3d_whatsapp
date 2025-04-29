@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:15 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/29 08:21:05 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:05:04 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	if (main_parsing(&cube, av))
-		return (1);
+		return (safe_malloc(-1), 1);
 	ft_bzero(&mlx, sizeof(t_mlx));
 	initializer(&mlx, &cube);
 	load_graphics(&mlx, &cube);

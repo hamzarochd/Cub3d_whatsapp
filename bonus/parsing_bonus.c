@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:27 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/29 10:36:28 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:32:39 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int	parse_file(t_cube *cube)
 
 static int	check_map_char(char c, int i, int j, t_cube *cube)
 {
-	if (!ft_strchr("NSWE01 ", c))
+	if (!ft_strchr("NSWE01D ", c))
 		return (printf("Error\nInvalid character '%c' at (%d, %d)\n",
 				c, i, j), 1);
-	if (c == '0' || c == 'N' || c == 'S' || c == 'W' || c == 'E')
+	if (c == '0' || c == 'N' || c == 'S' || c == 'W' || c == 'E' || c == 'D')
 	{
 		if (i == 0 || cube->map[i - 1][j] == ' ')
 			return (printf("Error\n'%c' not closed on top at (%d, %d)\n",
@@ -104,12 +104,13 @@ int	main_parsing(t_cube *cube, char **av)
 	cube->fd = open(cube->file_name, O_RDONLY);
 	if (cube->fd == -1)
 		return (printf("Error\nfd error\n"), 1);
+	set_fd(cube->fd, -1, 0);
 	if (read_file(cube) == 1)
-		return ( 1);
+		return (1);
 	if (parse_file(cube) == 1)
-		return ( 1);
+		return (1);
 	if (check_map(cube) == 1)
-		return ( 1);
+		return (1);
 	close (cube->fd);
 	return (0);
 }

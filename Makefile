@@ -27,7 +27,7 @@ BOBJ = $(BSRC:.c=.o)
 
 INCLUDES = -Iinclude -ldl -lglfw -pthread -lm
 
-MLX = MLX42/build/libmlx42.a
+MLX = libmlx42.a
 
 all:  $(NAME) 
 

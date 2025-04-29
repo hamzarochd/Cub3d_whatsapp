@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gcollect.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/29 13:03:18 by ymouigui          #+#    #+#             */
+/*   Updated: 2025/04/29 13:34:03 by ymouigui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 static void	node_add(t_garbage **lst, t_garbage *new)
@@ -38,6 +50,7 @@ static void	free_list(t_garbage **head)
 	t_garbage	*current;
 	t_garbage	*next;
 
+	set_fd(-1, -1, 1);
 	current = *head;
 	while (current != NULL)
 	{

@@ -50,7 +50,6 @@ char	*ft_strtrim(char *s1, char const *set)
 	while (i < l)
 		ptr[j++] = s1[i++];
 	ptr[j] = '\0';
-	free(s1);
 	return (ptr);
 }
 
@@ -74,7 +73,6 @@ char	*ft_strtrim_last(char *s1, char const *set)
 	while (i < l)
 		ptr[j++] = s1[i++];
 	ptr[j] = '\0';
-	free(s1);
 	return (ptr);
 }
 

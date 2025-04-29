@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 08:58:28 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/29 10:28:37 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:06:36 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,4 @@ void	normalize_angle(double *angle)
 		*angle += 2 * PI;
 	else if (*angle > 2 * PI)
 		*angle -= 2 * PI;
-}
-
-int	destroy_handler(void)
-{
-	exit(0);
-	return (0);
 }

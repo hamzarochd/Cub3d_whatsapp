@@ -6,26 +6,11 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:41 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/29 11:06:01 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:35:25 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	free_double(char **ptr)
-{
-	int	i;
-
-	i = 0;
-	while (ptr[i])
-	{
-		free(ptr[i]);
-		ptr[i] = NULL;
-		i++;
-	}
-	free (ptr);
-	ptr = NULL;
-}
 
 static int	ft_atoi(const char *str)
 {
@@ -102,46 +87,17 @@ int	is_invalid_rgb(char *input, t_cube *cube, char *tag)
 	while (token[i])
 		i++;
 	if (i != 3)
-		return (free_double(token), -1);
+		return (-1);
 	i = 0;
 	while (token[i])
 	{
 		count = ft_atoi(token[i]);
 		if (count < 0 || count > 255)
 		{
-			free_double(token);
 			return (-1);
 		}
 		decide(cube, token, tag);
 		i++;
 	}
-	free_double(token);
 	return (0);
-}
-
-void	free_all(t_cube *cube)
-{
-	int	i;
-
-	free(cube->file_name);
-	free(cube->no_tex);
-	free(cube->so_tex);
-	free(cube->we_tex);
-	free(cube->ea_tex);
-	i = 0;
-	if (cube->map)
-	{
-		while (cube->map[i])
-			free(cube->map[i++]);
-	}
-	free(cube->map);
-	i = 0;
-	if (cube->file_content)
-	{
-		while (cube->file_content[i])
-			free(cube->file_content[i++]);
-	}
-	free(cube->file_content);
-	if (cube->fd != 0)
-		close(cube->fd);
 }

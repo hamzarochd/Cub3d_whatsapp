@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:19 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/29 10:36:10 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:40:07 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,5 @@ char	**refill_map(t_cube *cube)
 		j++;
 	}
 	res[j] = NULL;
-	free_double(cube->map);
 	return (res);
 }

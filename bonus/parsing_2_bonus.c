@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:22 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/29 10:36:22 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:40:24 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static int	count_lines(t_cube *cube)
 	tmp = get_next_line(cube->fd);
 	while (tmp)
 	{
-		free(tmp);
 		tmp = get_next_line(cube->fd);
 		count++;
 	}
@@ -85,12 +84,10 @@ static int	read_lines(t_cube *cube, char **tmp_d)
 		tmp = ft_strtrim_last(tmp, " \t\n\r");
 		if (!tmp[0])
 		{
-			free(tmp);
 			tmp = get_next_line(cube->fd);
 			continue ;
 		}
 		cube->file_content[i++] = ft_strdup(tmp);
-		free(tmp);
 		tmp = get_next_line(cube->fd);
 	}
 	cube->file_content[i] = NULL;
@@ -111,6 +108,6 @@ int	read_file(t_cube *cube)
 	handle_fd(cube);
 	read_lines(cube, tmp_d);
 	if (check_tmp(tmp_d) == 1)
-		return (free_double(cube->file_content), free_double(tmp_d), 1);
-	return (free_double(tmp_d), 0);
+		return (1);
+	return (0);
 }

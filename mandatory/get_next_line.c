@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 15:34:26 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/29 10:27:54 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:36:20 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,14 @@ char	*ft_line(char **str)
 	if (!*str)
 		return (NULL);
 	if (*(str)[i] == '\0')
-		return (free(*str), *str = NULL, NULL);
+		return (NULL);
 	i = end_line(*str);
 	s1 = (char *)safe_malloc((ft_strlen(*str) - i + 1));
-	if (!s1)
-		return (my_free(s1, str), NULL);
 	while ((*str)[i])
 		s1[j++] = (*str)[i++];
 	s1[j] = '\0';
 	if (!s1[0])
-		return (my_free(s1, str), NULL);
-	free(*str);
+		return (NULL);
 	*str = NULL;
 	return (s1);
 }
@@ -77,14 +74,6 @@ char	*ft_read(char *str)
 	return (line);
 }
 
-char	*my_free(char *s1, char **s2)
-{
-	free(s1);
-	free(*s2);
-	*s2 = NULL;
-	return (NULL);
-}
-
 char	*get_next_line(int fd)
 {
 	static char	*buffer;
@@ -95,20 +84,17 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return (NULL);
 	s = safe_malloc((size_t)BUFFER_SIZE + 1);
-	if (!s)
-		return (free(buffer), buffer = NULL, NULL);
 	while (!(ft_strchr(buffer, '\n')) && n != 0)
 	{
 		n = read(fd, s, BUFFER_SIZE);
 		if (n == -1)
-			return (my_free(s, &buffer), NULL);
+			return (NULL);
 		s[n] = '\0';
 		buffer = ft_strjoin(buffer, s);
 	}
-	free(s);
 	s = ft_read(buffer);
 	if (!s)
-		return (free(buffer), buffer = NULL, NULL);
+		return (NULL);
 	buffer = ft_line(&buffer);
 	return (s);
 }

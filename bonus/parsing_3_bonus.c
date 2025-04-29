@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:59:24 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/29 10:36:24 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:40:34 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static int	process_texture(char **tex, char *line, char *dir)
 {
 	if ((*tex)[0] != '\0')
 		return (printf("Error\n%s texture already set\n", dir), -1);
-	free(*tex);
 	*tex = ft_strdup(line + ft_strlen(dir));
 	*tex = ft_strtrim(*tex, " \t");
 	return (0);
@@ -103,9 +102,7 @@ int	check_config(t_cube *cube)
 		splitted = ft_split(line, ' ');
 		counter = handle_config(cube, splitted, line, counter);
 		if (counter == -1)
-			return (free_double(splitted), free_textures(cube), free(line), -1);
-		free(line);
-		free_double(splitted);
+			return (-1);
 		i++;
 	}
 	return (counter);

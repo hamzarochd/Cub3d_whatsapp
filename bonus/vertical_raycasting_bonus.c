@@ -6,7 +6,7 @@
 /*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:34:12 by hrochd            #+#    #+#             */
-/*   Updated: 2025/04/27 10:20:16 by ymouigui         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:41:53 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	*ft_calloc(size_t number, size_t size)
 	size_t	i;
 
 	i = 0;
-	ptr = salloc(number * size);
+	ptr = safe_malloc(number * size);
 	while (i < number)
 	{
 		*(char *)(ptr + 1) = '\0';

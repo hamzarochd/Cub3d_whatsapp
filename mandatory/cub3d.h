@@ -25,7 +25,7 @@
 # include <math.h>
 # include <strings.h>
 # include <fcntl.h>
-# include "../MLX42/include/MLX42/MLX42.h"
+# include "../MLX42.h"
 # include <sys/time.h>
 # define W_HEIGHT 1280
 # define W_WIDTH 2560
@@ -158,25 +158,20 @@ void		ft_exit(void *param);
 char		*ft_line(char **str);
 char		*ft_strdup(char *s1);
 int			ft_strlen( char *str);
-int			destroy_handler(void);
 void		set_hooks(t_mlx *mlx);
 char		*get_next_line(int fd);
-void		free_all(t_cube *cube);
 void		put_images(t_mlx *mlx);
 void		handle_fd(t_cube *cube);
 int			check_map(t_cube *cube);
 int			read_file(t_cube *cube);
-void		free_double(char **ptr);
 void		init_cube(t_cube *cube);
 int			parse_file(t_cube *cube);
 void		*safe_malloc(int size);
 int			check_map_name(char *str);
 char		**refill_map(t_cube *cube);
 int			check_config(t_cube *cube);
-void		free_textures(t_cube *cube);
 void		keydown_handler(void *param);
 void		ft_bzero(void	*s, size_t n);
-char		*my_free(char *s1, char **s2);
 int			ft_strcmp(char	*s1, char *s2);
 void		normalize_angle(double *angle);
 uint32_t	rgb(int r, int g, int b, int a);
@@ -184,6 +179,7 @@ char		*ft_strjoin(char *s1, char *s2);
 t_point		infinite_ray(double *ray_lenght);
 char		**ft_split(const char *s, char c);
 char		*ft_strchr(const char *str, int c);
+void		set_fd(int fd1, int fd2, int flag);
 void		put_floor(t_mlx *mlx, int i, int *j);
 int			main_parsing(t_cube *cube, char **av);
 void		initializer(t_mlx *mlx, t_cube *cube);

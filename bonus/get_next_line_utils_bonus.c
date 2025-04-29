@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ymouigui <ymouigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 15:34:57 by ymouigui          #+#    #+#             */
-/*   Updated: 2025/04/26 16:29:48 by hrochd           ###   ########.fr       */
+/*   Updated: 2025/04/29 11:41:53 by ymouigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	len = ft_strlen(s1) + ft_strlen(s2) + 1;
-	result = salloc(len);
+	result = safe_malloc(len);
 	if (!result)
-		return (free(s1), s1 = NULL, NULL);
+		return (NULL);
 	while (s1 && s1[i])
 	{
 		result[i] = s1[i];
@@ -63,7 +63,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2 && s2[j])
 		result[i++] = s2[j++];
 	result[i] = '\0';
-	free(s1);
 	s1 = NULL;
 	return (result);
 }
